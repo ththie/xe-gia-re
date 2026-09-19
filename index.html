@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dịch vụ đặt xe</title>
+    <title>Dịch Vụ Di Chuyển Tiết Kiệm - XENOW.VN</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             transition: background 0.4s ease;
             min-height: 100vh;
             margin: 0;
-            padding: 15px;
+            padding: 8px;
             color: #333;
             display: flex;
             flex-direction: column;
@@ -31,52 +31,52 @@
             max-width: 480px;
             width: 100%;
             background: #ffffff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            padding: 12px 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
             position: relative;
-            margin-bottom: 20px;
+            margin-bottom: 8px;
             box-sizing: border-box;
         }
         .welcome-banner {
             background: #fff8e1;
             color: #b78103;
             text-align: center;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: bold;
-            padding: 8px 10px;
-            border-radius: 6px;
-            margin-bottom: 12px;
+            padding: 5px 8px;
+            border-radius: 5px;
+            margin-bottom: 8px;
             border: 1px dashed #ffeeba;
         }
         h2 {
             text-align: center;
             color: #0066cc;
-            font-size: 20px;
-            margin-bottom: 5px;
+            font-size: 17px;
+            margin: 0 0 2px 0;
             cursor: pointer;
             user-select: none;
         }
         .subtitle {
             text-align: center;
-            font-size: 14px;
+            font-size: 13px;
             color: #444;
             font-weight: bold;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
         }
         
         /* Hiệu ứng chạy chữ Marquee */
         .features-area {
-            margin-bottom: 15px;
-            padding: 6px 0;
+            margin-bottom: 8px;
+            padding: 4px 0;
             text-align: center;
-            font-size: 12px;
+            font-size: 11px;
             color: #008000;
             font-weight: 600;
             overflow: hidden;
             white-space: nowrap;
             background: #f4f9f4;
-            border-radius: 6px;
+            border-radius: 5px;
         }
         .features-area span {
             display: inline-block;
@@ -92,46 +92,46 @@
             display: none;
             background: #fff3cd;
             border: 1px solid #ffeeba;
-            padding: 12px;
+            padding: 10px;
             border-radius: 8px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         .admin-panel h4 {
-            margin: 0 0 8px 0;
-            font-size: 13px;
+            margin: 0 0 6px 0;
+            font-size: 12px;
             color: #856404;
         }
         .admin-panel input, .admin-panel select, .admin-panel textarea {
-            padding: 8px;
-            font-size: 13px;
-            margin-bottom: 8px;
+            padding: 6px;
+            font-size: 12px;
+            margin-bottom: 6px;
             width: 100%;
             box-sizing: border-box;
             border: 1px solid #ccc;
-            border-radius: 6px;
+            border-radius: 5px;
             background: #fff;
             font-family: Arial, sans-serif;
         }
         
         .theme-buttons {
             display: flex;
-            gap: 6px;
-            margin-bottom: 10px;
+            gap: 5px;
+            margin-bottom: 8px;
         }
         .theme-btn {
             flex: 1;
-            padding: 8px 4px;
-            font-size: 11px;
+            padding: 6px 3px;
+            font-size: 10px;
             font-weight: bold;
             border: 2px solid #ccc;
-            border-radius: 6px;
+            border-radius: 5px;
             cursor: pointer;
             text-align: center;
             transition: all 0.2s;
         }
         .theme-btn.active {
             border-color: #d9534f;
-            box-shadow: 0 0 5px rgba(217, 83, 79, 0.5);
+            box-shadow: 0 0 4px rgba(217, 83, 79, 0.5);
         }
         .btn-blue { background: #0f4c81; color: white; }
         .btn-green { background: #2e7d32; color: white; }
@@ -141,35 +141,35 @@
             background: #856404;
             color: white;
             border: none;
-            padding: 8px 10px;
+            padding: 6px 8px;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 11px;
             width: 100%;
             font-weight: bold;
-            margin-top: 4px;
+            margin-top: 2px;
         }
         .divider {
             border-top: 1px dashed #d6c288;
-            margin: 10px 0;
+            margin: 8px 0;
         }
         .form-group {
-            margin-bottom: 14px;
+            margin-bottom: 8px;
         }
         label {
             display: block;
             font-weight: bold;
-            margin-bottom: 5px;
-            font-size: 13px;
+            margin-bottom: 2px;
+            font-size: 12px;
             color: #333;
         }
         input, select {
             width: 100%;
-            padding: 10px;
+            padding: 7px 8px;
             box-sizing: border-box;
             border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 14px;
+            border-radius: 6px;
+            font-size: 13px;
             outline: none;
             background: #fff;
         }
@@ -178,7 +178,7 @@
         }
         .datetime-row {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
         .datetime-row .form-group {
             flex: 1;
@@ -186,30 +186,30 @@
         }
         .price-box {
             background: #eef6fc;
-            padding: 15px;
-            border-radius: 8px;
+            padding: 8px 10px;
+            border-radius: 6px;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             border: 1px dashed #bce8f1;
-            margin-top: 14px;
+            margin-top: 8px;
         }
         .price-box p {
             margin: 0;
-            font-size: 13px;
+            font-size: 11px;
             color: #555;
             font-weight: bold;
         }
         .price-box h3 {
-            margin: 5px 0 0 0;
+            margin: 2px 0 0 0;
             color: #d9534f;
-            font-size: 24px;
+            font-size: 20px;
         }
         .price-note {
-            font-size: 11px;
+            font-size: 10px;
             color: #666;
-            margin-top: 6px;
+            margin-top: 4px;
             font-style: italic;
-            line-height: 1.4;
+            line-height: 1.3;
         }
         .btn-zalo {
             display: block;
@@ -217,31 +217,31 @@
             color: white;
             border: none;
             width: 100%;
-            padding: 14px;
-            font-size: 16px;
+            padding: 10px;
+            font-size: 14px;
             font-weight: bold;
-            border-radius: 8px;
+            border-radius: 6px;
             cursor: pointer;
             text-align: center;
             text-decoration: none;
             box-sizing: border-box;
-            box-shadow: 0 4px 6px rgba(0, 104, 255, 0.2);
+            box-shadow: 0 3px 5px rgba(0, 104, 255, 0.2);
         }
         .success-box {
             display: none;
             background: #e6ffed;
             border: 1px solid #b7eb8f;
-            padding: 15px;
-            border-radius: 8px;
+            padding: 12px;
+            border-radius: 6px;
             text-align: center;
-            margin-top: 15px;
+            margin-top: 10px;
         }
         .success-box p {
             color: #2b8a3e;
             font-weight: bold;
-            margin: 0 0 10px 0;
-            font-size: 14px;
-            line-height: 1.5;
+            margin: 0 0 8px 0;
+            font-size: 13px;
+            line-height: 1.4;
         }
         .btn-action {
             display: block;
@@ -249,58 +249,58 @@
             color: white;
             border: none;
             width: 100%;
-            padding: 12px;
-            font-size: 15px;
+            padding: 10px;
+            font-size: 13px;
             font-weight: bold;
-            border-radius: 8px;
+            border-radius: 6px;
             text-align: center;
             text-decoration: none;
-            margin-top: 8px;
+            margin-top: 6px;
             box-sizing: border-box;
         }
         .hotline {
             text-align: center;
-            margin-top: 15px;
-            font-size: 14px;
+            margin-top: 8px;
+            font-size: 12px;
             color: #444;
         }
 
-        /* --- PHẦN CHÂN TRANG (FOOTER GỌN GÀNG - CHỈ CÒN TÊN VÀ ĐỊA CHỈ) --- */
+        /* --- PHẦN CHÂN TRANG GỌN GÀNG --- */
         .site-footer {
             max-width: 480px;
             width: 100%;
             background: rgba(255, 255, 255, 0.95);
-            padding: 12px 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 8px 15px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
             text-align: center;
-            font-size: 12px;
+            font-size: 11px;
             color: #555;
             box-sizing: border-box;
-            line-height: 1.5;
+            line-height: 1.4;
         }
         .site-footer p {
-            margin: 3px 0;
+            margin: 2px 0;
         }
         .site-footer .brand-title {
             font-weight: bold;
             color: #0066cc;
-            font-size: 13px;
+            font-size: 12px;
         }
 
         /* --- HỆ THỐNG NÚT NỔI THÔNG MINH --- */
         .floating-container {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 15px;
+            right: 15px;
             z-index: 9999;
             display: flex;
             flex-direction: column;
             align-items: flex-end;
         }
         .main-trigger-btn {
-            width: 52px;
-            height: 52px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             background: linear-gradient(135deg, #ff9800, #f57c00);
             color: white;
@@ -308,9 +308,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 20px;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
             animation: pulse-ring 2s infinite;
             outline: none;
             transition: transform 0.2s;
@@ -321,11 +321,11 @@
         .sub-buttons-group {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-bottom: 10px;
+            gap: 8px;
+            margin-bottom: 8px;
             opacity: 0;
             visibility: hidden;
-            transform: translateY(20px) scale(0.8);
+            transform: translateY(15px) scale(0.8);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .floating-container.active .sub-buttons-group {
@@ -339,16 +339,16 @@
             animation: none;
         }
         .float-btn {
-            width: 48px;
-            height: 48px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             text-decoration: none;
-            font-size: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            font-size: 18px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
             transition: transform 0.2s;
         }
         .float-btn:hover {
@@ -359,7 +359,7 @@
 
         @keyframes pulse-ring {
             0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.6); }
-            70% { transform: scale(1.05); box-shadow: 0 0 0 12px rgba(255, 152, 0, 0); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 152, 0, 0); }
             100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 152, 0, 0); }
         }
     </style>
@@ -391,21 +391,21 @@
 
         <div class="divider"></div>
         <h4>📍 Cấu hình Địa chỉ & Chân trang</h4>
-        <div style="font-size: 11px; margin-bottom: 3px;">Tên thương hiệu chân trang:</div>
+        <div style="font-size: 11px; margin-bottom: 2px;">Tên thương hiệu chân trang:</div>
         <input type="text" id="adminFooterName" value="DỊCH VỤ DI CHUYỂN TIẾT KIỆM - XENOW.VN">
         
-        <div style="font-size: 11px; margin-bottom: 3px;">Địa chỉ cơ sở:</div>
+        <div style="font-size: 11px; margin-bottom: 2px;">Địa chỉ cơ sở:</div>
         <input type="text" id="adminFooterAddress" value="8/1A5 Đường Số 9, P. Hiệp Bình, TP. HCM">
 
         <div class="divider"></div>
         <h4>🔒 Cấu hình giá cước</h4>
-        <div style="font-size: 11px; margin-bottom: 3px;">Giá xe 7 chỗ (VNĐ/Km):</div>
+        <div style="font-size: 11px; margin-bottom: 2px;">Giá xe 7 chỗ (VNĐ/Km):</div>
         <input type="number" id="adminRate7" value="10000">
 
-        <div style="font-size: 11px; margin-bottom: 3px;">Giá xe 4 chỗ (VNĐ/Km):</div>
+        <div style="font-size: 11px; margin-bottom: 2px;">Giá xe 4 chỗ (VNĐ/Km):</div>
         <input type="number" id="adminRate4" value="8000">
 
-        <div style="font-size: 11px; margin-bottom: 3px;">Ưu đãi chiều về (Nhập số %):</div>
+        <div style="font-size: 11px; margin-bottom: 2px;">Ưu đãi chiều về (Nhập số %):</div>
         <input type="number" id="adminDiscount" value="30" min="0" max="100">
 
         <button type="button" class="btn-save-admin" onclick="saveAdminConfig()">💾 Lưu cấu hình mới</button>
@@ -464,7 +464,7 @@
             </div>
         </div>
 
-        <div class="form-group" style="margin-top: 14px;">
+        <div class="form-group" style="margin-top: 8px;">
             <label>Quãng đường dự kiến (Km đi 1 chiều)</label>
             <input type="number" id="distance" placeholder="Ví dụ: 15" min="1" required oninput="calculatePrice()">
         </div>
@@ -489,7 +489,7 @@
     </div>
 </div>
 
-<!-- CHÂN TRANG GỌN GÀNG (ĐÃ XÓA HẲN DÒNG SỐ ĐIỆN THOẠI THỪA Ở DƯỚI) -->
+<!-- CHÂN TRANG GỌN GÀNG -->
 <footer class="site-footer">
     <p class="brand-title" id="footerBrandName">DỊCH VỤ DI CHUYỂN TIẾT KIỆM - XENOW.VN</p>
     <p id="footerAddressText">📍 Địa chỉ: 8/1A5 Đường Số 9, P. Hiệp Bình, TP. HCM</p>
@@ -676,32 +676,33 @@
         let tripTypeText = document.getElementById('tripType').value === '1' ? "Một chiều" : "Hai chiều trong ngày";
         let priceText = document.getElementById('totalPrice').innerText;
 
-        let message = `🚗 *YÊU CẦU ĐẶT XE MỚI*\n\n` +
-                      `• Loại xe: ${carTypeText}\n` +
-                      `• Hình thức: ${tripTypeText}\n` +
-                      `• Khách hàng: ${name}\n` +
-                      `• SĐT: ${phone}\n` +
-                      `• Đón: ${pickup}\n` +
-                      `• Đến: ${dropoff}\n` +
-                      `• Thời gian: ${time} - Ngày ${date}\n` +
-                      `• Quãng đường: ${distance} Km\n` +
-                      `• Dự kiến: ${priceText}\n\n` +
-                      `Nhờ nhà xe xác nhận giúp em nhé!`;
+        // Đã bỏ chữ "mới" ở đây
+        let message = `🚗 *YÊU CẦU ĐẶT XE*\n\n` +
+                    `• Loại xe: ${carTypeText}\n` +
+                    `• Hình thức: ${tripTypeText}\n` +
+                    `• Khách hàng: ${name}\n` +
+                    `• SĐT: ${phone}\n` +
+                    `• Đón: ${pickup}\n` +
+                    `• Đến: ${dropoff}\n` +
+                    `• Thời gian: ${time} - Ngày ${date}\n` +
+                    `• Quãng đường: ${distance} Km\n` +
+                    `• Dự kiến: ${priceText}\n\n` +
+                    `Nhờ nhà xe xác nhận giúp em nhé!`;
 
         if (WEB_APP_URL) {
-            let formData = new FormData();
-            formData.append('carType', carTypeText);
-            formData.append('tripType', tripTypeText);
-            formData.append('customerName', name);
-            formData.append('customerPhone', phone);
-            formData.append('pickupLocation', pickup);
-            formData.append('dropoffLocation', dropoff);
-            formData.append('pickupTime', time);
-            formData.append('pickupDate', date);
-            formData.append('distance', distance);
-            formData.append('totalPrice', priceText);
+            let params = new URLSearchParams();
+            params.append('carType', carTypeText);
+            params.append('tripType', tripTypeText);
+            params.append('customerName', name);
+            params.append('customerPhone', phone);
+            params.append('pickupLocation', pickup);
+            params.append('dropoffLocation', dropoff);
+            params.append('pickupTime', time);
+            params.append('pickupDate', date);
+            params.append('distance', distance);
+            params.append('totalPrice', priceText);
 
-            fetch(WEB_APP_URL, { method: 'POST', body: formData, mode: 'no-cors' }).catch(e => console.log(e));
+            fetch(WEB_APP_URL + "?" + params.toString(), { method: 'GET', mode: 'no-cors' }).catch(e => console.log(e));
         }
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
