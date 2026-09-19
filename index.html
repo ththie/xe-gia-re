@@ -65,27 +65,19 @@
             margin-bottom: 5px;
         }
         
-        /* Hiệu ứng chạy chữ Marquee */
         .features-area {
             margin-bottom: 8px;
-            padding: 4px 0;
+            padding: 6px 4px;
             text-align: center;
             font-size: 11px;
             color: #008000;
             font-weight: 600;
-            overflow: hidden;
-            white-space: nowrap;
             background: #f4f9f4;
             border-radius: 5px;
-        }
-        .features-area span {
-            display: inline-block;
-            padding-left: 100%;
-            animation: marquee 18s linear infinite;
-        }
-        @keyframes marquee {
-            0%   { transform: translate(0, 0); }
-            100% { transform: translate(-100%, 0); }
+            border: 1px solid #d4edda;
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .admin-panel {
@@ -95,6 +87,8 @@
             padding: 10px;
             border-radius: 8px;
             margin-bottom: 10px;
+            max-height: 400px;
+            overflow-y: auto;
         }
         .admin-panel h4 {
             margin: 0 0 6px 0;
@@ -265,7 +259,6 @@
             color: #444;
         }
 
-        /* --- PHẦN CHÂN TRANG GỌN GÀNG --- */
         .site-footer {
             max-width: 480px;
             width: 100%;
@@ -288,7 +281,6 @@
             font-size: 12px;
         }
 
-        /* --- HỆ THỐNG NÚT NỔI THÔNG MINH --- */
         .floating-container {
             position: fixed;
             bottom: 15px;
@@ -367,21 +359,21 @@
 <body class="tech-blue">
 
 <div class="container">
-    <div class="welcome-banner">
+    <div class="welcome-banner" id="welcomeBannerText">
         🌟 Xin kính chào Quý khách! Rất hân hạnh được phục vụ.
     </div>
 
     <!-- BẤM ĐÚP VÀO TIÊU ĐỀ ĐỂ MỞ BẢNG ADMIN -->
-    <h2 ondblclick="toggleAdmin()">🚗 DỊCH VỤ DI CHUYỂN TIẾT KIỆM</h2>
+    <h2 ondblclick="toggleAdmin()">🚗 DỊCH VỤ DI CHuyỂN TIẾT KIỆM</h2>
     <div class="subtitle">Xe 4 và 7 Chỗ Đời Mới</div>
     
-    <div class="features-area">
-        <span id="marqueeText">✨ Xe thơm sạch &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; 🛡️ Lái xe an toàn &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; 💰 Tiết kiệm 30%</span>
+    <div class="features-area" id="marqueeText">
+        ✨ Xe thơm sạch &nbsp;|&nbsp; 🛡️ Lái xe an toàn &nbsp;|&nbsp; 💰 Tiết kiệm 30%
     </div>
 
-    <!-- KHU VỰC QUẢN TRỊ ẨN -->
+    <!-- KHU VỰC QUẢN TRỊ ẨN (LINH HOẠT ĐIỀU CHỈNH) -->
     <div id="adminPanel" class="admin-panel">
-        <h4>🎨 Cấu hình Giao diện & Màu nền</h4>
+        <h4>🎨 Giao diện & Màu nền</h4>
         <div class="theme-buttons">
             <button type="button" class="theme-btn btn-blue" id="btnThemeBlue" onclick="selectTheme('tech-blue')">Xanh Dương</button>
             <button type="button" class="theme-btn btn-green" id="btnThemeGreen" onclick="selectTheme('eco-green')">Xanh Ngọc</button>
@@ -390,7 +382,20 @@
         <input type="hidden" id="selectedThemeValue" value="tech-blue">
 
         <div class="divider"></div>
-        <h4>📍 Cấu hình Địa chỉ & Chân trang</h4>
+        <h4>📢 Nội dung Thông báo & Lời chào</h4>
+        <div style="font-size: 11px; margin-bottom: 2px;">Dòng lời chào đầu trang:</div>
+        <input type="text" id="adminWelcomeInput" value="🌟 Xin kính chào Quý khách! Rất hân hạnh được phục vụ.">
+
+        <div style="font-size: 11px; margin-bottom: 2px;">Dòng nội dung chạy (Marquee):</div>
+        <input type="text" id="adminMarqueeInput" value="✨ Xe thơm sạch &nbsp;|&nbsp; 🛡️ Lái xe an toàn &nbsp;|&nbsp; 💰 Tiết kiệm 30%">
+
+        <div class="divider"></div>
+        <h4>📞 Cấu hình Liên hệ & Hotline</h4>
+        <div style="font-size: 11px; margin-bottom: 2px;">Số điện thoại (Dùng gọi & Zalo):</div>
+        <input type="text" id="adminPhoneInput" value="0917918586">
+
+        <div class="divider"></div>
+        <h4>📍 Địa chỉ & Chân trang</h4>
         <div style="font-size: 11px; margin-bottom: 2px;">Tên thương hiệu chân trang:</div>
         <input type="text" id="adminFooterName" value="DỊCH VỤ DI CHUYỂN TIẾT KIỆM - XENOW.VN">
         
@@ -398,11 +403,20 @@
         <input type="text" id="adminFooterAddress" value="8/1A5 Đường Số 9, P. Hiệp Bình, TP. HCM">
 
         <div class="divider"></div>
-        <h4>🔒 Cấu hình giá cước</h4>
-        <div style="font-size: 11px; margin-bottom: 2px;">Giá xe 7 chỗ (VNĐ/Km):</div>
+        <h4>🔒 Cấu hình Giá cước & Mở cửa</h4>
+        <div style="font-size: 11px; margin-bottom: 2px;">Giá mở cửa xe 7 chỗ (VNĐ):</div>
+        <input type="number" id="adminBasePrice7" value="0" placeholder="Ví dụ: 30000 cho 2km đầu">
+
+        <div style="font-size: 11px; margin-bottom: 2px;">Giá mở cửa xe 4 chỗ (VNĐ):</div>
+        <input type="number" id="adminBasePrice4" value="0" placeholder="Ví dụ: 25000 cho 2km đầu">
+
+        <div style="font-size: 11px; margin-bottom: 2px;">Số Km áp dụng giá mở cửa:</div>
+        <input type="number" id="adminBaseKm" value="0" min="0" placeholder="Ví dụ: nhập 2 (nếu 2km đầu trọn gói)">
+
+        <div style="font-size: 11px; margin-bottom: 2px;">Đơn giá tiếp theo - Xe 7 Chỗ (VNĐ/Km):</div>
         <input type="number" id="adminRate7" value="10000">
 
-        <div style="font-size: 11px; margin-bottom: 2px;">Giá xe 4 chỗ (VNĐ/Km):</div>
+        <div style="font-size: 11px; margin-bottom: 2px;">Đơn giá tiếp theo - Xe 4 Chỗ (VNĐ/Km):</div>
         <input type="number" id="adminRate4" value="8000">
 
         <div style="font-size: 11px; margin-bottom: 2px;">Ưu đãi chiều về (Nhập số %):</div>
@@ -420,8 +434,8 @@
         <div class="form-group">
             <label>Chọn loại xe</label>
             <select id="carType" onchange="calculatePrice()">
-                <option value="7" selected>🚙 Xe 7 Chỗ (10.000đ/Km)</option>
-                <option value="4">🚘 Xe 4 Chỗ (8.000đ/Km)</option>
+                <option value="7" selected>🚙 Xe 7 Chỗ</option>
+                <option value="4">🚘 Xe 4 Chỗ</option>
             </select>
         </div>
 
@@ -480,8 +494,8 @@
 
     <div id="successBox" class="success-box">
         <p>✅ ĐÃ LƯU ĐƠN & ĐÃ SAO CHÉP NỘI DUNG!<br>Vui lòng mở Zalo, vào khung chat và <b>DÁN (Paste)</b> để gửi.</p>
-        <a href="zalo://chat?phone=84917918586" class="btn-action">📱 MỞ ỨNG DỤNG ZALO NGAY</a>
-        <a href="tel:0917918586" class="btn-action" style="background-color: #0066cc;">📞 GỌI HOTLINE: 091 791 8586</a>
+        <a href="#" id="successZaloLink" class="btn-action">📱 MỞ ỨNG DỤNG ZALO NGAY</a>
+        <a href="#" id="successCallLink" class="btn-action" style="background-color: #0066cc;">📞 GỌI HOTLINE: <span id="hotlineCallText">091 791 8586</span></a>
     </div>
 
     <div class="hotline">
@@ -489,17 +503,15 @@
     </div>
 </div>
 
-<!-- CHÂN TRANG GỌN GÀNG -->
 <footer class="site-footer">
     <p class="brand-title" id="footerBrandName">DỊCH VỤ DI CHUYỂN TIẾT KIỆM - XENOW.VN</p>
     <p id="footerAddressText">📍 Địa chỉ: 8/1A5 Đường Số 9, P. Hiệp Bình, TP. HCM</p>
 </footer>
 
-<!-- CỤM NÚT NỔI THÔNG MINH -->
 <div id="floatingButtonsContainer" class="floating-container">
     <div class="sub-buttons-group">
-        <a href="tel:0917918586" class="float-btn float-call" title="Gọi điện trực tiếp">📞</a>
-        <a href="https://zalo.me/0917918586" target="_blank" class="float-btn float-zalo" title="Nhắn tin Zalo">💬</a>
+        <a href="#" id="floatingCallLink" class="float-btn float-call" title="Gọi điện trực tiếp">📞</a>
+        <a href="#" id="floatingZaloLink" target="_blank" class="float-btn float-zalo" title="Nhắn tin Zalo">💬</a>
     </div>
     <button type="button" class="main-trigger-btn" onclick="toggleFloatingMenu()" title="Mở menu liên hệ">
         🎧
@@ -587,14 +599,21 @@
 
     function saveAdminConfig() {
         localStorage.setItem('cfg_theme', document.getElementById('selectedThemeValue').value);
+        localStorage.setItem('cfg_base_price_7', document.getElementById('adminBasePrice7').value);
+        localStorage.setItem('cfg_base_price_4', document.getElementById('adminBasePrice4').value);
+        localStorage.setItem('cfg_base_km', document.getElementById('adminBaseKm').value);
         localStorage.setItem('cfg_rate7', document.getElementById('adminRate7').value);
         localStorage.setItem('cfg_rate4', document.getElementById('adminRate4').value);
         localStorage.setItem('cfg_discount', document.getElementById('adminDiscount').value);
         
+        localStorage.setItem('cfg_welcome', document.getElementById('adminWelcomeInput').value);
+        localStorage.setItem('cfg_marquee', document.getElementById('adminMarqueeInput').value);
+        localStorage.setItem('cfg_phone', document.getElementById('adminPhoneInput').value);
+        
         localStorage.setItem('cfg_footer_name', document.getElementById('adminFooterName').value);
         localStorage.setItem('cfg_footer_address', document.getElementById('adminFooterAddress').value);
 
-        alert("💾 Đã lưu cấu hình thành công!");
+        alert("💾 Đã lưu cấu hình giá & thông tin thành công!");
         document.getElementById('adminPanel').style.display = 'none';
         loadSavedConfig();
         calculatePrice();
@@ -604,19 +623,41 @@
         let savedTheme = localStorage.getItem('cfg_theme') || 'tech-blue';
         selectTheme(savedTheme);
 
+        let bp7 = localStorage.getItem('cfg_base_price_7');
+        let bp4 = localStorage.getItem('cfg_base_price_4');
+        let bKm = localStorage.getItem('cfg_base_km');
         let r7 = localStorage.getItem('cfg_rate7');
         let r4 = localStorage.getItem('cfg_rate4');
         let disc = localStorage.getItem('cfg_discount');
+        let welcome = localStorage.getItem('cfg_welcome');
+        let marquee = localStorage.getItem('cfg_marquee');
+        let phone = localStorage.getItem('cfg_phone');
         let fName = localStorage.getItem('cfg_footer_name');
         let fAddr = localStorage.getItem('cfg_footer_address');
 
+        if (bp7) document.getElementById('adminBasePrice7').value = bp7;
+        if (bp4) document.getElementById('adminBasePrice4').value = bp4;
+        if (bKm) document.getElementById('adminBaseKm').value = bKm;
         if (r7) document.getElementById('adminRate7').value = r7;
         if (r4) document.getElementById('adminRate4').value = r4;
-        if (disc) {
-            document.getElementById('adminDiscount').value = disc;
-            document.getElementById('marqueeText').innerHTML = `✨ Xe thơm sạch &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; 🛡️ Lái xe an toàn &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; 💰 Tiết kiệm ${disc}%`;
-        }
+        if (disc) document.getElementById('adminDiscount').value = disc;
         
+        if (welcome) {
+            document.getElementById('adminWelcomeInput').value = welcome;
+            document.getElementById('welcomeBannerText').innerHTML = welcome;
+        }
+        if (marquee) {
+            document.getElementById('adminMarqueeInput').value = marquee;
+            document.getElementById('marqueeText').innerHTML = marquee;
+        }
+        if (phone) {
+            document.getElementById('adminPhoneInput').value = phone;
+            document.getElementById('mainHotlineText').innerText = phone;
+            document.getElementById('hotlineCallText').innerText = phone;
+            document.getElementById('floatingCallLink').href = `tel:${phone}`;
+            document.getElementById('floatingZaloLink').href = `https://zalo.me/${phone}`;
+            document.getElementById('successCallLink').href = `tel:${phone}`;
+        }
         if (fName) {
             document.getElementById('adminFooterName').value = fName;
             document.getElementById('footerBrandName').innerText = fName;
@@ -625,12 +666,6 @@
             document.getElementById('adminFooterAddress').value = fAddr;
             document.getElementById('footerAddressText').innerText = `📍 Địa chỉ: ${fAddr}`;
         }
-
-        let rate7Val = document.getElementById('adminRate7').value;
-        let rate4Val = document.getElementById('adminRate4').value;
-        let carSelect = document.getElementById('carType');
-        carSelect.options[0].text = `🚙 Xe 7 Chỗ (${Number(rate7Val).toLocaleString('vi-VN')}đ/Km)`;
-        carSelect.options[1].text = `🚘 Xe 4 Chỗ (${Number(rate4Val).toLocaleString('vi-VN')}đ/Km)`;
     }
 
     function calculatePrice() {
@@ -638,17 +673,35 @@
         let tripType = parseInt(document.getElementById('tripType').value);
         let distance = parseFloat(document.getElementById('distance').value) || 0;
 
+        let baseKm = parseFloat(document.getElementById('adminBaseKm').value) || 0;
+        let basePrice7 = parseFloat(document.getElementById('adminBasePrice7').value) || 0;
+        let basePrice4 = parseFloat(document.getElementById('adminBasePrice4').value) || 0;
         let rate7 = parseFloat(document.getElementById('adminRate7').value) || 10000;
         let rate4 = parseFloat(document.getElementById('adminRate4').value) || 8000;
         let discountPercent = parseFloat(document.getElementById('adminDiscount').value) || 30;
 
+        let basePrice = 0;
         let ratePerKm = (carType === 7) ? rate7 : rate4;
-        let basePrice = distance * ratePerKm;
-        let finalPrice = basePrice;
+        let specificBasePrice = (carType === 7) ? basePrice7 : basePrice4;
 
+        if (distance <= 0) {
+            basePrice = 0;
+        } else if (baseKm > 0 && distance <= baseKm) {
+            // Nếu quãng đường nằm trong số km mở cửa
+            basePrice = specificBasePrice > 0 ? specificBasePrice : (distance * ratePerKm);
+        } else if (baseKm > 0 && distance > baseKm) {
+            // Nếu quãng đường vượt quá số km mở cửa
+            let extraKm = distance - baseKm;
+            basePrice = (specificBasePrice > 0 ? specificBasePrice : (baseKm * ratePerKm)) + (extraKm * ratePerKm);
+        } else {
+            // Trường hợp không cấu hình km mở cửa (tính đơn giá từ km đầu)
+            basePrice = distance * ratePerKm;
+        }
+
+        let finalPrice = basePrice;
         let noteHTML = "* Giá cước trên áp dụng cho chiều đi/về tiêu chuẩn.<br>Chưa bao gồm phí cầu đường (BOT) hoặc vé bến bãi nếu có.";
 
-        if (tripType === 2) {
+        if (tripType === 2 && basePrice > 0) {
             let returnDiscount = basePrice * (discountPercent / 100);
             finalPrice = basePrice + (basePrice - returnDiscount);
             noteHTML = `* Áp dụng ưu đãi giảm ${discountPercent}% cước chiều về trong ngày.<br>Chưa bao gồm phí cầu đường (BOT) hoặc vé bến bãi nếu có.`;
@@ -666,6 +719,7 @@
         let time = document.getElementById('pickupTime').value.trim();
         let date = document.getElementById('pickupDate').value.trim();
         let distance = document.getElementById('distance').value.trim();
+        let currentPhone = document.getElementById('adminPhoneInput').value.trim() || "0917918586";
         
         if (!name || !phone || !pickup || !dropoff || !time || !date || !distance) {
             alert("Vui lòng điền đầy đủ thông tin đặt xe trước khi gửi!");
@@ -676,7 +730,6 @@
         let tripTypeText = document.getElementById('tripType').value === '1' ? "Một chiều" : "Hai chiều trong ngày";
         let priceText = document.getElementById('totalPrice').innerText;
 
-        // Đã bỏ chữ "mới" ở đây
         let message = `🚗 *YÊU CẦU ĐẶT XE*\n\n` +
                     `• Loại xe: ${carTypeText}\n` +
                     `• Hình thức: ${tripTypeText}\n` +
@@ -716,6 +769,7 @@
             document.body.removeChild(textarea);
         }
 
+        document.getElementById('successZaloLink', `zalo://chat?phone=84${currentPhone.replace(/^0/, '')}`);
         document.getElementById('bookingForm').style.display = 'none';
         document.getElementById('successBox').style.display = 'block';
     }
