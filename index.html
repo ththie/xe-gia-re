@@ -144,27 +144,49 @@
         .site-footer p { margin: 2px 0; }
         .site-footer .brand-title { font-weight: bold; color: #0066cc; font-size: 12px; }
         
+        /* Floating Button & Ripple Effect */
         .floating-container {
-            position: fixed; bottom: 15px; right: 15px; z-index: 9999;
+            position: fixed; bottom: 20px; right: 20px; z-index: 9999;
             display: flex; flex-direction: column; align-items: flex-end;
         }
         .main-trigger-btn {
-            width: 45px; height: 45px; border-radius: 50%;
+            width: 50px; height: 50px; border-radius: 50%;
             background: linear-gradient(135deg, #ff9800, #f57c00); color: white; border: none;
-            display: flex; align-items: center; justify-content: center; font-size: 20px;
-            cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,0.3); outline: none;
-            transition: transform 0.3s ease;
+            display: flex; align-items: center; justify-content: center; font-size: 22px;
+            cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.3); outline: none;
+            position: relative; z-index: 2;
+            transition: transform 0.3s ease, background 0.3s ease;
         }
+        /* Hiệu ứng gợn sóng lan tỏa (Pulse / Ripple) */
+        .main-trigger-btn::after {
+            content: '';
+            position: absolute;
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            background: rgba(255, 152, 0, 0.5);
+            z-index: -1;
+            animation: pulse-wave 1.8s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+        @keyframes pulse-wave {
+            0% { transform: scale(1); opacity: 0.9; }
+            100% { transform: scale(1.7); opacity: 0; }
+        }
+
         .sub-buttons-group {
-            display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px;
+            display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px;
             opacity: 0; visibility: hidden; transform: translateY(15px) scale(0.8);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .floating-container.active .sub-buttons-group { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
-        .floating-container.active .main-trigger-btn { background: linear-gradient(135deg, #e53935, #c62828); transform: rotate(45deg); }
+        .floating-container.active .main-trigger-btn { 
+            background: linear-gradient(135deg, #e53935, #c62828); 
+            transform: rotate(45deg); 
+        }
+        .floating-container.active .main-trigger-btn::after { display: none; /* Dừng gợn sóng khi mở menu */ }
+
         .float-btn {
-            width: 42px; height: 42px; border-radius: 50%; display: flex;
-            align-items: center; justify-content: center; color: white; text-decoration: none; font-size: 18px;
+            width: 44px; height: 44px; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; color: white; text-decoration: none; font-size: 19px;
             box-shadow: 0 3px 8px rgba(0,0,0,0.3);
         }
         .float-call { background-color: #e53935; }
@@ -293,14 +315,15 @@
 
 <div id="floatingButtonsContainer" class="floating-container" onclick="event.stopPropagation()">
     <div class="sub-buttons-group">
-        <a href="tel:0917918586" id="floatingCallLink" class="float-btn float-call">📞</a>
-        <a href="https://zalo.me/0917918586" id="floatingZaloLink" target="_blank" class="float-btn float-zalo">💬</a>
+        <a href="tel:0917918586" id="floatingCallLink" class="float-btn float-call" onclick="autoCloseMenu()">📞</a>
+        <a href="https://zalo.me/0917918586" id="floatingZaloLink" target="_blank" class="float-btn float-zalo" onclick="autoCloseMenu()">💬</a>
     </div>
     <button type="button" class="main-trigger-btn" onclick="toggleFloatingMenu(event)">🎧</button>
 </div>
 
 <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxhdlq6CygTwjVKhtoDtDUSr8gNlgEA8UDle8IVhnvqHsCA3O8I3qlNjwaKqM6Fy-yD/exec";
+    let autoCloseTimer = null;
     
     window.onload = function() {
         loadSavedConfig();
@@ -383,14 +406,27 @@
 
     function toggleFloatingMenu(event) {
         event.stopPropagation();
-        document.getElementById('floatingButtonsContainer').classList.toggle('active');
+        let container = document.getElementById('floatingButtonsContainer');
+        container.classList.toggle('active');
+        
+        // Xóa hẹn giờ cũ nếu có
+        if (autoCloseTimer) clearTimeout(autoCloseTimer);
+
+        // Nếu menu đang mở, bật đếm ngược 5 giây tự thu lại
+        if (container.classList.contains('active')) {
+            autoCloseTimer = setTimeout(() => {
+                container.classList.remove('active');
+            }, 5000);
+        }
+    }
+
+    function autoCloseMenu() {
+        if (autoCloseTimer) clearTimeout(autoCloseTimer);
+        document.getElementById('floatingButtonsContainer').classList.remove('active');
     }
 
     function handleOutsideClick(event) {
-        let container = document.getElementById('floatingButtonsContainer');
-        if (container.classList.contains('active')) {
-            container.classList.remove('active');
-        }
+        autoCloseMenu();
     }
 
     function submitBooking() {
