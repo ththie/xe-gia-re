@@ -79,7 +79,7 @@
             padding: 10px;
             border-radius: 8px;
             margin-bottom: 10px;
-            max-height: 400px;
+            max-height: 420px;
             overflow-y: auto;
         }
         .admin-panel h4 { margin: 0 0 6px 0; font-size: 12px; color: #856404; }
@@ -157,7 +157,6 @@
             position: relative; z-index: 2;
             transition: transform 0.3s ease, background 0.3s ease;
         }
-        /* Hiệu ứng gợn sóng lan tỏa (Pulse / Ripple) */
         .main-trigger-btn::after {
             content: '';
             position: absolute;
@@ -182,7 +181,7 @@
             background: linear-gradient(135deg, #e53935, #c62828); 
             transform: rotate(45deg); 
         }
-        .floating-container.active .main-trigger-btn::after { display: none; /* Dừng gợn sóng khi mở menu */ }
+        .floating-container.active .main-trigger-btn::after { display: none; }
 
         .float-btn {
             width: 44px; height: 44px; border-radius: 50%; display: flex;
@@ -220,17 +219,26 @@
         <h4>📞 Cấu hình Hotline & Giá cước</h4>
         <div style="font-size: 11px; margin-bottom: 2px;">Số điện thoại:</div>
         <input type="text" id="adminPhoneInput" value="0917918586">
+        
+        <div style="font-size: 11px; margin-bottom: 2px;">Giá mở cửa / Mở chuyến (VNĐ):</div>
+        <input type="number" id="adminBaseFare" value="0">
+
         <div style="font-size: 11px; margin-bottom: 2px;">Đơn giá - Xe 7 Chỗ (VNĐ/Km):</div>
         <input type="number" id="adminRate7" value="15000">
+        
         <div style="font-size: 11px; margin-bottom: 2px;">Đơn giá - Xe 4 Chỗ (VNĐ/Km):</div>
         <input type="number" id="adminRate4" value="12000">
+        
         <div style="font-size: 11px; margin-bottom: 2px;">Ưu đãi chiều về (%):</div>
         <input type="number" id="adminDiscount" value="30">
         
         <div class="divider"></div>
-        <h4>⚙️ Tùy chỉnh khác</h4>
+        <h4>⚙️ Tùy chỉnh khác & Bảo mật</h4>
         <div style="font-size: 11px; margin-bottom: 2px;">Nội dung chữ chạy thông báo:</div>
         <input type="text" id="adminMarqueeText" value="✨ Xe thơm sạch &nbsp;|&nbsp; 🛡️ Lái xe an toàn &nbsp;|&nbsp; 💰 Tiết kiệm 30%">
+
+        <div style="font-size: 11px; margin-bottom: 2px;">Đổi mật khẩu quản trị mới:</div>
+        <input type="password" id="adminNewPassword" placeholder="Để trống nếu không muốn đổi">
         
         <button type="button" class="btn-save-admin" onclick="saveAdminConfig()">💾 Lưu cấu hình</button>
     </div>
@@ -337,12 +345,13 @@
         let tripType = parseInt(document.getElementById('tripType').value);
         let distance = parseFloat(document.getElementById('distance').value) || 0;
 
+        let baseFare = parseFloat(document.getElementById('adminBaseFare').value) || 0;
         let rate7 = parseFloat(document.getElementById('adminRate7').value) || 15000;
         let rate4 = parseFloat(document.getElementById('adminRate4').value) || 12000;
         let discountPercent = parseFloat(document.getElementById('adminDiscount').value) || 30;
 
         let ratePerKm = (carType === 7) ? rate7 : rate4;
-        let basePrice = distance * ratePerKm;
+        let basePrice = baseFare + (distance * ratePerKm);
         let finalPrice = basePrice;
         let noteHTML = "* Giá cước áp dụng cho chiều đi/về tiêu chuẩn. Chưa bao gồm phí cầu đường (BOT).";
 
@@ -368,13 +377,22 @@
 
     function saveAdminConfig() {
         localStorage.setItem('cfg_theme', document.getElementById('selectedThemeValue').value);
+        localStorage.setItem('cfg_baseFare', document.getElementById('adminBaseFare').value);
         localStorage.setItem('cfg_rate7', document.getElementById('adminRate7').value);
         localStorage.setItem('cfg_rate4', document.getElementById('adminRate4').value);
         localStorage.setItem('cfg_discount', document.getElementById('adminDiscount').value);
         localStorage.setItem('cfg_phone', document.getElementById('adminPhoneInput').value);
         localStorage.setItem('cfg_marquee', document.getElementById('adminMarqueeText').value);
-        
-        alert("💾 Đã lưu cấu hình!");
+
+        let newPass = document.getElementById('adminNewPassword').value.trim();
+        if (newPass) {
+            localStorage.setItem('admin_password', newPass);
+            alert("💾 Đã lưu cấu hình và CẬP NHẬT MẬT KHẨU MỚI THÀNH CÔNG!");
+            document.getElementById('adminNewPassword').value = "";
+        } else {
+            alert("💾 Đã lưu cấu hình thành công!");
+        }
+
         document.getElementById('adminPanel').style.display = 'none';
         loadSavedConfig();
         calculatePrice();
@@ -384,6 +402,7 @@
         let theme = localStorage.getItem('cfg_theme') || 'tech-blue';
         document.body.className = theme;
         
+        if(localStorage.getItem('cfg_baseFare')) document.getElementById('adminBaseFare').value = localStorage.getItem('cfg_baseFare');
         if(localStorage.getItem('cfg_rate7')) document.getElementById('adminRate7').value = localStorage.getItem('cfg_rate7');
         if(localStorage.getItem('cfg_rate4')) document.getElementById('adminRate4').value = localStorage.getItem('cfg_rate4');
         if(localStorage.getItem('cfg_discount')) document.getElementById('adminDiscount').value = localStorage.getItem('cfg_discount');
@@ -409,10 +428,8 @@
         let container = document.getElementById('floatingButtonsContainer');
         container.classList.toggle('active');
         
-        // Xóa hẹn giờ cũ nếu có
         if (autoCloseTimer) clearTimeout(autoCloseTimer);
 
-        // Nếu menu đang mở, bật đếm ngược 5 giây tự thu lại
         if (container.classList.contains('active')) {
             autoCloseTimer = setTimeout(() => {
                 container.classList.remove('active');
