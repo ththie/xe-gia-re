@@ -17,15 +17,9 @@
             align-items: center;
             justify-content: center;
         }
-        body.tech-blue {
-            background: linear-gradient(135deg, #0f4c81 0%, #1b262c 100%) !important;
-        }
-        body.eco-green {
-            background: linear-gradient(135deg, #2e7d32 0%, #a5d6a7 100%) !important;
-        }
-        body.modern-gray {
-            background: linear-gradient(135deg, #e9ecef 0%, #ced4da 100%) !important;
-        }
+        body.tech-blue { background: linear-gradient(135deg, #0f4c81 0%, #1b262c 100%) !important; }
+        body.eco-green { background: linear-gradient(135deg, #2e7d32 0%, #a5d6a7 100%) !important; }
+        body.modern-gray { background: linear-gradient(135deg, #e9ecef 0%, #ced4da 100%) !important; }
 
         .container {
             max-width: 480px;
@@ -64,7 +58,6 @@
             font-weight: bold;
             margin-bottom: 5px;
         }
-        
         .features-area {
             margin-bottom: 8px;
             padding: 6px 4px;
@@ -79,7 +72,6 @@
             width: 100%;
             box-sizing: border-box;
         }
-
         .admin-panel {
             display: none;
             background: #fff3cd;
@@ -90,270 +82,91 @@
             max-height: 400px;
             overflow-y: auto;
         }
-        .admin-panel h4 {
-            margin: 0 0 6px 0;
-            font-size: 12px;
-            color: #856404;
+        .admin-panel h4 { margin: 0 0 6px 0; font-size: 12px; color: #856404; }
+        .admin-panel input, .admin-panel select {
+            padding: 6px; font-size: 12px; margin-bottom: 6px; width: 100%;
+            box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; background: #fff;
         }
-        .admin-panel input, .admin-panel select, .admin-panel textarea {
-            padding: 6px;
-            font-size: 12px;
-            margin-bottom: 6px;
-            width: 100%;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background: #fff;
-            font-family: Arial, sans-serif;
-        }
-        
-        .theme-buttons {
-            display: flex;
-            gap: 5px;
-            margin-bottom: 8px;
-        }
+        .theme-buttons { display: flex; gap: 5px; margin-bottom: 8px; }
         .theme-btn {
-            flex: 1;
-            padding: 6px 3px;
-            font-size: 10px;
-            font-weight: bold;
-            border: 2px solid #ccc;
-            border-radius: 5px;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.2s;
+            flex: 1; padding: 6px 3px; font-size: 10px; font-weight: bold;
+            border: 2px solid #ccc; border-radius: 5px; cursor: pointer; text-align: center;
         }
-        .theme-btn.active {
-            border-color: #d9534f;
-            box-shadow: 0 0 4px rgba(217, 83, 79, 0.5);
-        }
+        .theme-btn.active { border-color: #d9534f; box-shadow: 0 0 4px rgba(217, 83, 79, 0.5); }
         .btn-blue { background: #0f4c81; color: white; }
         .btn-green { background: #2e7d32; color: white; }
         .btn-gray { background: #ced4da; color: #333; }
-
         .btn-save-admin {
-            background: #856404;
-            color: white;
-            border: none;
-            padding: 6px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 11px;
-            width: 100%;
-            font-weight: bold;
-            margin-top: 2px;
+            background: #856404; color: white; border: none; padding: 6px 8px;
+            border-radius: 4px; cursor: pointer; font-size: 11px; width: 100%; font-weight: bold;
         }
-        .divider {
-            border-top: 1px dashed #d6c288;
-            margin: 8px 0;
-        }
-        .form-group {
-            margin-bottom: 8px;
-        }
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 2px;
-            font-size: 12px;
-            color: #333;
-        }
+        .divider { border-top: 1px dashed #d6c288; margin: 8px 0; }
+        .form-group { margin-bottom: 8px; }
+        label { display: block; font-weight: bold; margin-bottom: 2px; font-size: 12px; color: #333; }
         input, select {
-            width: 100%;
-            padding: 7px 8px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 13px;
-            outline: none;
-            background: #fff;
+            width: 100%; padding: 7px 8px; box-sizing: border-box;
+            border: 1px solid #ccc; border-radius: 6px; font-size: 13px; outline: none; background: #fff;
         }
-        input:focus, select:focus {
-            border-color: #0066cc;
-        }
-        .datetime-row {
-            display: flex;
-            gap: 8px;
-        }
-        .datetime-row .form-group {
-            flex: 1;
-            margin-bottom: 0;
-        }
+        input:focus, select:focus { border-color: #0066cc; }
+        .datetime-row { display: flex; gap: 8px; }
+        .datetime-row .form-group { flex: 1; margin-bottom: 0; }
+
         .price-box {
-            background: #eef6fc;
-            padding: 8px 10px;
-            border-radius: 6px;
-            text-align: center;
-            margin-bottom: 10px;
-            border: 1px dashed #bce8f1;
-            margin-top: 8px;
+            background: #eef6fc; padding: 8px 10px; border-radius: 6px;
+            text-align: center; margin-bottom: 10px; border: 1px dashed #bce8f1; margin-top: 8px;
         }
-        .price-box p {
-            margin: 0;
-            font-size: 11px;
-            color: #555;
-            font-weight: bold;
-        }
-        .price-box h3 {
-            margin: 2px 0 0 0;
-            color: #d9534f;
-            font-size: 20px;
-        }
-        .price-note {
-            font-size: 10px;
-            color: #666;
-            margin-top: 4px;
-            font-style: italic;
-            line-height: 1.3;
-        }
+        .price-box p { margin: 0; font-size: 11px; color: #555; font-weight: bold; }
+        .price-box h3 { margin: 2px 0 0 0; color: #d9534f; font-size: 20px; }
+        .price-note { font-size: 10px; color: #666; margin-top: 4px; font-style: italic; line-height: 1.3; }
+        
         .btn-zalo {
-            display: block;
-            background-color: #0068ff;
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 10px;
-            font-size: 14px;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            box-sizing: border-box;
+            display: block; background-color: #0068ff; color: white; border: none;
+            width: 100%; padding: 10px; font-size: 14px; font-weight: bold; border-radius: 6px;
+            cursor: pointer; text-align: center; text-decoration: none; box-sizing: border-box;
             box-shadow: 0 3px 5px rgba(0, 104, 255, 0.2);
         }
         .success-box {
-            display: none;
-            background: #e6ffed;
-            border: 1px solid #b7eb8f;
-            padding: 12px;
-            border-radius: 6px;
-            text-align: center;
-            margin-top: 10px;
+            display: none; background: #e6ffed; border: 1px solid #b7eb8f;
+            padding: 12px; border-radius: 6px; text-align: center; margin-top: 10px;
         }
-        .success-box p {
-            color: #2b8a3e;
-            font-weight: bold;
-            margin: 0 0 8px 0;
-            font-size: 13px;
-            line-height: 1.4;
-        }
+        .success-box p { color: #2b8a3e; font-weight: bold; margin: 0 0 8px 0; font-size: 13px; line-height: 1.4; }
         .btn-action {
-            display: block;
-            background-color: #00aa00;
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 10px;
-            font-size: 13px;
-            font-weight: bold;
-            border-radius: 6px;
-            text-align: center;
-            text-decoration: none;
-            margin-top: 6px;
-            box-sizing: border-box;
+            display: block; background-color: #00aa00; color: white; border: none;
+            width: 100%; padding: 10px; font-size: 13px; font-weight: bold; border-radius: 6px;
+            text-align: center; text-decoration: none; margin-top: 6px; box-sizing: border-box;
         }
-        .hotline {
-            text-align: center;
-            margin-top: 8px;
-            font-size: 12px;
-            color: #444;
-        }
-
+        .hotline { text-align: center; margin-top: 8px; font-size: 12px; color: #444; }
         .site-footer {
-            max-width: 480px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 8px 15px;
-            border-radius: 8px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            text-align: center;
-            font-size: 11px;
-            color: #555;
-            box-sizing: border-box;
-            line-height: 1.4;
+            max-width: 480px; width: 100%; background: rgba(255, 255, 255, 0.95);
+            padding: 8px 15px; border-radius: 8px; box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            text-align: center; font-size: 11px; color: #555; box-sizing: border-box; line-height: 1.4;
         }
-        .site-footer p {
-            margin: 2px 0;
-        }
-        .site-footer .brand-title {
-            font-weight: bold;
-            color: #0066cc;
-            font-size: 12px;
-        }
-
+        .site-footer p { margin: 2px 0; }
+        .site-footer .brand-title { font-weight: bold; color: #0066cc; font-size: 12px; }
         .floating-container {
-            position: fixed;
-            bottom: 15px;
-            right: 15px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
+            position: fixed; bottom: 15px; right: 15px; z-index: 9999;
+            display: flex; flex-direction: column; align-items: flex-end;
         }
         .main-trigger-btn {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #ff9800, #f57c00);
-            color: white;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            cursor: pointer;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
-            animation: pulse-ring 2s infinite;
-            outline: none;
-            transition: transform 0.2s;
-        }
-        .main-trigger-btn:active {
-            transform: scale(0.9);
+            width: 45px; height: 45px; border-radius: 50%;
+            background: linear-gradient(135deg, #ff9800, #f57c00); color: white; border: none;
+            display: flex; align-items: center; justify-content: center; font-size: 20px;
+            cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,0.3); outline: none;
         }
         .sub-buttons-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-bottom: 8px;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(15px) scale(0.8);
+            display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px;
+            opacity: 0; visibility: hidden; transform: translateY(15px) scale(0.8);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .floating-container.active .sub-buttons-group {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0) scale(1);
-        }
-        .floating-container.active .main-trigger-btn {
-            background: linear-gradient(135deg, #e53935, #c62828);
-            transform: rotate(45deg);
-            animation: none;
-        }
+        .floating-container.active .sub-buttons-group { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+        .floating-container.active .main-trigger-btn { background: linear-gradient(135deg, #e53935, #c62828); transform: rotate(45deg); }
         .float-btn {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-decoration: none;
-            font-size: 18px;
+            width: 42px; height: 42px; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; color: white; text-decoration: none; font-size: 18px;
             box-shadow: 0 3px 8px rgba(0,0,0,0.3);
-            transition: transform 0.2s;
-        }
-        .float-btn:hover {
-            transform: scale(1.1);
         }
         .float-call { background-color: #e53935; }
         .float-zalo { background-color: #0068ff; }
-
-        @keyframes pulse-ring {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.6); }
-            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 152, 0, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 152, 0, 0); }
-        }
     </style>
 </head>
 <body class="tech-blue">
@@ -363,15 +176,13 @@
         🌟 Xin kính chào Quý khách! Rất hân hạnh được phục vụ.
     </div>
 
-    <!-- BẤM ĐÚP VÀO TIÊU ĐỀ ĐỂ MỞ BẢNG ADMIN -->
-    <h2 ondblclick="toggleAdmin()">🚗 DỊCH VỤ DI CHuyỂN TIẾT KIỆM</h2>
-    <div class="subtitle">Xe 4 và 7 Chỗ Đời Mới</div>
+    <h2 ondblclick="toggleAdmin()">🚗 XENOW.VN - ĐẶT XE TIẾT KIỆM</h2>
+    <div class="subtitle">Xe 4 và 7 Chỗ Đời Mới - Giá Rẻ</div>
     
-    <div class="features-area" id="marqueeText">
+    <marquee class="features-area" id="marqueeText" scrollamount="4">
         ✨ Xe thơm sạch &nbsp;|&nbsp; 🛡️ Lái xe an toàn &nbsp;|&nbsp; 💰 Tiết kiệm 30%
-    </div>
+    </marquee>
 
-    <!-- KHU VỰC QUẢN TRỊ ẨN (LINH HOẠT ĐIỀU CHỈNH) -->
     <div id="adminPanel" class="admin-panel">
         <h4>🎨 Giao diện & Màu nền</h4>
         <div class="theme-buttons">
@@ -382,52 +193,16 @@
         <input type="hidden" id="selectedThemeValue" value="tech-blue">
 
         <div class="divider"></div>
-        <h4>📢 Nội dung Thông báo & Lời chào</h4>
-        <div style="font-size: 11px; margin-bottom: 2px;">Dòng lời chào đầu trang:</div>
-        <input type="text" id="adminWelcomeInput" value="🌟 Xin kính chào Quý khách! Rất hân hạnh được phục vụ.">
-
-        <div style="font-size: 11px; margin-bottom: 2px;">Dòng nội dung chạy (Marquee):</div>
-        <input type="text" id="adminMarqueeInput" value="✨ Xe thơm sạch &nbsp;|&nbsp; 🛡️ Lái xe an toàn &nbsp;|&nbsp; 💰 Tiết kiệm 30%">
-
-        <div class="divider"></div>
-        <h4>📞 Cấu hình Liên hệ & Hotline</h4>
-        <div style="font-size: 11px; margin-bottom: 2px;">Số điện thoại (Dùng gọi & Zalo):</div>
+        <h4>📞 Cấu hình Hotline & Giá cước</h4>
+        <div style="font-size: 11px; margin-bottom: 2px;">Số điện thoại:</div>
         <input type="text" id="adminPhoneInput" value="0917918586">
-
-        <div class="divider"></div>
-        <h4>📍 Địa chỉ & Chân trang</h4>
-        <div style="font-size: 11px; margin-bottom: 2px;">Tên thương hiệu chân trang:</div>
-        <input type="text" id="adminFooterName" value="DỊCH VỤ DI CHUYỂN TIẾT KIỆM - XENOW.VN">
-        
-        <div style="font-size: 11px; margin-bottom: 2px;">Địa chỉ cơ sở:</div>
-        <input type="text" id="adminFooterAddress" value="8/1A5 Đường Số 9, P. Hiệp Bình, TP. HCM">
-
-        <div class="divider"></div>
-        <h4>🔒 Cấu hình Giá cước & Mở cửa</h4>
-        <div style="font-size: 11px; margin-bottom: 2px;">Giá mở cửa xe 7 chỗ (VNĐ):</div>
-        <input type="number" id="adminBasePrice7" value="0" placeholder="Ví dụ: 30000 cho 2km đầu">
-
-        <div style="font-size: 11px; margin-bottom: 2px;">Giá mở cửa xe 4 chỗ (VNĐ):</div>
-        <input type="number" id="adminBasePrice4" value="0" placeholder="Ví dụ: 25000 cho 2km đầu">
-
-        <div style="font-size: 11px; margin-bottom: 2px;">Số Km áp dụng giá mở cửa:</div>
-        <input type="number" id="adminBaseKm" value="0" min="0" placeholder="Ví dụ: nhập 2 (nếu 2km đầu trọn gói)">
-
-        <div style="font-size: 11px; margin-bottom: 2px;">Đơn giá tiếp theo - Xe 7 Chỗ (VNĐ/Km):</div>
-        <input type="number" id="adminRate7" value="10000">
-
-        <div style="font-size: 11px; margin-bottom: 2px;">Đơn giá tiếp theo - Xe 4 Chỗ (VNĐ/Km):</div>
-        <input type="number" id="adminRate4" value="8000">
-
-        <div style="font-size: 11px; margin-bottom: 2px;">Ưu đãi chiều về (Nhập số %):</div>
-        <input type="number" id="adminDiscount" value="30" min="0" max="100">
-
-        <button type="button" class="btn-save-admin" onclick="saveAdminConfig()">💾 Lưu cấu hình mới</button>
-
-        <div class="divider"></div>
-        <h4>🔑 Đổi mật khẩu quản trị</h4>
-        <input type="password" id="newAdminPass" placeholder="Nhập mật khẩu mới">
-        <button type="button" class="btn-save-admin" style="background: #b58100;" onclick="changePassword()">🔐 Cập nhật mật khẩu</button>
+        <div style="font-size: 11px; margin-bottom: 2px;">Đơn giá - Xe 7 Chỗ (VNĐ/Km):</div>
+        <input type="number" id="adminRate7" value="15000">
+        <div style="font-size: 11px; margin-bottom: 2px;">Đơn giá - Xe 4 Chỗ (VNĐ/Km):</div>
+        <input type="number" id="adminRate4" value="12000">
+        <div style="font-size: 11px; margin-bottom: 2px;">Ưu đãi chiều về (%):</div>
+        <input type="number" id="adminDiscount" value="30">
+        <button type="button" class="btn-save-admin" onclick="saveAdminConfig()">💾 Lưu cấu hình</button>
     </div>
 
     <form id="bookingForm">
@@ -470,245 +245,128 @@
         <div class="datetime-row">
             <div class="form-group">
                 <label>Giờ đón</label>
-                <input type="text" id="pickupTime" placeholder="Ví dụ: 08h30" required>
+                <input type="text" id="pickupTime" required>
             </div>
             <div class="form-group">
                 <label>Ngày đi</label>
-                <input type="text" id="pickupDate" placeholder="Ví dụ: 15/09/2026" required>
+                <input type="text" id="pickupDate" required>
             </div>
         </div>
 
         <div class="form-group" style="margin-top: 8px;">
-            <label>Quãng đường dự kiến (Km đi 1 chiều)</label>
-            <input type="number" id="distance" placeholder="Ví dụ: 15" min="1" required oninput="calculatePrice()">
+            <label>Quãng đường dự kiến (Km)</label>
+            <input type="number" id="distance" placeholder="Nhập số Km (Ví dụ: 15)" min="0.1" step="0.1" required oninput="calculatePrice()">
         </div>
 
         <div class="price-box">
             <p>DỰ KIẾN CƯỚC TRỌN GÓI:</p>
             <h3 id="totalPrice">0 VNĐ</h3>
-            <div class="price-note" id="priceNote">* Giá cước trên áp dụng cho chiều đi/về tiêu chuẩn.<br>Chưa bao gồm phí cầu đường (BOT) hoặc vé bến bãi nếu có.</div>
+            <div class="price-note" id="priceNote">* Giá cước trên áp dụng cho chiều đi/về tiêu chuẩn. Chưa bao gồm phí BOT.</div>
         </div>
 
         <button type="button" class="btn-zalo" onclick="submitBooking()">💬 GỬI YÊU CẦU ĐẶT XE QUA ZALO</button>
     </form>
 
     <div id="successBox" class="success-box">
-        <p>✅ ĐÃ LƯU ĐƠN & ĐÃ SAO CHÉP NỘI DUNG!<br>Vui lòng mở Zalo, vào khung chat và <b>DÁN (Paste)</b> để gửi.</p>
-        <a href="#" id="successZaloLink" class="btn-action">📱 MỞ ỨNG DỤNG ZALO NGAY</a>
-        <a href="#" id="successCallLink" class="btn-action" style="background-color: #0066cc;">📞 GỌI HOTLINE: <span id="hotlineCallText">091 791 8586</span></a>
+        <p>✅ ĐÃ LƯU ĐƠN & ĐÃ SAO CHÉP NỘI DUNG!<br>Vui lòng mở Zalo và <b>DÁN (Paste)</b> để gửi.</p>
+        <a href="#" id="successZaloLink" class="btn-action" target="_blank">📱 MỞ ỨNG DỤNG ZALO NGAY</a>
+        <a href="#" id="successCallLink" class="btn-action" style="background-color: #0066cc;">📞 GỌI HOTLINE</a>
     </div>
 
     <div class="hotline">
-        Cần tư vấn nhanh, gọi ngay Hotline: <b id="mainHotlineText">091 791 8586</b>
+        Cần tư vấn nhanh, gọi ngay Hotline: <b id="mainHotlineText">0917918586</b>
     </div>
 </div>
 
 <footer class="site-footer">
-    <p class="brand-title" id="footerBrandName">DỊCH VỤ DI CHUYỂN TIẾT KIỆM - XENOW.VN</p>
-    <p id="footerAddressText">📍 Địa chỉ: 8/1A5 Đường Số 9, P. Hiệp Bình, TP. HCM</p>
+    <p class="brand-title">DỊCH VỤ DI CHUYỂN TIẾT KIỆM - XENOW.VN</p>
+    <p>📍 Địa chỉ: 8/1A5 Đường Số 9, P. Hiệp Bình, TP. HCM</p>
 </footer>
 
 <div id="floatingButtonsContainer" class="floating-container">
     <div class="sub-buttons-group">
-        <a href="#" id="floatingCallLink" class="float-btn float-call" title="Gọi điện trực tiếp">📞</a>
-        <a href="#" id="floatingZaloLink" target="_blank" class="float-btn float-zalo" title="Nhắn tin Zalo">💬</a>
+        <a href="tel:0917918586" id="floatingCallLink" class="float-btn float-call">📞</a>
+        <a href="https://zalo.me/0917918586" id="floatingZaloLink" target="_blank" class="float-btn float-zalo">💬</a>
     </div>
-    <button type="button" class="main-trigger-btn" onclick="toggleFloatingMenu()" title="Mở menu liên hệ">
-        🎧
-    </button>
+    <button type="button" class="main-trigger-btn" onclick="toggleFloatingMenu()">🎧</button>
 </div>
 
 <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxhdlq6CygTwjVKhtoDtDUSr8gNlgEA8UDle8IVhnvqHsCA3O8I3qlNjwaKqM6Fy-yD/exec";
-    let autoCloseTimer = null;
-
+    
     window.onload = function() {
         loadSavedConfig();
-
         let now = new Date();
-        let hours = String(now.getHours()).padStart(2, '0');
-        let minutes = String(now.getMinutes()).padStart(2, '0');
-        document.getElementById('pickupTime').value = `${hours}h${minutes}`;
-
-        let day = String(now.getDate()).padStart(2, '0');
-        let month = String(now.getMonth() + 1).padStart(2, '0');
-        let year = now.getFullYear();
-        document.getElementById('pickupDate').value = `${day}/${month}/${year}`;
-
-        calculatePrice();
-
-        let container = document.getElementById('floatingButtonsContainer');
-        container.classList.add('active');
-        resetAutoCloseTimer();
+        document.getElementById('pickupTime').value = String(now.getHours()).padStart(2, '0') + 'h' + String(now.getMinutes()).padStart(2, '0');
+        document.getElementById('pickupDate').value = String(now.getDate()).padStart(2, '0') + '/' + String(now.getMonth() + 1).padStart(2, '0') + '/' + now.getFullYear();
     };
-
-    function toggleFloatingMenu() {
-        let container = document.getElementById('floatingButtonsContainer');
-        container.classList.toggle('active');
-        if (container.classList.contains('active')) {
-            resetAutoCloseTimer();
-        } else {
-            clearTimeout(autoCloseTimer);
-        }
-    }
-
-    function resetAutoCloseTimer() {
-        clearTimeout(autoCloseTimer);
-        autoCloseTimer = setTimeout(() => {
-            let container = document.getElementById('floatingButtonsContainer');
-            if (container.classList.contains('active')) {
-                container.classList.remove('active');
-            }
-        }, 5000);
-    }
-
-    function toggleAdmin() {
-        let currentPass = localStorage.getItem('admin_password') || "123456";
-        let pass = prompt("Nhập mật khẩu quản trị:");
-        if (pass === currentPass) {
-            let panel = document.getElementById('adminPanel');
-            panel.style.display = (panel.style.display === 'block') ? 'none' : 'block';
-        } else if (pass !== null) {
-            alert("Mật khẩu không chính xác!");
-        }
-    }
-
-    function changePassword() {
-        let newPass = document.getElementById('newAdminPass').value.trim();
-        if (!newPass) {
-            alert("Vui lòng nhập mật khẩu mới không được để trống!");
-            return;
-        }
-        localStorage.setItem('admin_password', newPass);
-        document.getElementById('newAdminPass').value = '';
-        alert("🎉 Đã đổi mật khẩu quản trị thành công!");
-        document.getElementById('adminPanel').style.display = 'none';
-    }
-
-    function selectTheme(themeName) {
-        document.getElementById('selectedThemeValue').value = themeName;
-        document.body.className = themeName;
-
-        ['btnThemeBlue', 'btnThemeGreen', 'btnThemeGray'].forEach(id => {
-            document.getElementById(id).classList.remove('active');
-        });
-        if (themeName === 'tech-blue') document.getElementById('btnThemeBlue').classList.add('active');
-        if (themeName === 'eco-green') document.getElementById('btnThemeGreen').classList.add('active');
-        if (themeName === 'modern-gray') document.getElementById('btnThemeGray').classList.add('active');
-    }
-
-    function saveAdminConfig() {
-        localStorage.setItem('cfg_theme', document.getElementById('selectedThemeValue').value);
-        localStorage.setItem('cfg_base_price_7', document.getElementById('adminBasePrice7').value);
-        localStorage.setItem('cfg_base_price_4', document.getElementById('adminBasePrice4').value);
-        localStorage.setItem('cfg_base_km', document.getElementById('adminBaseKm').value);
-        localStorage.setItem('cfg_rate7', document.getElementById('adminRate7').value);
-        localStorage.setItem('cfg_rate4', document.getElementById('adminRate4').value);
-        localStorage.setItem('cfg_discount', document.getElementById('adminDiscount').value);
-        
-        localStorage.setItem('cfg_welcome', document.getElementById('adminWelcomeInput').value);
-        localStorage.setItem('cfg_marquee', document.getElementById('adminMarqueeInput').value);
-        localStorage.setItem('cfg_phone', document.getElementById('adminPhoneInput').value);
-        
-        localStorage.setItem('cfg_footer_name', document.getElementById('adminFooterName').value);
-        localStorage.setItem('cfg_footer_address', document.getElementById('adminFooterAddress').value);
-
-        alert("💾 Đã lưu cấu hình giá & thông tin thành công!");
-        document.getElementById('adminPanel').style.display = 'none';
-        loadSavedConfig();
-        calculatePrice();
-    }
-
-    function loadSavedConfig() {
-        let savedTheme = localStorage.getItem('cfg_theme') || 'tech-blue';
-        selectTheme(savedTheme);
-
-        let bp7 = localStorage.getItem('cfg_base_price_7');
-        let bp4 = localStorage.getItem('cfg_base_price_4');
-        let bKm = localStorage.getItem('cfg_base_km');
-        let r7 = localStorage.getItem('cfg_rate7');
-        let r4 = localStorage.getItem('cfg_rate4');
-        let disc = localStorage.getItem('cfg_discount');
-        let welcome = localStorage.getItem('cfg_welcome');
-        let marquee = localStorage.getItem('cfg_marquee');
-        let phone = localStorage.getItem('cfg_phone');
-        let fName = localStorage.getItem('cfg_footer_name');
-        let fAddr = localStorage.getItem('cfg_footer_address');
-
-        if (bp7) document.getElementById('adminBasePrice7').value = bp7;
-        if (bp4) document.getElementById('adminBasePrice4').value = bp4;
-        if (bKm) document.getElementById('adminBaseKm').value = bKm;
-        if (r7) document.getElementById('adminRate7').value = r7;
-        if (r4) document.getElementById('adminRate4').value = r4;
-        if (disc) document.getElementById('adminDiscount').value = disc;
-        
-        if (welcome) {
-            document.getElementById('adminWelcomeInput').value = welcome;
-            document.getElementById('welcomeBannerText').innerHTML = welcome;
-        }
-        if (marquee) {
-            document.getElementById('adminMarqueeInput').value = marquee;
-            document.getElementById('marqueeText').innerHTML = marquee;
-        }
-        if (phone) {
-            document.getElementById('adminPhoneInput').value = phone;
-            document.getElementById('mainHotlineText').innerText = phone;
-            document.getElementById('hotlineCallText').innerText = phone;
-            document.getElementById('floatingCallLink').href = `tel:${phone}`;
-            document.getElementById('floatingZaloLink').href = `https://zalo.me/${phone}`;
-            document.getElementById('successCallLink').href = `tel:${phone}`;
-        }
-        if (fName) {
-            document.getElementById('adminFooterName').value = fName;
-            document.getElementById('footerBrandName').innerText = fName;
-        }
-        if (fAddr) {
-            document.getElementById('adminFooterAddress').value = fAddr;
-            document.getElementById('footerAddressText').innerText = `📍 Địa chỉ: ${fAddr}`;
-        }
-    }
 
     function calculatePrice() {
         let carType = parseInt(document.getElementById('carType').value);
         let tripType = parseInt(document.getElementById('tripType').value);
         let distance = parseFloat(document.getElementById('distance').value) || 0;
 
-        let baseKm = parseFloat(document.getElementById('adminBaseKm').value) || 0;
-        let basePrice7 = parseFloat(document.getElementById('adminBasePrice7').value) || 0;
-        let basePrice4 = parseFloat(document.getElementById('adminBasePrice4').value) || 0;
-        let rate7 = parseFloat(document.getElementById('adminRate7').value) || 10000;
-        let rate4 = parseFloat(document.getElementById('adminRate4').value) || 8000;
+        let rate7 = parseFloat(document.getElementById('adminRate7').value) || 15000;
+        let rate4 = parseFloat(document.getElementById('adminRate4').value) || 12000;
         let discountPercent = parseFloat(document.getElementById('adminDiscount').value) || 30;
 
-        let basePrice = 0;
         let ratePerKm = (carType === 7) ? rate7 : rate4;
-        let specificBasePrice = (carType === 7) ? basePrice7 : basePrice4;
-
-        if (distance <= 0) {
-            basePrice = 0;
-        } else if (baseKm > 0 && distance <= baseKm) {
-            // Nếu quãng đường nằm trong số km mở cửa
-            basePrice = specificBasePrice > 0 ? specificBasePrice : (distance * ratePerKm);
-        } else if (baseKm > 0 && distance > baseKm) {
-            // Nếu quãng đường vượt quá số km mở cửa
-            let extraKm = distance - baseKm;
-            basePrice = (specificBasePrice > 0 ? specificBasePrice : (baseKm * ratePerKm)) + (extraKm * ratePerKm);
-        } else {
-            // Trường hợp không cấu hình km mở cửa (tính đơn giá từ km đầu)
-            basePrice = distance * ratePerKm;
-        }
-
+        let basePrice = distance * ratePerKm;
         let finalPrice = basePrice;
-        let noteHTML = "* Giá cước trên áp dụng cho chiều đi/về tiêu chuẩn.<br>Chưa bao gồm phí cầu đường (BOT) hoặc vé bến bãi nếu có.";
+        let noteHTML = "* Giá cước áp dụng cho chiều đi/về tiêu chuẩn. Chưa bao gồm phí cầu đường (BOT).";
 
         if (tripType === 2 && basePrice > 0) {
             let returnDiscount = basePrice * (discountPercent / 100);
             finalPrice = basePrice + (basePrice - returnDiscount);
-            noteHTML = `* Áp dụng ưu đãi giảm ${discountPercent}% cước chiều về trong ngày.<br>Chưa bao gồm phí cầu đường (BOT) hoặc vé bến bãi nếu có.`;
+            noteHTML = `* Đã bao gồm ưu đãi giảm ${discountPercent}% cước chiều về trong ngày.`;
         }
 
         document.getElementById('totalPrice').innerText = finalPrice > 0 ? finalPrice.toLocaleString('vi-VN') + " VNĐ" : "0 VNĐ";
         document.getElementById('priceNote').innerHTML = noteHTML;
+    }
+
+    function toggleAdmin() {
+        let pass = prompt("Nhập mật khẩu quản trị:");
+        if (pass === (localStorage.getItem('admin_password') || "123456")) {
+            let panel = document.getElementById('adminPanel');
+            panel.style.display = (panel.style.display === 'block') ? 'none' : 'block';
+        } else if (pass !== null) {
+            alert("Mật khẩu sai!");
+        }
+    }
+
+    function saveAdminConfig() {
+        localStorage.setItem('cfg_theme', document.getElementById('selectedThemeValue').value);
+        localStorage.setItem('cfg_rate7', document.getElementById('adminRate7').value);
+        localStorage.setItem('cfg_rate4', document.getElementById('adminRate4').value);
+        localStorage.setItem('cfg_discount', document.getElementById('adminDiscount').value);
+        localStorage.setItem('cfg_phone', document.getElementById('adminPhoneInput').value);
+        alert("💾 Đã lưu cấu hình!");
+        document.getElementById('adminPanel').style.display = 'none';
+        loadSavedConfig();
+        calculatePrice();
+    }
+
+    function loadSavedConfig() {
+        let theme = localStorage.getItem('cfg_theme') || 'tech-blue';
+        document.body.className = theme;
+        if(localStorage.getItem('cfg_rate7')) document.getElementById('adminRate7').value = localStorage.getItem('cfg_rate7');
+        if(localStorage.getItem('cfg_rate4')) document.getElementById('adminRate4').value = localStorage.getItem('cfg_rate4');
+        if(localStorage.getItem('cfg_discount')) document.getElementById('adminDiscount').value = localStorage.getItem('cfg_discount');
+        let phone = localStorage.getItem('cfg_phone') || "0917918586";
+        document.getElementById('adminPhoneInput').value = phone;
+        document.getElementById('mainHotlineText').innerText = phone;
+        document.getElementById('floatingCallLink').href = `tel:${phone}`;
+        document.getElementById('floatingZaloLink').href = `https://zalo.me/${phone}`;
+    }
+
+    function selectTheme(t) {
+        document.getElementById('selectedThemeValue').value = t;
+        document.body.className = t;
+    }
+
+    function toggleFloatingMenu() {
+        document.getElementById('floatingButtonsContainer').classList.toggle('active');
     }
 
     function submitBooking() {
@@ -720,9 +378,9 @@
         let date = document.getElementById('pickupDate').value.trim();
         let distance = document.getElementById('distance').value.trim();
         let currentPhone = document.getElementById('adminPhoneInput').value.trim() || "0917918586";
-        
-        if (!name || !phone || !pickup || !dropoff || !time || !date || !distance) {
-            alert("Vui lòng điền đầy đủ thông tin đặt xe trước khi gửi!");
+
+        if (!name || !phone || !pickup || !dropoff || !distance) {
+            alert("Vui lòng điền đủ thông tin cá nhân, địa điểm và số Km quãng đường!");
             return;
         }
 
@@ -730,7 +388,7 @@
         let tripTypeText = document.getElementById('tripType').value === '1' ? "Một chiều" : "Hai chiều trong ngày";
         let priceText = document.getElementById('totalPrice').innerText;
 
-        let message = `🚗 *YÊU CẦU ĐẶT XE*\n\n` +
+        let message = `🚗 *YÊU CẦU ĐẶT XE XENOW.VN*\n\n` +
                     `• Loại xe: ${carTypeText}\n` +
                     `• Hình thức: ${tripTypeText}\n` +
                     `• Khách hàng: ${name}\n` +
@@ -743,33 +401,23 @@
                     `Nhờ nhà xe xác nhận giúp em nhé!`;
 
         if (WEB_APP_URL) {
-            let params = new URLSearchParams();
-            params.append('carType', carTypeText);
-            params.append('tripType', tripTypeText);
-            params.append('customerName', name);
-            params.append('customerPhone', phone);
-            params.append('pickupLocation', pickup);
-            params.append('dropoffLocation', dropoff);
-            params.append('pickupTime', time);
-            params.append('pickupDate', date);
-            params.append('distance', distance);
-            params.append('totalPrice', priceText);
-
+            let params = new URLSearchParams({
+                carType: carTypeText, tripType: tripTypeText, customerName: name,
+                customerPhone: phone, pickupLocation: pickup, dropoffLocation: dropoff,
+                pickupTime: time, pickupDate: date, distance: distance, totalPrice: priceText
+            });
             fetch(WEB_APP_URL + "?" + params.toString(), { method: 'GET', mode: 'no-cors' }).catch(e => console.log(e));
         }
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(message);
-        } else {
-            let textarea = document.createElement("textarea");
-            textarea.value = message;
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand("copy");
-            document.body.removeChild(textarea);
         }
 
-        document.getElementById('successZaloLink', `zalo://chat?phone=84${currentPhone.replace(/^0/, '')}`);
+        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        let zaloHref = isMobile ? `zalo://chat?phone=84${currentPhone.replace(/^0/, '')}` : `https://zalo.me/${currentPhone}`;
+        
+        document.getElementById('successZaloLink').href = zaloHref;   
+        document.getElementById('successCallLink').href = `tel:${currentPhone}`;
         document.getElementById('bookingForm').style.display = 'none';
         document.getElementById('successBox').style.display = 'block';
     }
