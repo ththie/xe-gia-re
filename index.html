@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dịch Vụ Di Chuyển Tiết Kiệm - XENOW.VN</title>
+    <title>XENOW.VN - Đặt Xe Giá Rẻ</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -143,6 +143,7 @@
         }
         .site-footer p { margin: 2px 0; }
         .site-footer .brand-title { font-weight: bold; color: #0066cc; font-size: 12px; }
+        
         .floating-container {
             position: fixed; bottom: 15px; right: 15px; z-index: 9999;
             display: flex; flex-direction: column; align-items: flex-end;
@@ -152,6 +153,7 @@
             background: linear-gradient(135deg, #ff9800, #f57c00); color: white; border: none;
             display: flex; align-items: center; justify-content: center; font-size: 20px;
             cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,0.3); outline: none;
+            transition: transform 0.3s ease;
         }
         .sub-buttons-group {
             display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px;
@@ -169,7 +171,7 @@
         .float-zalo { background-color: #0068ff; }
     </style>
 </head>
-<body class="tech-blue">
+<body class="tech-blue" onclick="handleOutsideClick(event)">
 
 <div class="container">
     <div class="welcome-banner" id="welcomeBannerText">
@@ -183,7 +185,7 @@
         ✨ Xe thơm sạch &nbsp;|&nbsp; 🛡️ Lái xe an toàn &nbsp;|&nbsp; 💰 Tiết kiệm 30%
     </marquee>
 
-    <div id="adminPanel" class="admin-panel">
+    <div id="adminPanel" class="admin-panel" onclick="event.stopPropagation()">
         <h4>🎨 Giao diện & Màu nền</h4>
         <div class="theme-buttons">
             <button type="button" class="theme-btn btn-blue" id="btnThemeBlue" onclick="selectTheme('tech-blue')">Xanh Dương</button>
@@ -202,6 +204,12 @@
         <input type="number" id="adminRate4" value="12000">
         <div style="font-size: 11px; margin-bottom: 2px;">Ưu đãi chiều về (%):</div>
         <input type="number" id="adminDiscount" value="30">
+        
+        <div class="divider"></div>
+        <h4>⚙️ Tùy chỉnh khác</h4>
+        <div style="font-size: 11px; margin-bottom: 2px;">Nội dung chữ chạy thông báo:</div>
+        <input type="text" id="adminMarqueeText" value="✨ Xe thơm sạch &nbsp;|&nbsp; 🛡️ Lái xe an toàn &nbsp;|&nbsp; 💰 Tiết kiệm 30%">
+        
         <button type="button" class="btn-save-admin" onclick="saveAdminConfig()">💾 Lưu cấu hình</button>
     </div>
 
@@ -283,12 +291,12 @@
     <p>📍 Địa chỉ: 8/1A5 Đường Số 9, P. Hiệp Bình, TP. HCM</p>
 </footer>
 
-<div id="floatingButtonsContainer" class="floating-container">
+<div id="floatingButtonsContainer" class="floating-container" onclick="event.stopPropagation()">
     <div class="sub-buttons-group">
         <a href="tel:0917918586" id="floatingCallLink" class="float-btn float-call">📞</a>
         <a href="https://zalo.me/0917918586" id="floatingZaloLink" target="_blank" class="float-btn float-zalo">💬</a>
     </div>
-    <button type="button" class="main-trigger-btn" onclick="toggleFloatingMenu()">🎧</button>
+    <button type="button" class="main-trigger-btn" onclick="toggleFloatingMenu(event)">🎧</button>
 </div>
 
 <script>
@@ -341,6 +349,8 @@
         localStorage.setItem('cfg_rate4', document.getElementById('adminRate4').value);
         localStorage.setItem('cfg_discount', document.getElementById('adminDiscount').value);
         localStorage.setItem('cfg_phone', document.getElementById('adminPhoneInput').value);
+        localStorage.setItem('cfg_marquee', document.getElementById('adminMarqueeText').value);
+        
         alert("💾 Đã lưu cấu hình!");
         document.getElementById('adminPanel').style.display = 'none';
         loadSavedConfig();
@@ -350,14 +360,20 @@
     function loadSavedConfig() {
         let theme = localStorage.getItem('cfg_theme') || 'tech-blue';
         document.body.className = theme;
+        
         if(localStorage.getItem('cfg_rate7')) document.getElementById('adminRate7').value = localStorage.getItem('cfg_rate7');
         if(localStorage.getItem('cfg_rate4')) document.getElementById('adminRate4').value = localStorage.getItem('cfg_rate4');
         if(localStorage.getItem('cfg_discount')) document.getElementById('adminDiscount').value = localStorage.getItem('cfg_discount');
+        
         let phone = localStorage.getItem('cfg_phone') || "0917918586";
         document.getElementById('adminPhoneInput').value = phone;
         document.getElementById('mainHotlineText').innerText = phone;
         document.getElementById('floatingCallLink').href = `tel:${phone}`;
         document.getElementById('floatingZaloLink').href = `https://zalo.me/${phone}`;
+
+        let marquee = localStorage.getItem('cfg_marquee') || "✨ Xe thơm sạch &nbsp;|&nbsp; 🛡️ Lái xe an toàn &nbsp;|&nbsp; 💰 Tiết kiệm 30%";
+        document.getElementById('adminMarqueeText').value = marquee;
+        document.getElementById('marqueeText').innerHTML = marquee;
     }
 
     function selectTheme(t) {
@@ -365,8 +381,16 @@
         document.body.className = t;
     }
 
-    function toggleFloatingMenu() {
+    function toggleFloatingMenu(event) {
+        event.stopPropagation();
         document.getElementById('floatingButtonsContainer').classList.toggle('active');
+    }
+
+    function handleOutsideClick(event) {
+        let container = document.getElementById('floatingButtonsContainer');
+        if (container.classList.contains('active')) {
+            container.classList.remove('active');
+        }
     }
 
     function submitBooking() {
