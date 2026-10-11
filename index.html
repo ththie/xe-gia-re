@@ -298,7 +298,7 @@
 
         <div class="price-box">
             <p>DỰ KIẾN CƯỚC TRỌN GÓI:</p>
-            <h3 id="totalPrice">0 VNĐ</h3>
+            <h3 id="totalPrice">20.000 VNĐ</h3>
             <div class="price-note" id="priceNote">* Giá cước trên áp dụng cho chiều đi/về tiêu chuẩn. Chưa bao gồm phí BOT.</div>
         </div>
 
@@ -338,7 +338,7 @@
         let now = new Date();
         document.getElementById('pickupTime').value = String(now.getHours()).padStart(2, '0') + 'h' + String(now.getMinutes()).padStart(2, '0');
         document.getElementById('pickupDate').value = String(now.getDate()).padStart(2, '0') + '/' + String(now.getMonth() + 1).padStart(2, '0') + '/' + now.getFullYear();
-        document.getElementById('distance').value = 1; // Mặc định 1 km đầu tiên
+        document.getElementById('distance').value = ""; // Để trống ô Km
         calculatePrice();
     };
 
@@ -354,10 +354,8 @@
 
         let ratePerKm = (carType === 7) ? rate7 : rate4;
         
-        // Tính cước theo km
         let calculatedPrice = distance * ratePerKm;
-        
-        // Giá mở cửa hoạt động như mức tối thiểu (nếu tính theo km thấp hơn giá mở cửa thì lấy giá mở cửa)
+        // Nếu cước tính theo Km nhỏ hơn Giá mở cửa (hoặc chưa nhập Km), mặc định lấy Giá mở cửa
         let basePrice = calculatedPrice < baseFare ? baseFare : calculatedPrice;
         
         let finalPrice = basePrice;
@@ -369,7 +367,7 @@
             noteHTML = `* Đã bao gồm ưu đãi giảm ${discountPercent}% cước chiều về trong ngày.`;
         }
 
-        document.getElementById('totalPrice').innerText = finalPrice > 0 ? finalPrice.toLocaleString('vi-VN') + " VNĐ" : "0 VNĐ";
+        document.getElementById('totalPrice').innerText = finalPrice > 0 ? finalPrice.toLocaleString('vi-VN') + " VNĐ" : baseFare.toLocaleString('vi-VN') + " VNĐ";
         document.getElementById('priceNote').innerHTML = noteHTML;
     }
 
@@ -499,8 +497,7 @@
             navigator.clipboard.writeText(message);
         }
 
-      let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        // Sử dụng link zalo.me chuẩn để chạy ổn định cả trên điện thoại và máy tính
+        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         let zaloHref = `https://zalo.me/${currentPhone}`;
         
         document.getElementById('successZaloLink').href = zaloHref;   
