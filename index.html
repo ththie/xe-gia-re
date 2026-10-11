@@ -499,8 +499,9 @@
             navigator.clipboard.writeText(message);
         }
 
-        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        let zaloHref = isMobile ? `zalo://chat?phone=84${currentPhone.replace(/^0/, '')}` : `https://zalo.me/${currentPhone}`;
+      let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        // Sử dụng link zalo.me chuẩn để chạy ổn định cả trên điện thoại và máy tính
+        let zaloHref = `https://zalo.me/${currentPhone}`;
         
         document.getElementById('successZaloLink').href = zaloHref;   
         document.getElementById('successCallLink').href = `tel:${currentPhone}`;
