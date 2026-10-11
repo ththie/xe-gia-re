@@ -144,7 +144,6 @@
         .site-footer p { margin: 2px 0; }
         .site-footer .brand-title { font-weight: bold; color: #0066cc; font-size: 12px; }
         
-        /* Floating Button & Ripple Effect */
         .floating-container {
             position: fixed; bottom: 20px; right: 20px; z-index: 9999;
             display: flex; flex-direction: column; align-items: flex-end;
@@ -192,9 +191,9 @@
         .float-zalo { background-color: #0068ff; }
     </style>
 </head>
-<body class="tech-blue" onclick="handleOutsideClick(event)">
+<body class="tech-blue">
 
-<div class="container">
+<div class="container" onclick="event.stopPropagation()">
     <div class="welcome-banner" id="welcomeBannerText">
         🌟 Xin kính chào Quý khách! Rất hân hạnh được phục vụ.
     </div>
@@ -206,7 +205,7 @@
         ✨ Xe thơm sạch &nbsp;|&nbsp; 🛡️ Lái xe an toàn &nbsp;|&nbsp; 💰 Tiết kiệm 30%
     </marquee>
 
-    <div id="adminPanel" class="admin-panel" onclick="event.stopPropagation()">
+    <div id="adminPanel" class="admin-panel">
         <h4>🎨 Giao diện & Màu nền</h4>
         <div class="theme-buttons">
             <button type="button" class="theme-btn btn-blue" id="btnThemeBlue" onclick="selectTheme('tech-blue')">Xanh Dương</button>
@@ -301,13 +300,13 @@
 
         <div class="form-group" style="margin-top: 8px;">
             <label id="distanceLabel">Quãng đường dự kiến (Km)</label>
-            <input type="number" id="distance" placeholder="Nhập số Km (Ví dụ: 10)" min="0.1" step="0.1" required oninput="calculatePrice()">
+            <input type="number" id="distance" placeholder="Nhập số Km (Ví dụ: 9)" min="0.1" step="0.1" required oninput="calculatePrice()">
         </div>
 
         <div class="price-box">
             <p>DỰ KIẾN CƯỚC TRỌN GÓI:</p>
             <h3 id="totalPrice">20.000 VNĐ</h3>
-            <div class="price-note" id="priceNote">* Giá cước áp dụng cho chiều đi/về tiêu chuẩn. Chưa bao gồm phí BOT.</div>
+            <div class="price-note" id="priceNote">* Giá cước áp dụng chiều đi/về tiêu chuẩn. Chưa bao gồm phí BOT.</div>
         </div>
 
         <button type="button" class="btn-zalo" onclick="submitBooking()">💬 GỬI YÊU CẦU ĐẶT XE QUA ZALO</button>
@@ -329,7 +328,7 @@
     <p>📍 Địa chỉ: 8/1A5 Đường Số 9, P. Hiệp Bình, TP. HCM</p>
 </footer>
 
-<div id="floatingButtonsContainer" class="floating-container" onclick="event.stopPropagation()">
+<div id="floatingButtonsContainer" class="floating-container">
     <div class="sub-buttons-group">
         <a href="tel:0917918586" id="floatingCallLink" class="float-btn float-call" onclick="autoCloseMenu()">📞</a>
         <a href="https://zalo.me/0917918586" id="floatingZaloLink" target="_blank" class="float-btn float-zalo" onclick="autoCloseMenu()">💬</a>
@@ -338,7 +337,8 @@
 </div>
 
 <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz_RFft1SHgpTcZolH73vEyreBqKLDV3QDd_hvsEAqJlCx60KLn-90UjjPnAbMZCucr/exec"
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwO5x_B9wjSaTG4fUfqVyCPAau5Mi9Ch6Ve0l10qXaYAcc4TZrtxxu-bZ2ZGErmGAj3/exec";
+    let autoCloseTimer = null;
     
     window.onload = function() {
         loadSavedConfig();
@@ -352,7 +352,8 @@
     function calculatePrice() {
         let carType = parseInt(document.getElementById('carType').value);
         let tripType = parseInt(document.getElementById('tripType').value);
-        let distance = parseFloat(document.getElementById('distance').value) || 0;
+        let distanceInput = document.getElementById('distance').value;
+        let distance = parseFloat(distanceInput) || 0;
 
         let baseFare = parseFloat(document.getElementById('adminBaseFare').value) || 20000;
         let rate7 = parseFloat(document.getElementById('adminRate7').value) || 15000;
@@ -364,7 +365,9 @@
         let ratePerKm = (carType === 7) ? rate7 : rate4;
         
         let calculatedPrice = distance * ratePerKm;
-        let basePrice = calculatedPrice < baseFare ? baseFare : calculatedPrice;
+        let basePrice = (calculatedPrice < baseFare && distance > 0) ? baseFare : calculatedPrice;
+        if (distance === 0) basePrice = baseFare;
+
         let finalPrice = basePrice;
         let noteHTML = "* Giá cước áp dụng chiều đi/về tiêu chuẩn. Chưa bao gồm phí BOT.";
 
@@ -394,7 +397,7 @@
             distanceLabel.innerText = "Quãng đường dự kiến (Km)";
         }
 
-        document.getElementById('totalPrice').innerText = finalPrice > 0 ? finalPrice.toLocaleString('vi-VN') + " VNĐ" : baseFare.toLocaleString('vi-VN') + " VNĐ";
+        document.getElementById('totalPrice').innerText = finalPrice.toLocaleString('vi-VN') + " VNĐ";
         document.getElementById('priceNote').innerHTML = noteHTML;
     }
 
@@ -429,7 +432,6 @@
         }
 
         document.getElementById('adminPanel').style.display = 'none';
-        loadSavedConfig();
         calculatePrice();
     }
 
@@ -480,10 +482,6 @@
         document.getElementById('floatingButtonsContainer').classList.remove('active');
     }
 
-    function handleOutsideClick(event) {
-        autoCloseMenu();
-    }
-
     function submitBooking() {
         let name = document.getElementById('customerName').value.trim();
         let phone = document.getElementById('customerPhone').value.trim();
@@ -514,7 +512,7 @@
                     `• Đón: ${pickup}\n` +
                     `• Đến: ${dropoff}\n` +
                     `• Thời gian: ${time} - Ngày ${date}\n` +
-                    `• Quãng đường: ${distance} Km \n` +
+                    `• Quãng đường: ${distance} Km (1 chiều)\n` +
                     `• Dự kiến: ${priceText}\n\n` +
                     `Nhờ nhà xe xác nhận giúp nhé!`;
 
@@ -531,7 +529,6 @@
             navigator.clipboard.writeText(message);
         }
 
-        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         let zaloHref = `https://zalo.me/${currentPhone}`;
         
         document.getElementById('successZaloLink').href = zaloHref;   
