@@ -10,12 +10,12 @@
             transition: background 0.4s ease;
             min-height: 100vh;
             margin: 0;
-            padding: 8px;
+            padding: 8px 8px 60px 8px; /* Thêm khoảng trống dưới cùng để cuộn */
             color: #333;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
         }
         body.tech-blue { background: linear-gradient(135deg, #0f4c81 0%, #1b262c 100%) !important; }
         body.eco-green { background: linear-gradient(135deg, #2e7d32 0%, #a5d6a7 100%) !important; }
@@ -31,6 +31,7 @@
             position: relative;
             margin-bottom: 8px;
             box-sizing: border-box;
+            margin-top: 10px;
         }
         .welcome-banner {
             background: #fff8e1;
@@ -140,6 +141,7 @@
             max-width: 480px; width: 100%; background: rgba(255, 255, 255, 0.95);
             padding: 8px 15px; border-radius: 8px; box-shadow: 0 3px 10px rgba(0,0,0,0.1);
             text-align: center; font-size: 11px; color: #555; box-sizing: border-box; line-height: 1.4;
+            margin-bottom: 20px;
         }
         .site-footer p { margin: 2px 0; }
         .site-footer .brand-title { font-weight: bold; color: #0066cc; font-size: 12px; }
@@ -337,7 +339,7 @@
 </div>
 
 <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwCLvZBsJCJP_uNsIsP2O_dGcUlfFPTHwFpj81qvnOFfVpJkaZFldBO_LpfPiqGAWoT/exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw7VeG8bw0CnqWr007ctRRMQyMdtQhlsk9ZMZ2CyvzaFAw9upS0-h9MOxJuzQ-eqZCL/exec";
     let autoCloseTimer = null;
     
     window.onload = function() {
@@ -347,6 +349,16 @@
         document.getElementById('pickupDate').value = String(now.getDate()).padStart(2, '0') + '/' + String(now.getMonth() + 1).padStart(2, '0') + '/' + now.getFullYear();
         document.getElementById('distance').value = "";
         calculatePrice();
+
+        // Tự động cuộn trang khi focus vào các ô nhập liệu (tránh bị bàn phím Facebook che khuất)
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                setTimeout(() => {
+                    this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            });
+        });
     };
 
     function calculatePrice() {
