@@ -231,6 +231,12 @@
         
         <div style="font-size: 11px; margin-bottom: 2px;">Ưu đãi chiều về (%):</div>
         <input type="number" id="adminDiscount" value="30">
+
+        <div style="font-size: 11px; margin-bottom: 2px;">Phụ phí gói 1 đêm 2 ngày (VNĐ):</div>
+        <input type="number" id="adminPackage1" value="1500000">
+
+        <div style="font-size: 11px; margin-bottom: 2px;">Phụ phí gói 2 đêm 3 ngày (VNĐ):</div>
+        <input type="number" id="adminPackage2" value="2700000">
         
         <div class="divider"></div>
         <h4>⚙️ Tùy chỉnh khác & Bảo mật</h4>
@@ -257,6 +263,8 @@
             <select id="tripType" onchange="calculatePrice()">
                 <option value="1" selected>Một chiều (Đi 1 lượt)</option>
                 <option value="2">Hai chiều trong ngày (Ưu đãi chiều về)</option>
+                <option value="3">1 đêm 2 ngày</option>
+                <option value="4">2 đêm 3 ngày</option>
             </select>
         </div>
 
@@ -338,7 +346,7 @@
         let now = new Date();
         document.getElementById('pickupTime').value = String(now.getHours()).padStart(2, '0') + 'h' + String(now.getMinutes()).padStart(2, '0');
         document.getElementById('pickupDate').value = String(now.getDate()).padStart(2, '0') + '/' + String(now.getMonth() + 1).padStart(2, '0') + '/' + now.getFullYear();
-        document.getElementById('distance').value = ""; // Để trống ô Km
+        document.getElementById('distance').value = "";
         calculatePrice();
     };
 
@@ -351,13 +359,13 @@
         let rate7 = parseFloat(document.getElementById('adminRate7').value) || 15000;
         let rate4 = parseFloat(document.getElementById('adminRate4').value) || 12000;
         let discountPercent = parseFloat(document.getElementById('adminDiscount').value) || 30;
+        let pkg1Fee = parseFloat(document.getElementById('adminPackage1').value) || 1500000;
+        let pkg2Fee = parseFloat(document.getElementById('adminPackage2').value) || 2700000;
 
         let ratePerKm = (carType === 7) ? rate7 : rate4;
         
         let calculatedPrice = distance * ratePerKm;
-        // Nếu cước tính theo Km nhỏ hơn Giá mở cửa (hoặc chưa nhập Km), mặc định lấy Giá mở cửa
         let basePrice = calculatedPrice < baseFare ? baseFare : calculatedPrice;
-        
         let finalPrice = basePrice;
         let noteHTML = "* Giá cước áp dụng cho chiều đi/về tiêu chuẩn. Chưa bao gồm phí cầu đường (BOT).";
 
@@ -365,6 +373,12 @@
             let returnDiscount = basePrice * (discountPercent / 100);
             finalPrice = basePrice + (basePrice - returnDiscount);
             noteHTML = `* Đã bao gồm ưu đãi giảm ${discountPercent}% cước chiều về trong ngày.`;
+        } else if (tripType === 3 && basePrice > 0) {
+            finalPrice = basePrice + pkg1Fee;
+            noteHTML = `* Đã bao gồm phụ phí gói 1 đêm 2 ngày (+${pkg1Fee.toLocaleString('vi-VN')} VNĐ).`;
+        } else if (tripType === 4 && basePrice > 0) {
+            finalPrice = basePrice + pkg2Fee;
+            noteHTML = `* Đã bao gồm phụ phí gói 2 đêm 3 ngày (+${pkg2Fee.toLocaleString('vi-VN')} VNĐ).`;
         }
 
         document.getElementById('totalPrice').innerText = finalPrice > 0 ? finalPrice.toLocaleString('vi-VN') + " VNĐ" : baseFare.toLocaleString('vi-VN') + " VNĐ";
@@ -387,6 +401,8 @@
         localStorage.setItem('cfg_rate7', document.getElementById('adminRate7').value);
         localStorage.setItem('cfg_rate4', document.getElementById('adminRate4').value);
         localStorage.setItem('cfg_discount', document.getElementById('adminDiscount').value);
+        localStorage.setItem('cfg_package1', document.getElementById('adminPackage1').value);
+        localStorage.setItem('cfg_package2', document.getElementById('adminPackage2').value);
         localStorage.setItem('cfg_phone', document.getElementById('adminPhoneInput').value);
         localStorage.setItem('cfg_marquee', document.getElementById('adminMarqueeText').value);
 
@@ -413,6 +429,8 @@
         if(localStorage.getItem('cfg_rate7')) document.getElementById('adminRate7').value = localStorage.getItem('cfg_rate7');
         if(localStorage.getItem('cfg_rate4')) document.getElementById('adminRate4').value = localStorage.getItem('cfg_rate4');
         if(localStorage.getItem('cfg_discount')) document.getElementById('adminDiscount').value = localStorage.getItem('cfg_discount');
+        if(localStorage.getItem('cfg_package1')) document.getElementById('adminPackage1').value = localStorage.getItem('cfg_package1');
+        if(localStorage.getItem('cfg_package2')) document.getElementById('adminPackage2').value = localStorage.getItem('cfg_package2');
         
         let phone = localStorage.getItem('cfg_phone') || "0917918586";
         document.getElementById('adminPhoneInput').value = phone;
@@ -469,7 +487,10 @@
         }
 
         let carTypeText = document.getElementById('carType').value === '7' ? "Xe 7 Chỗ" : "Xe 4 Chỗ";
-        let tripTypeText = document.getElementById('tripType').value === '1' ? "Một chiều" : "Hai chiều trong ngày";
+        
+        let tripTypeSelect = document.getElementById('tripType');
+        let tripTypeText = tripTypeSelect.options[tripTypeSelect.selectedIndex].text;
+        
         let priceText = document.getElementById('totalPrice').innerText;
 
         let message = `🚗 *YÊU CẦU ĐẶT XE XENOW.VN*\n\n` +
