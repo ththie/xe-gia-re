@@ -220,8 +220,8 @@
         <div style="font-size: 11px; margin-bottom: 2px;">Số điện thoại:</div>
         <input type="text" id="adminPhoneInput" value="0917918586">
         
-        <div style="font-size: 11px; margin-bottom: 2px;">Giá mở cửa / Mở chuyến (VNĐ):</div>
-        <input type="number" id="adminBaseFare" value="0">
+        <div style="font-size: 11px; margin-bottom: 2px;">Giá mở cửa / Mức tối thiểu (VNĐ):</div>
+        <input type="number" id="adminBaseFare" value="20000">
 
         <div style="font-size: 11px; margin-bottom: 2px;">Đơn giá - Xe 7 Chỗ (VNĐ/Km):</div>
         <input type="number" id="adminRate7" value="15000">
@@ -293,7 +293,7 @@
 
         <div class="form-group" style="margin-top: 8px;">
             <label>Quãng đường dự kiến (Km)</label>
-            <input type="number" id="distance" placeholder="Nhập số Km (Ví dụ: 15)" min="0.1" step="0.1" required oninput="calculatePrice()">
+            <input type="number" id="distance" placeholder="Nhập số Km (Ví dụ: 1)" min="0.1" step="0.1" required oninput="calculatePrice()">
         </div>
 
         <div class="price-box">
@@ -338,6 +338,8 @@
         let now = new Date();
         document.getElementById('pickupTime').value = String(now.getHours()).padStart(2, '0') + 'h' + String(now.getMinutes()).padStart(2, '0');
         document.getElementById('pickupDate').value = String(now.getDate()).padStart(2, '0') + '/' + String(now.getMonth() + 1).padStart(2, '0') + '/' + now.getFullYear();
+        document.getElementById('distance').value = 1; // Mặc định 1 km đầu tiên
+        calculatePrice();
     };
 
     function calculatePrice() {
@@ -345,13 +347,19 @@
         let tripType = parseInt(document.getElementById('tripType').value);
         let distance = parseFloat(document.getElementById('distance').value) || 0;
 
-        let baseFare = parseFloat(document.getElementById('adminBaseFare').value) || 0;
+        let baseFare = parseFloat(document.getElementById('adminBaseFare').value) || 20000;
         let rate7 = parseFloat(document.getElementById('adminRate7').value) || 15000;
         let rate4 = parseFloat(document.getElementById('adminRate4').value) || 12000;
         let discountPercent = parseFloat(document.getElementById('adminDiscount').value) || 30;
 
         let ratePerKm = (carType === 7) ? rate7 : rate4;
-        let basePrice = baseFare + (distance * ratePerKm);
+        
+        // Tính cước theo km
+        let calculatedPrice = distance * ratePerKm;
+        
+        // Giá mở cửa hoạt động như mức tối thiểu (nếu tính theo km thấp hơn giá mở cửa thì lấy giá mở cửa)
+        let basePrice = calculatedPrice < baseFare ? baseFare : calculatedPrice;
+        
         let finalPrice = basePrice;
         let noteHTML = "* Giá cước áp dụng cho chiều đi/về tiêu chuẩn. Chưa bao gồm phí cầu đường (BOT).";
 
@@ -401,6 +409,7 @@
     function loadSavedConfig() {
         let theme = localStorage.getItem('cfg_theme') || 'tech-blue';
         document.body.className = theme;
+        document.getElementById('selectedThemeValue').value = theme;
         
         if(localStorage.getItem('cfg_baseFare')) document.getElementById('adminBaseFare').value = localStorage.getItem('cfg_baseFare');
         if(localStorage.getItem('cfg_rate7')) document.getElementById('adminRate7').value = localStorage.getItem('cfg_rate7');
