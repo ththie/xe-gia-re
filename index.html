@@ -371,7 +371,7 @@
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
-        db = firebase.datbase();
+        db = firebase.database();
     isCloudConnected = true;
 db.ref('xenow_config').on('value', (snapshot) => {
   const data = snapshot.val();
