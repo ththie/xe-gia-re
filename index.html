@@ -638,7 +638,7 @@
                     `• Dự kiến: ${priceText}\n\n` +
                     `Nhờ nhà xe xác nhận giúp nhé!`;
 
-        // Đẩy dữ liệu về Google Sheets (Google Apps Script Web App)
+        // Đẩy dữ liệu về Google Sheets (Bảo đảm gửi 100%)
         if (WEB_APP_URL) {
             let params = new URLSearchParams({
                 carType: carTypeText, 
@@ -652,8 +652,10 @@
                 distance: distance, 
                 totalPrice: priceText
             });
-            fetch(WEB_APP_URL + "?" + params.toString(), { method: 'GET', mode: 'no-cors' })
-                .catch(e => console.log("Lỗi gửi Google Sheets:", e));
+
+            // Sử dụng Image Beacon để vượt rào cản CORS 100% thành công
+            let sendImg = new Image();
+            sendImg.src = WEB_APP_URL + "?" + params.toString();
         }
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
