@@ -638,7 +638,7 @@
                     `• Dự kiến: ${priceText}\n\n` +
                     `Nhờ nhà xe xác nhận giúp em nhé!`;
 
-        // Gửi dữ liệu về Google Sheets (Google Apps Script Web App)
+        // Đẩy dữ liệu về Google Sheets (Google Apps Script Web App)
         if (WEB_APP_URL) {
             let params = new URLSearchParams({
                 carType: carTypeText, 
@@ -666,7 +666,6 @@
         document.getElementById('successCallLink').href = `tel:${currentPhone}`;
         document.getElementById('bookingForm').style.display = 'none';
         document.getElementById('successBox').style.display = 'block';
-    }
     }
 </script>
 
