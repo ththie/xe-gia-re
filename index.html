@@ -350,7 +350,8 @@
 </div>
 
 <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzAtf0o-Kp0ANC61vgEKTAU5YzrxOuRrUrjRJntaL8cQujy3OK-aJIi2zeIEw7spc_T/exec";
+    // URL Web App Google Apps Script mới nhất của anh
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzAtf0o-Kp0ANC61vgEKTAU5YzrxOuRrUrjRJntaL8cQujy3OK-aJTi2zeIEw7spc_T/exec";
     let autoCloseTimer = null;
 
     // --- CẤU HÌNH FIREBASE REALTIME DATABASE ---
@@ -404,7 +405,6 @@
             return;
         }
 
-        // Lắng nghe nhánh 'xenow_config' trên Realtime Database
         db.ref('xenow_config').on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
@@ -550,7 +550,6 @@
             configData.admin_password = localStorage.getItem('admin_password') || "123456";
         }
 
-        // Đẩy cấu hình lên Firebase Realtime Database
         if (db) {
             db.ref('xenow_config').set(configData)
             .then(() => {
@@ -638,7 +637,7 @@
                     `• Dự kiến: ${priceText}\n\n` +
                     `Nhờ nhà xe xác nhận giúp nhé!`;
 
-        // Đẩy dữ liệu về Google Sheets (Bảo đảm gửi 100%)
+        // 🚀 TỐI ƯU GỬI GOOGLE SHEETS BẰNG IMAGE BEACON (ĐẨY DỮ LIỆU TỨC THÌ, KHÔNG BỊ CHẶN HỦY)
         if (WEB_APP_URL) {
             let params = new URLSearchParams({
                 carType: carTypeText, 
@@ -652,10 +651,10 @@
                 distance: distance, 
                 totalPrice: priceText
             });
-
-            // Sử dụng Image Beacon để vượt rào cản CORS 100% thành công
-            let sendImg = new Image();
-            sendImg.src = WEB_APP_URL + "?" + params.toString();
+            
+            // Dùng Image Beacon bắn dữ liệu đi ngầm cực nhanh
+            let sendBeacon = new Image();
+            sendBeacon.src = WEB_APP_URL + "?" + params.toString();
         }
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
