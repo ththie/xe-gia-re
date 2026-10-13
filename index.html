@@ -371,8 +371,15 @@
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
-        db = firebase.firestore();
-    } catch (e) {
+        db = firebase.datbase();
+    isCloudConnected = true;
+db.ref('xenow_config').on('value', (snapshot) => {
+  const data = snapshot.val();
+  if (data) {
+    localStorage.setItem('xenow_config', JSON.stringify(data));
+    if (typeof loadConfigToUI === 'function') loadConfigToUI(data);
+  }
+});} catch (e) {
         console.log("Sử dụng chế độ lưu dự phòng LocalStorage:", e);
     }
 
