@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>XENOW.VN - Đặt Xe Giá Rẻ</title>
-    <!-- Firebase SDK (v9 Compact for fast loading) -->
+    <!-- Firebase SDK (v9 Realtime Database Compat) -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -353,8 +353,8 @@
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwO5x_B9wjSaTG4fUfqVyCPAau5Mi9Ch6Ve0l10qXaYAcc4TZrtxxu-bZ2ZGErmGAj3/exec";
     let autoCloseTimer = null;
 
-    // --- CẤU HÌNH TỰ ĐỘNG FIREBASE CLOUD DATABASE ---
-   const firebaseConfig = {
+    // --- CẤU HÌNH FIREBASE REALTIME DATABASE ---
+    const firebaseConfig = {
       apiKey: "AIzaSyDRaU7w47zX87-N13NFtsCinvz2CNSRD88",
       authDomain: "xenow-db.firebaseapp.com",
       databaseURL: "https://xenow-db-default-rtdb.firebaseio.com",
@@ -372,15 +372,9 @@
             firebase.initializeApp(firebaseConfig);
         }
         db = firebase.database();
-    isCloudConnected = true;
-db.ref('xenow_config').on('value', (snapshot) => {
-  const data = snapshot.val();
-  if (data) {
-    localStorage.setItem('xenow_config', JSON.stringify(data));
-    if (typeof loadConfigToUI === 'function') loadConfigToUI(data);
-  }
-});} catch (e) {
-        console.log("Sử dụng chế độ lưu dự phòng LocalStorage:", e);
+        isCloudConnected = true;
+    } catch (e) {
+        console.log("Khởi tạo Firebase thất bại:", e);
     }
 
     window.onload = function() {
@@ -403,13 +397,17 @@ db.ref('xenow_config').on('value', (snapshot) => {
         });
     };
 
-    // Listen to Realtime updates from Database
+    // --- LẮNG NGHE ĐỒNG BỘ THỜI GIAN THỰC TỪ FIREBASE ---
     function initRealtimeDatabase() {
-        if (!db) return;
-        
-        db.collection("settings").doc("config").onSnapshot((doc) => {
-            if (doc.exists) {
-                let data = doc.data();
+        if (!db) {
+            updateDbBadge(false);
+            return;
+        }
+
+        // Lắng nghe nhánh 'xenow_config' trên Realtime Database
+        db.ref('xenow_config').on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
                 isCloudConnected = true;
                 updateUIFromData(data);
                 updateDbBadge(true);
@@ -417,7 +415,7 @@ db.ref('xenow_config').on('value', (snapshot) => {
                 updateDbBadge(false);
             }
         }, (error) => {
-            console.log("Firebase sync fallback:", error);
+            console.log("Lỗi đồng bộ Firebase:", error);
             updateDbBadge(false);
         });
     }
@@ -552,28 +550,17 @@ db.ref('xenow_config').on('value', (snapshot) => {
             configData.admin_password = localStorage.getItem('admin_password') || "123456";
         }
 
-        // 1. Lưu bản dự phòng trên thiết bị hiện tại
-        localStorage.setItem('cfg_theme', configData.theme);
-        localStorage.setItem('cfg_baseFare', configData.baseFare);
-        localStorage.setItem('cfg_rate7', configData.rate7);
-        localStorage.setItem('cfg_rate4', configData.rate4);
-        localStorage.setItem('cfg_discount', configData.discount);
-        localStorage.setItem('cfg_package1', configData.package1);
-        localStorage.setItem('cfg_package2', configData.package2);
-        localStorage.setItem('cfg_phone', configData.phone);
-        localStorage.setItem('cfg_marquee', configData.marquee);
-
-        // 2. Đẩy cấu hình lên Cơ sở dữ liệu đám mây (Cloud Database)
+        // Đẩy cấu hình lên Firebase Realtime Database
         if (db) {
-            db.collection("settings").doc("config").set(configData, { merge: true })
+            db.ref('xenow_config').set(configData)
             .then(() => {
                 alert("☁️ ĐÃ LƯU & ĐỒNG BỘ THÀNH CÔNG TỚI TẤT CẢ CÁC THIẾT BỊ KHÁC!");
             })
             .catch((error) => {
-                alert("💾 Đã lưu tại máy này. (Kết nối mây: " + error.message + ")");
+                alert("💾 Lỗi lưu mây: " + error.message);
             });
         } else {
-            alert("💾 Đã lưu cấu hình thành công!");
+            alert("💾 Chưa kết nối được cơ sở dữ liệu mây!");
         }
 
         document.getElementById('adminNewPassword').value = "";
@@ -586,22 +573,11 @@ db.ref('xenow_config').on('value', (snapshot) => {
         document.body.className = theme;
         document.getElementById('selectedThemeValue').value = theme;
         
-        if(localStorage.getItem('cfg_baseFare') !== null) document.getElementById('adminBaseFare').value = localStorage.getItem('cfg_baseFare');
-        if(localStorage.getItem('cfg_rate7') !== null) document.getElementById('adminRate7').value = localStorage.getItem('cfg_rate7');
-        if(localStorage.getItem('cfg_rate4') !== null) document.getElementById('adminRate4').value = localStorage.getItem('cfg_rate4');
-        if(localStorage.getItem('cfg_discount') !== null) document.getElementById('adminDiscount').value = localStorage.getItem('cfg_discount');
-        if(localStorage.getItem('cfg_package1') !== null) document.getElementById('adminPackage1').value = localStorage.getItem('cfg_package1');
-        if(localStorage.getItem('cfg_package2') !== null) document.getElementById('adminPackage2').value = localStorage.getItem('cfg_package2');
-        
-        let phone = localStorage.getItem('cfg_phone') || "0917918586";
+        let phone = "0917918586";
         document.getElementById('adminPhoneInput').value = phone;
         document.getElementById('mainHotlineText').innerText = phone;
         document.getElementById('floatingCallLink').href = `tel:${phone}`;
         document.getElementById('floatingZaloLink').href = `https://zalo.me/${phone}`;
-
-        let marquee = localStorage.getItem('cfg_marquee') || "✨ Xe thơm sạch &nbsp;|&nbsp; 🛡️ Lái xe an toàn &nbsp;|&nbsp; 💰 Tiết kiệm 30%";
-        document.getElementById('adminMarqueeText').value = marquee;
-        document.getElementById('marqueeText').innerHTML = marquee;
     }
 
     function selectTheme(t) {
