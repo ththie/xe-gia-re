@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>XENOW.VN - Đặt Xe Giá Rẻ</title>
+    
+    <!-- 🚀 ÉP SẴN NỀN TRẮNG SÁNG MƯỢT MÀ TỨC THÌ (CHỐNG CHỚP MÀN HÌNH TRÊN FACEBOOK) -->
+    <style id="instant-theme-style">
+        body { background: #f4f6f9 !important; }
+    </style>
+
     <!-- Firebase SDK (v9 Realtime Database Compat) -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -384,11 +390,9 @@
         document.getElementById('pickupDate').value = String(now.getDate()).padStart(2, '0') + '/' + String(now.getMonth() + 1).padStart(2, '0') + '/' + now.getFullYear();
         document.getElementById('distance').value = "";
         
-        // Thiết lập mặc định giá mở cửa bằng 0 ngay lập tức khi mở web (0 giây độ trễ)
         document.getElementById('adminBaseFare').value = "0";
         calculatePrice();
 
-        // Sau khi hiển thị tức thì, bắt đầu kết nối ngầm đồng bộ với Firebase
         initRealtimeDatabase();
 
         const inputs = document.querySelectorAll('input');
@@ -435,13 +439,13 @@
 
     function updateUIFromData(data) {
         if (data.theme) {
-            document.body.className = data.theme;
+            applyThemeInstant(data.theme);
             document.getElementById('selectedThemeValue').value = data.theme;
+            localStorage.setItem('cfg_theme', data.theme);
         }
 
         const activeEl = document.activeElement;
         
-        // Nếu trên mây đang lưu baseFare = 0 thì cập nhật ngay lập tức không delay
         if (data.baseFare !== undefined && activeEl.id !== 'adminBaseFare') {
             document.getElementById('adminBaseFare').value = data.baseFare;
         }
@@ -482,6 +486,19 @@
         calculatePrice();
     }
 
+    function applyThemeInstant(themeName) {
+        document.body.className = themeName;
+        let bgCode = "#f4f6f9"; // Mặc định nền sáng mượt
+        if (themeName === 'tech-blue') bgCode = "linear-gradient(135deg, #0f4c81 0%, #1b262c 100%)";
+        if (themeName === 'eco-green') bgCode = "linear-gradient(135deg, #2e7d32 0%, #a5d6a7 100%)";
+        if (themeName === 'modern-gray') bgCode = "linear-gradient(135deg, #e9ecef 0%, #ced4da 100%)";
+        
+        let instantStyle = document.getElementById('instant-theme-style');
+        if (instantStyle) {
+            instantStyle.innerHTML = `body { background: ${bgCode} !important; }`;
+        }
+    }
+
     function calculatePrice() {
         let carType = parseInt(document.getElementById('carType').value);
         let tripType = parseInt(document.getElementById('tripType').value);
@@ -506,7 +523,7 @@
             basePrice = (calculatedPrice < baseFare && distance > 0) ? baseFare : calculatedPrice;
             if (distance === 0) basePrice = baseFare;
         } else {
-            basePrice = calculatedPrice; // Nếu baseFare = 0 thì tính đúng theo số Km thực tế
+            basePrice = calculatedPrice;
         }
 
         let finalPrice = basePrice;
@@ -556,8 +573,9 @@
         let baseFareVal = document.getElementById('adminBaseFare').value.trim();
         let finalBaseFare = (baseFareVal === "" || isNaN(parseFloat(baseFareVal))) ? 0 : parseFloat(baseFareVal);
 
+        let currentTheme = document.getElementById('selectedThemeValue').value;
         let configData = {
-            theme: document.getElementById('selectedThemeValue').value,
+            theme: currentTheme,
             baseFare: finalBaseFare,
             rate7: parseFloat(document.getElementById('adminRate7').value) || 0,
             rate4: parseFloat(document.getElementById('adminRate4').value) || 0,
@@ -577,6 +595,8 @@
             configData.admin_password = localStorage.getItem('admin_password') || "123456";
         }
 
+        applyThemeInstant(currentTheme);
+        localStorage.setItem('cfg_theme', currentTheme);
         calculatePrice();
 
         if (db) {
@@ -597,7 +617,7 @@
 
     function loadSavedConfig() {
         let theme = localStorage.getItem('cfg_theme') || 'tech-blue';
-        document.body.className = theme;
+        applyThemeInstant(theme);
         document.getElementById('selectedThemeValue').value = theme;
         
         let phone = "0917918586";
@@ -609,7 +629,8 @@
 
     function selectTheme(t) {
         document.getElementById('selectedThemeValue').value = t;
-        document.body.className = t;
+        applyThemeInstant(t);
+        localStorage.setItem('cfg_theme', t);
     }
 
     function toggleFloatingMenu(event) {
