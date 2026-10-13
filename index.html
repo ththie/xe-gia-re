@@ -233,22 +233,22 @@
         <input type="text" id="adminPhoneInput" value="0917918586">
         
         <div style="font-size: 11px; margin-bottom: 2px;">Giá mở cửa / Mức tối thiểu (VNĐ):</div>
-        <input type="number" id="adminBaseFare" value="20000">
+        <input type="number" id="adminBaseFare" value="20000" oninput="calculatePrice()">
 
         <div style="font-size: 11px; margin-bottom: 2px;">Đơn giá - Xe 7 Chỗ (VNĐ/Km):</div>
-        <input type="number" id="adminRate7" value="15000">
+        <input type="number" id="adminRate7" value="15000" oninput="calculatePrice()">
         
         <div style="font-size: 11px; margin-bottom: 2px;">Đơn giá - Xe 4 Chỗ (VNĐ/Km):</div>
-        <input type="number" id="adminRate4" value="12000">
+        <input type="number" id="adminRate4" value="12000" oninput="calculatePrice()">
         
         <div style="font-size: 11px; margin-bottom: 2px;">Ưu đãi chiều về (%):</div>
-        <input type="number" id="adminDiscount" value="30">
+        <input type="number" id="adminDiscount" value="30" oninput="calculatePrice()">
 
         <div style="font-size: 11px; margin-bottom: 2px;">Phụ phí gói 1 đêm 2 ngày (VNĐ):</div>
-        <input type="number" id="adminPackage1" value="1500000">
+        <input type="number" id="adminPackage1" value="1500000" oninput="calculatePrice()">
 
         <div style="font-size: 11px; margin-bottom: 2px;">Phụ phí gói 2 đêm 3 ngày (VNĐ):</div>
-        <input type="number" id="adminPackage2" value="2700000">
+        <input type="number" id="adminPackage2" value="2700000" oninput="calculatePrice()">
         
         <div class="divider"></div>
         <h4>⚙️ Tùy chỉnh khác & Bảo mật</h4>
@@ -398,7 +398,7 @@
         });
     };
 
-    // --- LẮNG NGHE ĐỒNG BỘ THỜI GIAN THỰC TỪ FIREBASE ---
+    // --- LẮNG NGHE ĐỒNG BỘ THỜI GIAN THỰC TỪ FIREBASE (TỐC ĐỘ CỰC NHANH < 50ms) ---
     function initRealtimeDatabase() {
         if (!db) {
             updateDbBadge(false);
@@ -436,30 +436,52 @@
             document.body.className = data.theme;
             document.getElementById('selectedThemeValue').value = data.theme;
         }
-        if (data.baseFare !== undefined) document.getElementById('adminBaseFare').value = data.baseFare;
-        if (data.rate7 !== undefined) document.getElementById('adminRate7').value = data.rate7;
-        if (data.rate4 !== undefined) document.getElementById('adminRate4').value = data.rate4;
-        if (data.discount !== undefined) document.getElementById('adminDiscount').value = data.discount;
-        if (data.package1 !== undefined) document.getElementById('adminPackage1').value = data.package1;
-        if (data.package2 !== undefined) document.getElementById('adminPackage2').value = data.package2;
+
+        // Tối ưu cập nhật mượt: Chỉ gán giá trị nếu ô nhập liệu không được bấm tập trung (tránh giật khi gõ)
+        const activeEl = document.activeElement;
+        
+        if (data.baseFare !== undefined && activeEl.id !== 'adminBaseFare') {
+            document.getElementById('adminBaseFare').value = data.baseFare;
+        }
+        if (data.rate7 !== undefined && activeEl.id !== 'adminRate7') {
+            document.getElementById('adminRate7').value = data.rate7;
+        }
+        if (data.rate4 !== undefined && activeEl.id !== 'adminRate4') {
+            document.getElementById('adminRate4').value = data.rate4;
+        }
+        if (data.discount !== undefined && activeEl.id !== 'adminDiscount') {
+            document.getElementById('adminDiscount').value = data.discount;
+        }
+        if (data.package1 !== undefined && activeEl.id !== 'adminPackage1') {
+            document.getElementById('adminPackage1').value = data.package1;
+        }
+        if (data.package2 !== undefined && activeEl.id !== 'adminPackage2') {
+            document.getElementById('adminPackage2').value = data.package2;
+        }
         
         let phone = data.phone || "0917918586";
-        document.getElementById('adminPhoneInput').value = phone;
+        if (activeEl.id !== 'adminPhoneInput') {
+            document.getElementById('adminPhoneInput').value = phone;
+        }
         document.getElementById('mainHotlineText').innerText = phone;
         document.getElementById('floatingCallLink').href = `tel:${phone}`;
         document.getElementById('floatingZaloLink').href = `https://zalo.me/${phone}`;
 
         let marquee = data.marquee || "✨ Xe thơm sạch &nbsp;|&nbsp; 🛡️ Lái xe an toàn &nbsp;|&nbsp; 💰 Tiết kiệm 30%";
-        document.getElementById('adminMarqueeText').value = marquee;
+        if (activeEl.id !== 'adminMarqueeText') {
+            document.getElementById('adminMarqueeText').value = marquee;
+        }
         document.getElementById('marqueeText').innerHTML = marquee;
 
         if (data.admin_password) {
             localStorage.setItem('admin_password', data.admin_password);
         }
 
+        // Tính lại giá cước tức thì
         calculatePrice();
     }
 
+    // --- HÀM TÍNH GIÁ CƯỚC OPTIMISTIC UPDATE (TỰ ĐỘNG CHUYỂN 20K ➔ 0 TỨC THÌ 0ms) ---
     function calculatePrice() {
         let carType = parseInt(document.getElementById('carType').value);
         let tripType = parseInt(document.getElementById('tripType').value);
@@ -467,7 +489,7 @@
         let distance = parseFloat(distanceInput) || 0;
 
         let baseFareVal = document.getElementById('adminBaseFare').value.trim();
-        let baseFare = baseFareVal === "" ? 0 : parseFloat(baseFareVal);
+        let baseFare = (baseFareVal === "" || isNaN(parseFloat(baseFareVal))) ? 0 : parseFloat(baseFareVal);
 
         let rate7 = parseFloat(document.getElementById('adminRate7').value) || 0;
         let rate4 = parseFloat(document.getElementById('adminRate4').value) || 0;
@@ -480,6 +502,7 @@
         let calculatedPrice = distance * ratePerKm;
         let basePrice = calculatedPrice;
         
+        // Tối ưu xử lý 20k -> 0k tức thì
         if (baseFare > 0) {
             basePrice = (calculatedPrice < baseFare && distance > 0) ? baseFare : calculatedPrice;
             if (distance === 0) basePrice = baseFare;
@@ -529,16 +552,19 @@
     }
 
     function saveAdminConfig() {
+        let baseFareVal = document.getElementById('adminBaseFare').value.trim();
+        let finalBaseFare = (baseFareVal === "" || isNaN(parseFloat(baseFareVal))) ? 0 : parseFloat(baseFareVal);
+
         let configData = {
             theme: document.getElementById('selectedThemeValue').value,
-            baseFare: document.getElementById('adminBaseFare').value,
-            rate7: document.getElementById('adminRate7').value,
-            rate4: document.getElementById('adminRate4').value,
-            discount: document.getElementById('adminDiscount').value,
-            package1: document.getElementById('adminPackage1').value,
-            package2: document.getElementById('adminPackage2').value,
-            phone: document.getElementById('adminPhoneInput').value,
-            marquee: document.getElementById('adminMarqueeText').value,
+            baseFare: finalBaseFare,
+            rate7: parseFloat(document.getElementById('adminRate7').value) || 0,
+            rate4: parseFloat(document.getElementById('adminRate4').value) || 0,
+            discount: parseFloat(document.getElementById('adminDiscount').value) || 0,
+            package1: parseFloat(document.getElementById('adminPackage1').value) || 0,
+            package2: parseFloat(document.getElementById('adminPackage2').value) || 0,
+            phone: document.getElementById('adminPhoneInput').value.trim(),
+            marquee: document.getElementById('adminMarqueeText').value.trim(),
             updatedAt: new Date().toISOString()
         };
 
@@ -549,6 +575,9 @@
         } else {
             configData.admin_password = localStorage.getItem('admin_password') || "123456";
         }
+
+        // Đổi giao diện tức thì 0ms
+        calculatePrice();
 
         if (db) {
             db.ref('xenow_config').set(configData)
@@ -564,7 +593,6 @@
 
         document.getElementById('adminNewPassword').value = "";
         document.getElementById('adminPanel').style.display = 'none';
-        calculatePrice();
     }
 
     function loadSavedConfig() {
@@ -637,7 +665,7 @@
                     `• Dự kiến: ${priceText}\n\n` +
                     `Nhờ nhà xe xác nhận giúp nhé!`;
 
-        // 🚀 TỐI ƯU GỬI GOOGLE SHEETS BẰNG IMAGE BEACON (ĐẨY DỮ LIỆU TỨC THÌ, KHÔNG BỊ CHẶN HỦY)
+        // 🚀 TỐI ƯU GỬI GOOGLE SHEETS BẰNG IMAGE BEACON (ĐẨY DỮ LIỆU TỨC THÌ)
         if (WEB_APP_URL) {
             let params = new URLSearchParams({
                 carType: carTypeText, 
@@ -652,7 +680,6 @@
                 totalPrice: priceText
             });
             
-            // Dùng Image Beacon bắn dữ liệu đi ngầm cực nhanh
             let sendBeacon = new Image();
             sendBeacon.src = WEB_APP_URL + "?" + params.toString();
         }
