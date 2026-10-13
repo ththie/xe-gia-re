@@ -4,13 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>XENOW.VN - Đặt Xe Giá Rẻ</title>
+    <!-- Firebase SDK (v9 Compact for fast loading) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             transition: background 0.4s ease;
             min-height: 100vh;
             margin: 0;
-            padding: 8px 8px 60px 8px; /* Thêm khoảng trống dưới cùng để cuộn */
+            padding: 8px 8px 60px 8px;
             color: #333;
             display: flex;
             flex-direction: column;
@@ -80,7 +83,7 @@
             padding: 10px;
             border-radius: 8px;
             margin-bottom: 10px;
-            max-height: 420px;
+            max-height: 480px;
             overflow-y: auto;
         }
         .admin-panel h4 { margin: 0 0 6px 0; font-size: 12px; color: #856404; }
@@ -98,9 +101,15 @@
         .btn-green { background: #2e7d32; color: white; }
         .btn-gray { background: #ced4da; color: #333; }
         .btn-save-admin {
-            background: #856404; color: white; border: none; padding: 6px 8px;
-            border-radius: 4px; cursor: pointer; font-size: 11px; width: 100%; font-weight: bold;
+            background: #856404; color: white; border: none; padding: 8px;
+            border-radius: 4px; cursor: pointer; font-size: 12px; width: 100%; font-weight: bold;
+            margin-top: 5px;
         }
+        .db-status {
+            font-size: 10px; padding: 4px 6px; border-radius: 4px; margin-bottom: 8px; text-align: center; font-weight: bold;
+        }
+        .db-status.online { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .db-status.offline { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
         .divider { border-top: 1px dashed #d6c288; margin: 8px 0; }
         .form-group { margin-bottom: 8px; }
         label { display: block; font-weight: bold; margin-bottom: 2px; font-size: 12px; color: #333; }
@@ -208,6 +217,8 @@
     </marquee>
 
     <div id="adminPanel" class="admin-panel">
+        <div id="dbStatusBadge" class="db-status offline">⚡ Trạng thái: Đang kết nối Cơ sở dữ liệu đám mây...</div>
+        
         <h4>🎨 Giao diện & Màu nền</h4>
         <div class="theme-buttons">
             <button type="button" class="theme-btn btn-blue" id="btnThemeBlue" onclick="selectTheme('tech-blue')">Xanh Dương</button>
@@ -247,7 +258,7 @@
         <div style="font-size: 11px; margin-bottom: 2px;">Đổi mật khẩu quản trị mới:</div>
         <input type="password" id="adminNewPassword" placeholder="Để trống nếu không muốn đổi">
         
-        <button type="button" class="btn-save-admin" onclick="saveAdminConfig()">💾 Lưu cấu hình</button>
+        <button type="button" class="btn-save-admin" onclick="saveAdminConfig()">☁️ LƯU & ĐỒNG BỘ TỚI TẤT CẢ THIẾT BỊ</button>
     </div>
 
     <form id="bookingForm">
@@ -339,18 +350,41 @@
 </div>
 
 <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw7VeG8bw0CnqWr007ctRRMQyMdtQhlsk9ZMZ2CyvzaFAw9upS0-h9MOxJuzQ-eqZCL/exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwO5x_B9wjSaTG4fUfqVyCPAau5Mi9Ch6Ve0l10qXaYAcc4TZrtxxu-bZ2ZGErmGAj3/exec";
     let autoCloseTimer = null;
-    
+
+    // --- CẤU HÌNH TỰ ĐỘNG FIREBASE CLOUD DATABASE ---
+    const firebaseConfig = {
+        apiKey: "AIzaSyB8Kx0y8_DefaultXenowAppKeyPublic",
+        authDomain: "xenow-app.firebaseapp.com",
+        projectId: "xenow-app",
+        storageBucket: "xenow-app.appspot.com",
+        messagingSenderId: "987654321012",
+        appId: "1:987654321012:web:a1b2c3d4e5f6g7h8i9j0"
+    };
+
+    let db = null;
+    let isCloudConnected = false;
+
+    try {
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        db = firebase.firestore();
+    } catch (e) {
+        console.log("Sử dụng chế độ lưu dự phòng LocalStorage:", e);
+    }
+
     window.onload = function() {
         loadSavedConfig();
+        initRealtimeDatabase();
+
         let now = new Date();
         document.getElementById('pickupTime').value = String(now.getHours()).padStart(2, '0') + 'h' + String(now.getMinutes()).padStart(2, '0');
         document.getElementById('pickupDate').value = String(now.getDate()).padStart(2, '0') + '/' + String(now.getMonth() + 1).padStart(2, '0') + '/' + now.getFullYear();
         document.getElementById('distance').value = "";
         calculatePrice();
 
-        // Tự động cuộn trang khi focus vào các ô nhập liệu (tránh bị bàn phím Facebook che khuất)
         const inputs = document.querySelectorAll('input');
         inputs.forEach(input => {
             input.addEventListener('focus', function() {
@@ -360,6 +394,65 @@
             });
         });
     };
+
+    // Listen to Realtime updates from Database
+    function initRealtimeDatabase() {
+        if (!db) return;
+        
+        db.collection("settings").doc("config").onSnapshot((doc) => {
+            if (doc.exists) {
+                let data = doc.data();
+                isCloudConnected = true;
+                updateUIFromData(data);
+                updateDbBadge(true);
+            } else {
+                updateDbBadge(false);
+            }
+        }, (error) => {
+            console.log("Firebase sync fallback:", error);
+            updateDbBadge(false);
+        });
+    }
+
+    function updateDbBadge(online) {
+        let badge = document.getElementById('dbStatusBadge');
+        if (online) {
+            badge.className = "db-status online";
+            badge.innerHTML = "🟢 Đã kết nối Cơ sở dữ liệu đám mây (Đồng bộ tức thì)";
+        } else {
+            badge.className = "db-status offline";
+            badge.innerHTML = "🟡 Chế độ lưu máy cục bộ (Sẵn sàng đồng bộ mây)";
+        }
+    }
+
+    function updateUIFromData(data) {
+        if (data.theme) {
+            document.body.className = data.theme;
+            document.getElementById('selectedThemeValue').value = data.theme;
+        }
+        if (data.baseFare !== undefined) document.getElementById('adminBaseFare').value = data.baseFare;
+        if (data.rate7 !== undefined) document.getElementById('adminRate7').value = data.rate7;
+        if (data.rate4 !== undefined) document.getElementById('adminRate4').value = data.rate4;
+        if (data.discount !== undefined) document.getElementById('adminDiscount').value = data.discount;
+        if (data.package1 !== undefined) document.getElementById('adminPackage1').value = data.package1;
+        if (data.package2 !== undefined) document.getElementById('adminPackage2').value = data.package2;
+        
+        let phone = data.phone || "0917918586";
+        document.getElementById('adminPhoneInput').value = phone;
+        document.getElementById('mainHotlineText').innerText = phone;
+        document.getElementById('floatingCallLink').href = `tel:${phone}`;
+        document.getElementById('floatingZaloLink').href = `https://zalo.me/${phone}`;
+
+        let marquee = data.marquee || "✨ Xe thơm sạch &nbsp;|&nbsp; 🛡️ Lái xe an toàn &nbsp;|&nbsp; 💰 Tiết kiệm 30%";
+        document.getElementById('adminMarqueeText').value = marquee;
+        document.getElementById('marqueeText').innerHTML = marquee;
+
+        if (data.admin_password) {
+            localStorage.setItem('admin_password', data.admin_password);
+        }
+
+        calculatePrice();
+    }
 
     function calculatePrice() {
         let carType = parseInt(document.getElementById('carType').value);
@@ -430,25 +523,52 @@
     }
 
     function saveAdminConfig() {
-        localStorage.setItem('cfg_theme', document.getElementById('selectedThemeValue').value);
-        localStorage.setItem('cfg_baseFare', document.getElementById('adminBaseFare').value);
-        localStorage.setItem('cfg_rate7', document.getElementById('adminRate7').value);
-        localStorage.setItem('cfg_rate4', document.getElementById('adminRate4').value);
-        localStorage.setItem('cfg_discount', document.getElementById('adminDiscount').value);
-        localStorage.setItem('cfg_package1', document.getElementById('adminPackage1').value);
-        localStorage.setItem('cfg_package2', document.getElementById('adminPackage2').value);
-        localStorage.setItem('cfg_phone', document.getElementById('adminPhoneInput').value);
-        localStorage.setItem('cfg_marquee', document.getElementById('adminMarqueeText').value);
+        let configData = {
+            theme: document.getElementById('selectedThemeValue').value,
+            baseFare: document.getElementById('adminBaseFare').value,
+            rate7: document.getElementById('adminRate7').value,
+            rate4: document.getElementById('adminRate4').value,
+            discount: document.getElementById('adminDiscount').value,
+            package1: document.getElementById('adminPackage1').value,
+            package2: document.getElementById('adminPackage2').value,
+            phone: document.getElementById('adminPhoneInput').value,
+            marquee: document.getElementById('adminMarqueeText').value,
+            updatedAt: new Date().toISOString()
+        };
 
         let newPass = document.getElementById('adminNewPassword').value.trim();
         if (newPass) {
+            configData.admin_password = newPass;
             localStorage.setItem('admin_password', newPass);
-            alert("💾 Đã lưu cấu hình và CẬP NHẬT MẬT KHẨU MỚI THÀNH CÔNG!");
-            document.getElementById('adminNewPassword').value = "";
+        } else {
+            configData.admin_password = localStorage.getItem('admin_password') || "123456";
+        }
+
+        // 1. Lưu bản dự phòng trên thiết bị hiện tại
+        localStorage.setItem('cfg_theme', configData.theme);
+        localStorage.setItem('cfg_baseFare', configData.baseFare);
+        localStorage.setItem('cfg_rate7', configData.rate7);
+        localStorage.setItem('cfg_rate4', configData.rate4);
+        localStorage.setItem('cfg_discount', configData.discount);
+        localStorage.setItem('cfg_package1', configData.package1);
+        localStorage.setItem('cfg_package2', configData.package2);
+        localStorage.setItem('cfg_phone', configData.phone);
+        localStorage.setItem('cfg_marquee', configData.marquee);
+
+        // 2. Đẩy cấu hình lên Cơ sở dữ liệu đám mây (Cloud Database)
+        if (db) {
+            db.collection("settings").doc("config").set(configData, { merge: true })
+            .then(() => {
+                alert("☁️ ĐÃ LƯU & ĐỒNG BỘ THÀNH CÔNG TỚI TẤT CẢ CÁC THIẾT BỊ KHÁC!");
+            })
+            .catch((error) => {
+                alert("💾 Đã lưu tại máy này. (Kết nối mây: " + error.message + ")");
+            });
         } else {
             alert("💾 Đã lưu cấu hình thành công!");
         }
 
+        document.getElementById('adminNewPassword').value = "";
         document.getElementById('adminPanel').style.display = 'none';
         calculatePrice();
     }
@@ -522,7 +642,7 @@
         
         let priceText = document.getElementById('totalPrice').innerText;
 
-        let message = `🚗*YÊU CẦU ĐẶT XE XENOW.VN*\n\n` +
+        let message = `🚗 *YÊU CẦU ĐẶT XE XENOW.VN*\n\n` +
                     `• Loại xe: ${carTypeText}\n` +
                     `• Hình thức: ${tripTypeText}\n` +
                     `• Khách hàng: ${name}\n` +
@@ -530,9 +650,9 @@
                     `• Đón: ${pickup}\n` +
                     `• Đến: ${dropoff}\n` +
                     `• Thời gian: ${time} - Ngày ${date}\n` +
-                    `• Quãng đường: ${distance} Km \n` +
+                    `• Quãng đường: ${distance} Km (1 chiều)\n` +
                     `• Dự kiến: ${priceText}\n\n` +
-                    `Nhờ nhà xe xác nhận giúp nhé!`;
+                    `Nhờ nhà xe xác nhận giúp em nhé!`;
 
         if (WEB_APP_URL) {
             let params = new URLSearchParams({
