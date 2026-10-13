@@ -638,13 +638,22 @@
                     `• Dự kiến: ${priceText}\n\n` +
                     `Nhờ nhà xe xác nhận giúp em nhé!`;
 
+        // Gửi dữ liệu về Google Sheets (Google Apps Script Web App)
         if (WEB_APP_URL) {
             let params = new URLSearchParams({
-                carType: carTypeText, tripType: tripTypeText, customerName: name,
-                customerPhone: phone, pickupLocation: pickup, dropoffLocation: dropoff,
-                pickupTime: time, pickupDate: date, distance: distance, totalPrice: priceText
+                carType: carTypeText, 
+                tripType: tripTypeText, 
+                customerName: name,
+                customerPhone: phone, 
+                pickupLocation: pickup, 
+                dropoffLocation: dropoff,
+                pickupTime: time, 
+                pickupDate: date, 
+                distance: distance, 
+                totalPrice: priceText
             });
-            fetch(WEB_APP_URL + "?" + params.toString(), { method: 'GET', mode: 'no-cors' }).catch(e => console.log(e));
+            fetch(WEB_APP_URL + "?" + params.toString(), { method: 'GET', mode: 'no-cors' })
+                .catch(e => console.log("Lỗi gửi Google Sheets:", e));
         }
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -657,6 +666,7 @@
         document.getElementById('successCallLink').href = `tel:${currentPhone}`;
         document.getElementById('bookingForm').style.display = 'none';
         document.getElementById('successBox').style.display = 'block';
+    }
     }
 </script>
 
