@@ -233,7 +233,7 @@
         <input type="text" id="adminPhoneInput" value="0917918586">
         
         <div style="font-size: 11px; margin-bottom: 2px;">Giá mở cửa / Mức tối thiểu (VNĐ):</div>
-        <input type="number" id="adminBaseFare" value="20000" oninput="calculatePrice()">
+        <input type="number" id="adminBaseFare" value="0" oninput="calculatePrice()">
 
         <div style="font-size: 11px; margin-bottom: 2px;">Đơn giá - Xe 7 Chỗ (VNĐ/Km):</div>
         <input type="number" id="adminRate7" value="15000" oninput="calculatePrice()">
@@ -350,11 +350,9 @@
 </div>
 
 <script>
-    // URL Web App Google Apps Script mới nhất của anh
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbznrDDbfbSpRBQYu5-y5NpOJ7u6AaPcmJJdRUeSLIVy-BYwf6DkGJK6c6IVlUxmvmgf/exec";
     let autoCloseTimer = null;
 
-    // --- CẤU HÌNH FIREBASE REALTIME DATABASE ---
     const firebaseConfig = {
       apiKey: "AIzaSyDRaU7w47zX87-N13NFtsCinvz2CNSRD88",
       authDomain: "xenow-db.firebaseapp.com",
@@ -380,13 +378,18 @@
 
     window.onload = function() {
         loadSavedConfig();
-        initRealtimeDatabase();
-
+        
         let now = new Date();
         document.getElementById('pickupTime').value = String(now.getHours()).padStart(2, '0') + 'h' + String(now.getMinutes()).padStart(2, '0');
         document.getElementById('pickupDate').value = String(now.getDate()).padStart(2, '0') + '/' + String(now.getMonth() + 1).padStart(2, '0') + '/' + now.getFullYear();
         document.getElementById('distance').value = "";
+        
+        // Thiết lập mặc định giá mở cửa bằng 0 ngay lập tức khi mở web (0 giây độ trễ)
+        document.getElementById('adminBaseFare').value = "0";
         calculatePrice();
+
+        // Sau khi hiển thị tức thì, bắt đầu kết nối ngầm đồng bộ với Firebase
+        initRealtimeDatabase();
 
         const inputs = document.querySelectorAll('input');
         inputs.forEach(input => {
@@ -398,7 +401,6 @@
         });
     };
 
-    // --- LẮNG NGHE ĐỒNG BỘ THỜI GIAN THỰC TỪ FIREBASE (TỐC ĐỘ CỰC NHANH < 50ms) ---
     function initRealtimeDatabase() {
         if (!db) {
             updateDbBadge(false);
@@ -437,9 +439,9 @@
             document.getElementById('selectedThemeValue').value = data.theme;
         }
 
-        // Tối ưu cập nhật mượt: Chỉ gán giá trị nếu ô nhập liệu không được bấm tập trung (tránh giật khi gõ)
         const activeEl = document.activeElement;
         
+        // Nếu trên mây đang lưu baseFare = 0 thì cập nhật ngay lập tức không delay
         if (data.baseFare !== undefined && activeEl.id !== 'adminBaseFare') {
             document.getElementById('adminBaseFare').value = data.baseFare;
         }
@@ -477,11 +479,9 @@
             localStorage.setItem('admin_password', data.admin_password);
         }
 
-        // Tính lại giá cước tức thì
         calculatePrice();
     }
 
-    // --- HÀM TÍNH GIÁ CƯỚC OPTIMISTIC UPDATE (TỰ ĐỘNG CHUYỂN 20K ➔ 0 TỨC THÌ 0ms) ---
     function calculatePrice() {
         let carType = parseInt(document.getElementById('carType').value);
         let tripType = parseInt(document.getElementById('tripType').value);
@@ -502,10 +502,11 @@
         let calculatedPrice = distance * ratePerKm;
         let basePrice = calculatedPrice;
         
-        // Tối ưu xử lý 20k -> 0k tức thì
         if (baseFare > 0) {
             basePrice = (calculatedPrice < baseFare && distance > 0) ? baseFare : calculatedPrice;
             if (distance === 0) basePrice = baseFare;
+        } else {
+            basePrice = calculatedPrice; // Nếu baseFare = 0 thì tính đúng theo số Km thực tế
         }
 
         let finalPrice = basePrice;
@@ -576,7 +577,6 @@
             configData.admin_password = localStorage.getItem('admin_password') || "123456";
         }
 
-        // Đổi giao diện tức thì 0ms
         calculatePrice();
 
         if (db) {
@@ -665,7 +665,6 @@
                     `• Dự kiến: ${priceText}\n\n` +
                     `Nhờ nhà xe xác nhận giúp nhé!`;
 
-        // 🚀 TỐI ƯU GỬI GOOGLE SHEETS BẰNG IMAGE BEACON (ĐẨY DỮ LIỆU TỨC THÌ)
         if (WEB_APP_URL) {
             let params = new URLSearchParams({
                 carType: carTypeText, 
