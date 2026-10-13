@@ -626,7 +626,7 @@
         
         let priceText = document.getElementById('totalPrice').innerText;
 
-        let message = `🚗 *YÊU CẦU ĐẶT XE XENOW.VN*\n\n` +
+        let message = `🚗*YÊU CẦU ĐẶT XE XENOW.VN*\n\n` +
                     `• Loại xe: ${carTypeText}\n` +
                     `• Hình thức: ${tripTypeText}\n` +
                     `• Khách hàng: ${name}\n` +
@@ -634,9 +634,9 @@
                     `• Đón: ${pickup}\n` +
                     `• Đến: ${dropoff}\n` +
                     `• Thời gian: ${time} - Ngày ${date}\n` +
-                    `• Quãng đường: ${distance} Km (1 chiều)\n` +
+                    `• Quãng đường: ${distance} Km \n` +
                     `• Dự kiến: ${priceText}\n\n` +
-                    `Nhờ nhà xe xác nhận giúp em nhé!`;
+                    `Nhờ nhà xe xác nhận giúp nhé!`;
 
         // Đẩy dữ liệu về Google Sheets (Google Apps Script Web App)
         if (WEB_APP_URL) {
