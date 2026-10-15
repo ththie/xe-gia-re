@@ -13,6 +13,10 @@
     <!-- Firebase SDK (v9 Realtime Database Compat) -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    
+    <!-- Google Maps API với Key của anh -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvLCJqVB09Wu_m4imI5qQBXlcBeYIgBvs&libraries=places"></script>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -319,7 +323,7 @@
 
         <div class="form-group" style="margin-top: 8px;">
             <label id="distanceLabel">Quãng đường dự kiến (Km)</label>
-            <input type="number" id="distance" placeholder="Nhập số Km (Ví dụ: 9)" min="0" step="0.1" required oninput="calculatePrice()">
+            <input type="number" id="distance" placeholder="Tự động tính qua Google Maps" min="0" step="0.1" required oninput="calculatePrice()">
         </div>
 
         <div class="price-box">
@@ -384,6 +388,7 @@
 
     window.onload = function() {
         loadSavedConfig();
+        initGooglePlacesAndDistance();
         
         let now = new Date();
         document.getElementById('pickupTime').value = String(now.getHours()).padStart(2, '0') + 'h' + String(now.getMinutes()).padStart(2, '0');
@@ -404,6 +409,74 @@
             });
         });
     };
+
+    // 🗺️ TÍCH HỢP GOOGLE MAPS AUTOCOMPLETE & DISTANCE MATRIX TỰ ĐỘNG
+    function initGooglePlacesAndDistance() {
+        if (typeof google === 'undefined' || !google.maps || !google.maps.places) {
+            console.log("Google Maps API chưa sẵn sàng.");
+            return;
+        }
+
+        const pickupInput = document.getElementById('pickupLocation');
+        const dropoffInput = document.getElementById('dropoffLocation');
+
+        const autocompleteOptions = {
+            componentRestrictions: { country: "vn" }
+        };
+
+        const pickupAutocomplete = new google.maps.places.Autocomplete(pickupInput, autocompleteOptions);
+        const dropoffAutocomplete = new google.maps.places.Autocomplete(dropoffInput, autocompleteOptions);
+
+        pickupAutocomplete.addListener('place_changed', function() {
+            calculateDistanceAndPrice();
+        });
+
+        dropoffAutocomplete.addListener('place_changed', function() {
+            calculateDistanceAndPrice();
+        });
+
+        pickupInput.addEventListener('blur', calculateDistanceAndPrice);
+        dropoffInput.addEventListener('blur', calculateDistanceAndPrice);
+    }
+
+    function calculateDistanceAndPrice() {
+        const pickup = document.getElementById('pickupLocation').value.trim();
+        const dropoff = document.getElementById('dropoffLocation').value.trim();
+
+        if (!pickup || !dropoff) return;
+
+        if (typeof google === 'undefined' || !google.maps || !google.maps.DistanceMatrixService) {
+            calculatePrice();
+            return;
+        }
+
+        const service = new google.maps.DistanceMatrixService();
+        service.getDistanceMatrix({
+            origins: [pickup],
+            destinations: [dropoff],
+            travelMode: 'DRIVING',
+            unitSystem: google.maps.UnitSystem.METRIC,
+            avoidHighways: false,
+            avoidTolls: false
+        }, (response, status) => {
+            if (status === 'OK') {
+                const results = response.rows[0].elements;
+                if (results[0].status === 'OK') {
+                    const distanceInMeters = results[0].distance.value;
+                    const distanceInKm = (distanceInMeters / 1000).toFixed(1);
+                    
+                    document.getElementById('distance').value = distanceInKm;
+                    calculatePrice();
+                } else {
+                    console.log("Không tìm thấy tuyến đường giữa 2 địa điểm.");
+                    calculatePrice();
+                }
+            } else {
+                console.log("Lỗi Distance Matrix: " + status);
+                calculatePrice();
+            }
+        });
+    }
 
     function initRealtimeDatabase() {
         if (!db) {
@@ -488,7 +561,7 @@
 
     function applyThemeInstant(themeName) {
         document.body.className = themeName;
-        let bgCode = "#f4f6f9"; // Mặc định nền sáng mượt
+        let bgCode = "#f4f6f9";
         if (themeName === 'tech-blue') bgCode = "linear-gradient(135deg, #0f4c81 0%, #1b262c 100%)";
         if (themeName === 'eco-green') bgCode = "linear-gradient(135deg, #2e7d32 0%, #a5d6a7 100%)";
         if (themeName === 'modern-gray') bgCode = "linear-gradient(135deg, #e9ecef 0%, #ced4da 100%)";
