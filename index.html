@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dịch Vụ Xe 7 Chỗ Sài Gòn Đi Tỉnh Giá Rẻ - XENOW.VN</title>
     
+    <!-- 🔑 MÃ XÁC MINH GOOGLE SEARCH CONSOLE -->
+    <meta name="google-site-verification" content="FbEToHEhCRYu70AMJh-UT8Movc7dz7hCOFJ4mOzdkdU" />
+
     <!-- 🎯 SEO META TAGS -->
     <meta name="description" content="Dịch vụ đặt xe 7 chỗ Suzuki XL7 Hybrid đưa đón tận nơi Sài Gòn đi Vũng Tàu, Cần Thơ, Miền Tây, Sân bay Tân Sơn Nhất. Giá cước tiết kiệm 30%, lái xe an toàn, phục vụ 24/7. Hotline/Zalo: 0917 918 586.">
     <meta name="keywords" content="xenow, xenow.vn, thue xe 7 cho sai gon, thue xe sai gon vung tau, thue xe sai gon can tho, xe hợp đồng tiết kiệm, taxi đường dài giá rẻ">
@@ -48,7 +51,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     
-    <!-- Google Maps API với Key mới của anh -->
+    <!-- Google Maps API -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCi28imj0sc3k0atSItUB4mpUFTdYAEXIE&libraries=places"></script>
 
     <style>
@@ -191,7 +194,6 @@
         }
         .hotline { text-align: center; margin-top: 8px; font-size: 12px; color: #444; }
 
-        /* KHỐI NỘI DUNG SEO DÀNH CHO GOOGLE BOT (VẪN ĐƯỢC INDEX NHƯNG ẨN GỌN TRÊN GIAO DIỆN) */
         .seo-info-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.6); z-index: 10000; align-items: center; justify-content: center; padding: 15px; box-sizing: border-box;
@@ -400,7 +402,6 @@
     </div>
 </div>
 
-<!-- 🌐 HỘP THOẠI NỘI DUNG SEO (ẨN TRÊN MÀN HÌNH CHÍNH, BUNG RA KHI BẤM NÚT SÁCH 📖) -->
 <div id="seoInfoModal" class="seo-info-modal" onclick="closeSeoModal()">
     <div class="seo-modal-content" onclick="event.stopPropagation()">
         <button type="button" class="close-modal-btn" onclick="closeSeoModal()">✕</button>
@@ -430,7 +431,6 @@
     <p>📞 Hotline/Zalo: 0917 918 586</p>
 </footer>
 
-<!-- 🎧 CỤM NÚT NỔI GÓC MÀN HÌNH (ĐÃ THÊM NÚT XEM GIỚI THIỆU 📖) -->
 <div id="floatingButtonsContainer" class="floating-container">
     <div class="sub-buttons-group">
         <button type="button" class="float-btn float-info" onclick="openSeoModal(); autoCloseMenu();" title="Giới thiệu dịch vụ">📖</button>
@@ -491,7 +491,6 @@
         });
     };
 
-    // Hàm mở/đóng bảng giới thiệu SEO
     function openSeoModal() {
         document.getElementById('seoInfoModal').style.display = 'flex';
     }
@@ -499,7 +498,6 @@
         document.getElementById('seoInfoModal').style.display = 'none';
     }
 
-    // 🗺️ TÍCH HỢP GOOGLE MAPS AUTOCOMPLETE & DISTANCE MATRIX TỰ ĐỘNG
     function initGooglePlacesAndDistance() {
         if (typeof google === 'undefined' || !google.maps || !google.maps.places) {
             console.log("Google Maps API chưa sẵn sàng.");
