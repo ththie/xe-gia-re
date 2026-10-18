@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dịch Vụ Xe 7 Chỗ Sài Gòn Đi Tỉnh Giá Rẻ - XENOW.VN</title>
     
-    <!-- 🔑 MÃ XÁC MINH GOOGLE SEARCH CONSOLE -->
-    <meta name="google-site-verification" content="FbEToHEhCRYu70AMJh-UT8Movc7dz7hCOFJ4mOzdkdU" />
-
     <!-- 🎯 SEO META TAGS -->
     <meta name="description" content="Dịch vụ đặt xe 7 chỗ Suzuki XL7 Hybrid đưa đón tận nơi Sài Gòn đi Vũng Tàu, Cần Thơ, Miền Tây, Sân bay Tân Sơn Nhất. Giá cước tiết kiệm 30%, lái xe an toàn, phục vụ 24/7. Hotline/Zalo: 0917 918 586.">
     <meta name="keywords" content="xenow, xenow.vn, thue xe 7 cho sai gon, thue xe sai gon vung tau, thue xe sai gon can tho, xe hợp đồng tiết kiệm, taxi đường dài giá rẻ">
@@ -50,9 +47,6 @@
     <!-- Firebase SDK (v9 Realtime Database Compat) -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-    
-    <!-- Google Maps API -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCi28imj0sc3k0atSItUB4mpUFTdYAEXIE&libraries=places"></script>
 
     <style>
         body {
@@ -194,6 +188,7 @@
         }
         .hotline { text-align: center; margin-top: 8px; font-size: 12px; color: #444; }
 
+        /* KHỐI NỘI DUNG SEO DÀNH CHO GOOGLE BOT (VẪN ĐƯỢC INDEX NHƯNG ẨN GỌN TRÊN GIAO DIỆN) */
         .seo-info-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.6); z-index: 10000; align-items: center; justify-content: center; padding: 15px; box-sizing: border-box;
@@ -378,8 +373,22 @@
         </div>
 
         <div class="form-group" style="margin-top: 8px;">
+            <label>Gợi ý chọn tuyến đường nhanh (Tùy chọn)</label>
+            <select id="quickRouteSelect" onchange="applyQuickRoute()" style="margin-bottom: 6px; background: #eef6fc; border-color: #0066cc; font-weight: bold; color: #0066cc;">
+                <option value="">-- Chọn tuyến đường nhanh để tự nhảy Km --</option>
+                <option value="100|Sài Gòn|Vũng Tàu">Sài Gòn ⇄ Vũng Tàu (~100 km)</option>
+                <option value="165|Sài Gòn|Cần Thơ">Sài Gòn ⇄ Cần Thơ (~165 km)</option>
+                <option value="140|Sài Gòn|Đồng Tháp">Sài Gòn ⇄ Đồng Tháp (~140 km)</option>
+                <option value="190|Sài Gòn|An Giang">Sài Gòn ⇄ An Giang (~190 km)</option>
+                <option value="200|Sài Gòn|Phan Thiết">Sài Gòn ⇄ Phan Thiết (~200 km)</option>
+                <option value="90|Sài Gòn|Tây Ninh">Sài Gòn ⇄ Tây Ninh (~90 km)</option>
+                <option value="40|Sài Gòn|Bình Dương">Sài Gòn ⇄ Bình Dương (~40 km)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
             <label id="distanceLabel">Quãng đường dự kiến (Km)</label>
-            <input type="number" id="distance" placeholder="Tự động tính qua Google Maps" min="0" step="0.1" required oninput="calculatePrice()">
+            <input type="number" id="distance" placeholder="Nhập số Km dự kiến" min="0" step="0.1" required oninput="calculatePrice()">
         </div>
 
         <div class="price-box">
@@ -402,6 +411,7 @@
     </div>
 </div>
 
+<!-- 🌐 HỘP THOẠI NỘI DUNG SEO (ẨN TRÊN MÀN HÌNH CHÍNH, BUNG RA KHI BẤM NÚT SÁCH 📖) -->
 <div id="seoInfoModal" class="seo-info-modal" onclick="closeSeoModal()">
     <div class="seo-modal-content" onclick="event.stopPropagation()">
         <button type="button" class="close-modal-btn" onclick="closeSeoModal()">✕</button>
@@ -431,6 +441,7 @@
     <p>📞 Hotline/Zalo: 0917 918 586</p>
 </footer>
 
+<!-- 🎧 CỤM NÚT NỔI GÓC MÀN HÌNH (ĐÃ THÊM NÚT XEM GIỚI THIỆU 📖) -->
 <div id="floatingButtonsContainer" class="floating-container">
     <div class="sub-buttons-group">
         <button type="button" class="float-btn float-info" onclick="openSeoModal(); autoCloseMenu();" title="Giới thiệu dịch vụ">📖</button>
@@ -469,7 +480,6 @@
 
     window.onload = function() {
         loadSavedConfig();
-        initGooglePlacesAndDistance();
         
         let now = new Date();
         document.getElementById('pickupTime').value = String(now.getHours()).padStart(2, '0') + 'h' + String(now.getMinutes()).padStart(2, '0');
@@ -491,6 +501,7 @@
         });
     };
 
+    // Hàm mở/đóng bảng giới thiệu SEO
     function openSeoModal() {
         document.getElementById('seoInfoModal').style.display = 'flex';
     }
@@ -498,71 +509,20 @@
         document.getElementById('seoInfoModal').style.display = 'none';
     }
 
-    function initGooglePlacesAndDistance() {
-        if (typeof google === 'undefined' || !google.maps || !google.maps.places) {
-            console.log("Google Maps API chưa sẵn sàng.");
-            return;
-        }
-
-        const pickupInput = document.getElementById('pickupLocation');
-        const dropoffInput = document.getElementById('dropoffLocation');
-
-        const autocompleteOptions = {
-            componentRestrictions: { country: "vn" }
-        };
-
-        const pickupAutocomplete = new google.maps.places.Autocomplete(pickupInput, autocompleteOptions);
-        const dropoffAutocomplete = new google.maps.places.Autocomplete(dropoffInput, autocompleteOptions);
-
-        pickupAutocomplete.addListener('place_changed', function() {
-            calculateDistanceAndPrice();
-        });
-
-        dropoffAutocomplete.addListener('place_changed', function() {
-            calculateDistanceAndPrice();
-        });
-
-        pickupInput.addEventListener('blur', calculateDistanceAndPrice);
-        dropoffInput.addEventListener('blur', calculateDistanceAndPrice);
-    }
-
-    function calculateDistanceAndPrice() {
-        const pickup = document.getElementById('pickupLocation').value.trim();
-        const dropoff = document.getElementById('dropoffLocation').value.trim();
-
-        if (!pickup || !dropoff) return;
-
-        if (typeof google === 'undefined' || !google.maps || !google.maps.DistanceMatrixService) {
-            calculatePrice();
-            return;
-        }
-
-        const service = new google.maps.DistanceMatrixService();
-        service.getDistanceMatrix({
-            origins: [pickup],
-            destinations: [dropoff],
-            travelMode: 'DRIVING',
-            unitSystem: google.maps.UnitSystem.METRIC,
-            avoidHighways: false,
-            avoidTolls: false
-        }, (response, status) => {
-            if (status === 'OK') {
-                const results = response.rows[0].elements;
-                if (results[0].status === 'OK') {
-                    const distanceInMeters = results[0].distance.value;
-                    const distanceInKm = (distanceInMeters / 1000).toFixed(1);
-                    
-                    document.getElementById('distance').value = distanceInKm;
-                    calculatePrice();
-                } else {
-                    console.log("Không tìm thấy tuyến đường giữa 2 địa điểm.");
-                    calculatePrice();
-                }
-            } else {
-                console.log("Lỗi Distance Matrix: " + status);
-                calculatePrice();
+    // Chọn nhanh tuyến đường tự động điền Km và điểm đón/đến
+    function applyQuickRoute() {
+        const val = document.getElementById('quickRouteSelect').value;
+        if (val) {
+            const parts = val.split('|');
+            document.getElementById('distance').value = parts[0];
+            if (!document.getElementById('pickupLocation').value) {
+                document.getElementById('pickupLocation').value = parts[1];
             }
-        });
+            if (!document.getElementById('dropoffLocation').value) {
+                document.getElementById('dropoffLocation').value = parts[2];
+            }
+            calculatePrice();
+        }
     }
 
     function initRealtimeDatabase() {
