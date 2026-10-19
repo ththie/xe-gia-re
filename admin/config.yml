@@ -21,6 +21,6 @@ collections:
     fields:
       - { label: "Tiêu đề bài viết", name: "title", widget: "string" }
       - { label: "Ngày đăng", name: "date", widget: "datetime" }
-      - { label: "Hình ảnh đại diện", name: "thumbnail", widget: "image" }
+      - { label: "Hình ảnh đại diện", name: "image", widget: "image" }
       - { label: "Mô tả ngắn (SEO)", name: "description", widget: "text" }
       - { label: "Nội dung bài viết", name: "body", widget: "markdown" }
