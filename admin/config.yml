@@ -15,7 +15,7 @@ media_library:
 collections:
   - name: "blog"
     label: "Bài Viết SEO"
-    folder: "_posts"
+    folder: "content"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
