@@ -1,8 +1,6 @@
 backend:
-  name: github
-  repo: ththie/xe-gia-re
+  name: git-gateway
   branch: main
-  base_url: https://decap-oauth.vercel.app
   
 
 # Tích hợp Cloudinary lưu ảnh mây tự động
