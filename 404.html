@@ -4,9 +4,9 @@
     <meta charset="utf-8">
     <title>Đang chuyển hướng...</title>
     <script>
-      // Lưu lại đường dẫn bài viết hiện tại vào bộ nhớ trình duyệt
+      // Lưu lại đường dẫn gốc (bao gồm cả tên bài viết) vào bộ nhớ tạm của trình duyệt
       sessionStorage.setItem('redirect_path', window.location.pathname);
-      // Chuyển hướng về trang chủ index.html
+      // Chuyển hướng về trang chủ
       window.location.replace('/');
     </script>
   </head>
