@@ -49,6 +49,8 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <!-- Marked.js để phân giải nội dung Markdown từ Decap CMS -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- YAML Parser để đọc danh sách bài viết chuẩn xác -->
+    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
 
     <style>
         body {
@@ -366,7 +368,7 @@
         <button type="button" class="btn-save-admin" onclick="saveAdminConfig()">☁️ LƯU & ĐỒNG BỘ TỚI TẤT CẢ THIẾT BỊ</button>
     </div>
 
-    <!-- PHẦN NHẬP LIỆU GỐC GIỮ NGUYÊN 100% -->
+    <!-- PHẦN NHẬP LIỆU GỐC -->
     <form id="bookingForm">
         <div class="form-group">
             <label>Chọn loại xe</label>
@@ -487,7 +489,7 @@
             </div>
         </div>
 
-        <!-- 2. GIAO DIỆN DANH SÁCH BÀI VIẾT MỚI (PHÂN TRANG 1, 2, 3... CUỘN SANG TRANG) -->
+        <!-- 2. GIAO DIỆN DANH SÁCH BÀI VIẾT MỚI (PHÂN TRANG 1, 2, 3...) -->
         <div id="postsListView" class="posts-list-view">
             <button type="button" class="back-to-intro-btn" onclick="switchToIntro()">← Quay lại giới thiệu</button>
             <h3 style="color: #0066cc; font-size: 13px; margin: 0 0 10px 0;">📖 Danh Sách Bài Viết Mới</h3>
@@ -513,7 +515,7 @@
     <p>📞 Hotline/Zalo: 0917 918 586</p>
 </footer>
 
-<!-- 🎧 CỤM NÚT NỔI GÓC MÀN HÌNH (CÓ NÚT SÁCH 📖 ĐỂ MỞ TAB MENU) -->
+<!-- 🎧 CỤM NÚT NỔI GÓC MÀN HÌNH -->
 <div id="floatingButtonsContainer" class="floating-container">
     <div class="sub-buttons-group">
         <button type="button" class="float-btn float-info" onclick="openSeoModal(); autoCloseMenu();" title="Mở danh mục bài viết">📖</button>
@@ -528,7 +530,7 @@
     let autoCloseTimer = null;
     let allPosts = [];
     let currentPage = 1;
-    const postsPerPage = 3; // Mỗi trang 3 bài (hiển thị 1, 2, 3...)
+    const postsPerPage = 3;
 
     const firebaseConfig = {
       apiKey: "AIzaSyDRaU7w47zX87-N13NFtsCinvz2CNSRD88",
@@ -555,7 +557,7 @@
 
     window.onload = function() {
         loadSavedConfig();
-        loadDecapArticles(); // Tải bài viết từ Decap CMS / GitHub
+        loadDecapArticles();
         
         let now = new Date();
         document.getElementById('pickupTime').value = String(now.getHours()).padStart(2, '0') + 'h' + String(now.getMinutes()).padStart(2, '0');
@@ -577,27 +579,26 @@
         });
     };
 
-    // 📥 TẢI BÀI VIẾT TỪ GITHUB / DECAP CMS (CÓ TÍNH NĂNG LỌC HIỆN / ẨN)
+    // 📥 TẢI BÀI VIẾT ĐÃ TỐI ƯU TRỰC TIẾP
     async function loadDecapArticles() {
         try {
-            const repoOwner = "ththie";
-            const repoName = "xe-gia-re";
-            const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/content`);
-            
-            if (!response.ok) return;
+            const response = await fetch('https://api.github.com/repos/ththie/xe-gia-re/contents/content');
+            if (!response.ok) throw new Error("Không lấy được thư mục content");
             
             const files = await response.json();
             const mdFiles = files.filter(f => f.name.endsWith('.md'));
 
             allPosts = [];
             for (let file of mdFiles) {
-                const res = await fetch(file.download_url);
-                const text = await res.text();
-                const parsed = parseMarkdownPost(text);
-                
-                // CHỈ LẤY CÁC BÀI VIẾT ĐÃ BẬT TRẠNG THÁI HIỂN THỊ (publish / show: true)
-                if (parsed.status !== 'hidden' && parsed.status !== 'draft') {
-                    allPosts.push(parsed);
+                try {
+                    const res = await fetch(file.download_url);
+                    const text = await res.text();
+                    const parsed = parseMarkdownPost(text);
+                    if (parsed && parsed.status !== 'hidden' && parsed.status !== 'draft') {
+                        allPosts.push(parsed);
+                    }
+                } catch (err) {
+                    console.log("Lỗi đọc file:", file.name);
                 }
             }
 
@@ -606,32 +607,31 @@
 
         } catch (e) {
             console.log("Lỗi tải bài viết:", e);
+            document.getElementById('postsContainer').innerHTML = `<p style="text-align: center; color: #777; font-size: 11px;">Chưa có bài viết mới hoặc đang cập nhật.</p>`;
         }
     }
 
     function parseMarkdownPost(text) {
-        let title = "", date = "", image = "", description = "", status = "published", body = "";
         const parts = text.split("---");
         if (parts.length >= 3) {
-            const frontmatter = parts[1];
-            body = parts.slice(2).join("---");
-
-            frontmatter.split("\n").forEach(line => {
-                let kv = line.split(":");
-                if (kv.length >= 2) {
-                    let key = kv[0].trim();
-                    let val = kv.slice(1).join(":").trim().replace(/^["'](.*)["']$/, '$1');
-                    if (key === 'title') title = val;
-                    if (key === 'date') date = val;
-                    if (key === 'image') image = val;
-                    if (key === 'description') description = val;
-                    if (key === 'status' || key === 'draft') status = val;
-                }
-            });
-        } else {
-            body = text;
+            const frontmatterText = parts[1];
+            const bodyText = parts.slice(2).join("---");
+            let data = {};
+            try {
+                data = jsyaml.load(frontmatterText) || {};
+            } catch (err) {
+                data = {};
+            }
+            return {
+                title: data.title || 'Bài viết',
+                date: data.date || '',
+                image: data.image || '',
+                description: data.description || '',
+                status: data.status || 'published',
+                body: marked.parse(bodyText)
+            };
         }
-        return { title, date, image, description, status, body: marked.parse(body) };
+        return { title: 'Bài viết', date: '', image: '', description: '', status: 'published', body: marked.parse(text) };
     }
 
     function renderPostsPage(page) {
@@ -656,7 +656,7 @@
                 <div class="post-card" onclick="viewSinglePost(${globalIdx})">
                     <img src="${post.image || 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=100'}" alt="Thumb">
                     <div class="post-info">
-                        <h4>${post.title || 'Bài viết'}</h4>
+                        <h4>${post.title}</h4>
                         <p>${post.description || 'Xem chi tiết...'}</p>
                     </div>
                 </div>
@@ -664,7 +664,6 @@
         });
         container.innerHTML = html;
 
-        // Tạo nút phân trang (1, 2, 3...)
         let totalPages = Math.ceil(allPosts.length / postsPerPage);
         let pagHtml = "";
         for (let i = 1; i <= totalPages; i++) {
@@ -699,7 +698,6 @@
         document.getElementById('singlePostView').style.display = 'none';
     }
 
-    // Mở / Đóng tab menu nút sách
     function openSeoModal() {
         document.getElementById('seoInfoModal').style.display = 'flex';
         switchToIntro();
@@ -986,10 +984,8 @@
         }
 
         let carTypeText = document.getElementById('carType').value === '7' ? "Xe 7 Chỗ" : "Xe 4 Chỗ";
-        
         let tripTypeSelect = document.getElementById('tripType');
         let tripTypeText = tripTypeSelect.options[tripTypeSelect.selectedIndex].text;
-        
         let priceText = document.getElementById('totalPrice').innerText;
 
         let message = `🚗*YÊU CẦU ĐẶT XE XENOW.VN*\n\n` +
@@ -1017,7 +1013,6 @@
                 distance: distance, 
                 totalPrice: priceText
             });
-            
             let sendBeacon = new Image();
             sendBeacon.src = WEB_APP_URL + "?" + params.toString();
         }
@@ -1027,7 +1022,6 @@
         }
 
         let zaloHref = `https://zalo.me/${currentPhone}`;
-        
         document.getElementById('successZaloLink').href = zaloHref;   
         document.getElementById('successCallLink').href = `tel:${currentPhone}`;
         document.getElementById('bookingForm').style.display = 'none';
