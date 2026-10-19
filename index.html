@@ -1029,5 +1029,17 @@
     }
 </script>
 
+<script>
+  // Tự động kiểm tra URL và mở bài viết tương ứng khi truy cập link độc lập
+  window.addEventListener('DOMContentLoaded', () => {
+    const path = window.location.pathname;
+    if (path && path !== '/' && path !== '/index.html') {
+      const slug = path.replace(/^\/|\/$/g, '');
+      if (typeof openPostBySlug === 'function') {
+        openPostBySlug(slug);
+      }
+    }
+  });
+</script>
 </body>
 </html>
