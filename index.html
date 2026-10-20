@@ -4,6 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dịch Vụ Xe 7 Chỗ Sài Gòn Đi Tỉnh Giá Rẻ - XENOW.VN</title>
+    <script type="text/javascript">
+      (function(l) {
+        if (l.search[1] === 'p') {
+          var decoded = l.search.slice(1).split('&').map(function(s) { 
+            return s.replace(/~and~/g, '&') 
+          }).join('?');
+          window.history.replaceState(null, null,
+              l.pathname.slice(0, -1) + decoded + l.hash
+          );
+        }
+      }(window.location));
+    </script>
     
     <!-- 🎯 SEO META TAGS -->
     <meta name="description" content="Dịch vụ đặt xe 7 chỗ Suzuki XL7 Hybrid đưa đón tận nơi Sài Gòn đi Vũng Tàu, Cần Thơ, Miền Tây, Sân bay Tân Sơn Nhất. Giá cước tiết kiệm 30%, lái xe an toàn, phục vụ 24/7. Hotline/Zalo: 0917 918 586.">
@@ -593,11 +605,8 @@
             for (let file of mdFiles) {
                 const res = await fetch(file.download_url);
                 const text = await res.text();
-                let parsed = parseMarkdownPost(text);
+                const parsed = parseMarkdownPost(text);
                 
-                // Lấy slug từ tên file (bỏ đuôi .md) để khớp với URL độc lập
-                parsed.slug = file.name.replace(/\.md$/, '');
-
                 // CHỈ LẤY CÁC BÀI VIẾT ĐÃ BẬT TRẠNG THÁI HIỂN THỊ (publish / show: true)
                 if (parsed.status !== 'hidden' && parsed.status !== 'draft') {
                     allPosts.push(parsed);
@@ -606,9 +615,6 @@
 
             allPosts.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
             renderPostsPage(1);
-
-            // 🎯 KIỂM TRA NẾU KHÁCH TRUY CẬP TRỰC TIẾP BẰNG LINK ĐỘC LẬP
-            checkAndOpenDirectPost();
 
         } catch (e) {
             console.log("Lỗi tải bài viết:", e);
@@ -638,23 +644,6 @@
             body = text;
         }
         return { title, date, image, description, status, body: marked.parse(body) };
-    }
-
-    // 🔗 HÀM TỰ ĐỘNG MỞ BÀI VIẾT KHI KHÁCH MỞ LINK ĐỘC LẬP
-    function checkAndOpenDirectPost() {
-        let path = sessionStorage.getItem('redirect_path') || window.location.pathname;
-        sessionStorage.removeItem('redirect_path');
-
-        if (path && path !== '/' && path !== '/index.html') {
-            const targetSlug = path.replace(/^\/|\/$/g, '');
-            const foundIndex = allPosts.findIndex(p => p.slug === targetSlug);
-            
-            if (foundIndex !== -1) {
-                // Tự động mở modal và bật đúng bài viết lên
-                document.getElementById('seoInfoModal').style.display = 'flex';
-                viewSinglePost(foundIndex);
-            }
-        }
     }
 
     function renderPostsPage(page) {
@@ -698,7 +687,6 @@
 
     function viewSinglePost(index) {
         const post = allPosts[index];
-        document.getElementById('introArticleView').style.display = 'none';
         document.getElementById('postsListView').style.display = 'none';
         document.getElementById('singlePostView').style.display = 'block';
         document.getElementById('detailTitle').innerText = post.title;
