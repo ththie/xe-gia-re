@@ -12,7 +12,7 @@
         }
     </style>
     
-    <!-- 🎯 SEO META TAGS GIỮ NGUYÊN BẢN BAN ĐẦU -->
+    <!-- 🎯 SEO META TAGS -->
     <meta name="description" id="metaDesc" content="Dịch vụ đặt xe 7 chỗ Suzuki XL7 Hybrid đưa đón tận nơi Sài Gòn đi Vũng Tàu, Cần Thơ, Miền Tây, Sân bay Tân Sơn Nhất. Giá cước tiết kiệm 30%, lái xe an toàn, phục vụ 24/7. Hotline/Zalo: 0917 918 586.">
     <meta name="keywords" content="xenow, xenow.vn, thue xe 7 cho sai gon, thue xe sai gon vung tau, thue xe sai gon can tho, xe hợp đồng tiết kiệm, taxi đường dài giá rẻ">
     <meta name="robots" content="index, follow">
@@ -552,6 +552,24 @@
         console.log("Khởi tạo Firebase thất bại:", e);
     }
 
+    // 🌟 HÀM TỰ ĐỘNG LÀM SẠCH TIẾNG VIỆT CÓ DẤU THÀNH KHÔNG DẤU SIÊU NGẮN
+    function slugify(text) {
+        return text.toString().toLowerCase().trim()
+            .replace(/^[\d]{4}-[\d]{2}-[\d]{2}-/, '') // Xóa ngày tháng ở đầu tệp
+            .replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a")
+            .replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e")
+            .replace(/ì|í|ị|ỉ|ĩ/g, "i")
+            .replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o")
+            .replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u")
+            .replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y")
+            .replace(/đ/g, "d")
+            .replace(/\s+/g, '-')         // Thay khoảng trắng bằng dấu -
+            .replace(/[^\w\-]+/g, '')     // Xóa ký tự đặc biệt
+            .replace(/\-\-+/g, '-')       // Thay nhiều dấu - liên tiếp bằng 1 dấu -
+            .replace(/^-+/, '')           // Xóa dấu - ở đầu
+            .replace(/-+$/, '');          // Xóa dấu - ở cuối
+    }
+
     window.onload = function() {
         loadSavedConfig();
         loadDecapArticles();
@@ -610,8 +628,9 @@
 
     function parseMarkdownPost(text, filename = "") {
         let title = "", date = "", image = "", description = "", status = "published", body = "";
-        // TẠO SLUG RÚT GỌN CHUẨN ĐẸP MẮT (Loại bỏ các ký tự có dấu/đặc biệt)
-        let slug = filename.replace(/\.md$/, '').replace(/^[\d]{4}-[\d]{2}-[\d]{2}-/, '');
+        let rawSlug = filename.replace(/\.md$/, '');
+        let cleanSlug = slugify(rawSlug); // Chuyển thành slug không dấu ngắn gọn
+        
         const parts = text.split("---");
         if (parts.length >= 3) {
             const frontmatter = parts[1];
@@ -632,7 +651,7 @@
         } else {
             body = text;
         }
-        return { slug, title, date, image, description, status, body: marked.parse(body) };
+        return { slug: cleanSlug, rawSlug, title, date, image, description, status, body: marked.parse(body) };
     }
 
     function renderPostsPage(page) {
@@ -672,17 +691,16 @@
         pagination.innerHTML = pagHtml;
     }
 
-    // 🌟 MỞ BÀI VIẾT, ĐỔI URL SIÊU NGẮN VÀ CẬP NHẬT THẺ META SEO RIÊNG CHO BÀI VIẾT
+    // 🌟 MỞ BÀI VIẾT TẠO URL KHÔNG DẤU SIÊU NGẮN
     function viewSinglePost(slug) {
-        const post = allPosts.find(p => p.slug === slug || encodeURIComponent(p.slug) === slug);
+        const post = allPosts.find(p => p.slug === slug || p.rawSlug === slug || encodeURIComponent(p.rawSlug) === slug);
         if (!post) return;
 
-        // Tạo URL siêu ngắn
+        // Tạo URL ngắn sạch sẽ tuyệt đối
         const cleanBase = window.location.protocol + "//" + window.location.host + window.location.pathname;
         const newUrl = cleanBase + "?p=" + post.slug;
         window.history.pushState({slug: post.slug}, "", newUrl);
 
-        // ĐỔI ĐỘNG CÁC THẺ META CỦA BÀI VIẾT ĐỂ TỐI ƯU HIỂN THỊ
         document.title = post.title + " - XENOW.VN";
         document.getElementById('ogTitle').setAttribute('content', post.title);
         if (post.description) {
@@ -694,7 +712,6 @@
         }
         document.getElementById('ogUrl').setAttribute('content', newUrl);
 
-        // Hiển thị khung đọc bài viết
         document.getElementById('introArticleView').style.display = 'none';
         document.getElementById('postsListView').style.display = 'none';
         document.getElementById('seoInfoModal').style.display = 'flex';
@@ -714,7 +731,7 @@
         }
 
         if (slug && allPosts.length > 0) {
-            const matchedPost = allPosts.find(p => p.slug === slug || encodeURIComponent(p.slug) === slug);
+            const matchedPost = allPosts.find(p => p.slug === slug || p.rawSlug === slug || encodeURIComponent(p.rawSlug) === slug);
             if (matchedPost) {
                 viewSinglePost(matchedPost.slug);
             }
