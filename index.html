@@ -5,12 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dịch Vụ Xe 7 Chỗ Sài Gòn Đi Tỉnh Giá Rẻ - XENOW.VN</title>
     
-    <!-- 🚀 FIX CHỚP NỀN TỨC THÌ -->
+    <!-- 🚀 FIX CHỚP NỀN TỨC THÌ & ROUTER HACK CHO GITHUB PAGES -->
     <style id="instant-theme-style">
         body { 
             background: linear-gradient(135deg, #0f4c81 0%, #1b262c 100%) !important; 
         }
     </style>
+    <script type="text/javascript">
+      (function(l) {
+        if (l.search[1] === 'p') {
+          var decoded = l.search.slice(1).split('&').map(function(s) { 
+            return s.replace(/~and~/g, '&') 
+          }).join('?');
+          window.history.replaceState(null, null,
+              l.pathname.slice(0, -1) + decoded + l.hash
+          );
+        }
+      }(window.location));
+    </script>
     
     <!-- 🎯 SEO META TAGS -->
     <meta name="description" content="Dịch vụ đặt xe 7 chỗ Suzuki XL7 Hybrid đưa đón tận nơi Sài Gòn đi Vũng Tàu, Cần Thơ, Miền Tây, Sân bay Tân Sơn Nhất. Giá cước tiết kiệm 30%, lái xe an toàn, phục vụ 24/7. Hotline/Zalo: 0917 918 586.">
@@ -554,9 +566,6 @@
         console.log("Khởi tạo Firebase thất bại:", e);
     }
 
-    // 🌟 LẮNG NGHE SỰ CỐ THAY ĐỔI HASH TRÊN thanh URL
-    window.addEventListener('hashchange', checkUrlAndOpenPost);
-
     window.onload = function() {
         loadSavedConfig();
         loadDecapArticles();
@@ -606,7 +615,7 @@
             allPosts.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
             renderPostsPage(1);
 
-            // KIỂM TRA LINK LÚC VỪA VÀO TRANG
+            // KIỂM TRA QUERY PARAM ?p=slug LÚC VỪA VÀO TRANG
             checkUrlAndOpenPost();
 
         } catch (e) {
@@ -677,15 +686,14 @@
         pagination.innerHTML = pagHtml;
     }
 
-    // 🌟 MỞ BÀI VIẾT & ĐỔI THANH URL SANG DẠNG HASH CHUẨN GITHUB PAGES
+    // 🌟 MỞ BÀI VIẾT VÀ ĐỔI THANH URL THÀNH DẠNG ?p=slug
     function viewSinglePost(slug) {
         const post = allPosts.find(p => p.slug === slug);
         if (!post) return;
 
-        // Đổi thanh URL trình duyệt
-        if (window.location.hash !== "#/" + post.slug) {
-            window.location.hash = "#/" + post.slug;
-        }
+        // Đổi URL trình duyệt sang dạng ?p=slug
+        const newUrl = window.location.pathname + "?p=" + post.slug;
+        window.history.pushState({slug: post.slug}, "", newUrl);
 
         document.getElementById('introArticleView').style.display = 'none';
         document.getElementById('postsListView').style.display = 'none';
@@ -697,22 +705,20 @@
         document.getElementById('detailContent').innerHTML = post.body;
     }
 
-    // 🌟 NHẬN BIẾT URL HASH ĐỂ BẬT ĐÚNG BÀI VIẾT DÙ TRUY CẬP TỪ ZALO
+    // 🌟 KIỂM TRA THAM SỐ ?p=slug ĐỂ MỞ ĐÚNG BÀI VIẾT KHI CLICK TỪ ZALO
     function checkUrlAndOpenPost() {
-        const hash = window.location.hash;
-        if (hash && hash.startsWith('#/')) {
-            const currentSlug = hash.replace('#/', '').split('?')[0];
-            if (currentSlug && allPosts.length > 0) {
-                const matchedPost = allPosts.find(p => p.slug === currentSlug);
-                if (matchedPost) {
-                    viewSinglePost(matchedPost.slug);
-                }
+        const urlParams = new URLSearchParams(window.location.search);
+        const slug = urlParams.get('p');
+        if (slug && allPosts.length > 0) {
+            const matchedPost = allPosts.find(p => p.slug === slug);
+            if (matchedPost) {
+                viewSinglePost(matchedPost.slug);
             }
         }
     }
 
     function backToList() {
-        window.location.hash = "";
+        window.history.pushState({}, "", window.location.pathname);
         document.getElementById('singlePostView').style.display = 'none';
         document.getElementById('postsListView').style.display = 'block';
     }
@@ -734,7 +740,7 @@
         switchToIntro();
     }
     function closeSeoModal() {
-        window.location.hash = "";
+        window.history.pushState({}, "", window.location.pathname);
         document.getElementById('seoInfoModal').style.display = 'none';
     }
 
