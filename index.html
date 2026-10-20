@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="dynamicTitle">Dịch Vụ Xe 7 Chỗ Sài Gòn Đi Tỉnh Giá Rẻ - XENOW.VN</title>
+    <title id="dynamicTitle">XENOW.VN - Di Chuyển Tiết Kiệm</title>
     
     <!-- 🚀 FIX CHỚP NỀN TỨC THÌ -->
     <style id="instant-theme-style">
@@ -12,17 +12,17 @@
         }
     </style>
     
-    <!-- 🎯 SEO META TAGS -->
-    <meta name="description" id="metaDesc" content="Dịch vụ đặt xe 7 chỗ Suzuki XL7 Hybrid đưa đón tận nơi Sài Gòn đi Vũng Tàu, Cần Thơ, Miền Tây, Sân bay Tân Sơn Nhất. Giá cước tiết kiệm 30%, lái xe an toàn, phục vụ 24/7. Hotline/Zalo: 0917 918 586.">
-    <meta name="keywords" content="xenow, xenow.vn, thue xe 7 cho sai gon, thue xe sai gon vung tau, thue xe sai gon can tho, xe hợp đồng tiết kiệm, taxi đường dài giá rẻ">
+    <!-- 🎯 SEO META TAGS ĐÃ TRIỆT TIỆU ĐOẠN TRÙNG LẶP -->
+    <meta name="description" id="metaDesc" content="XENOW.VN - Dịch vụ di chuyển tiết kiệm, đặt xe 4-7 chỗ liên tỉnh an toàn, nhanh chóng, phục vụ 24/7. Hotline/Zalo: 0917 918 586.">
+    <meta name="keywords" content="xenow, xenow.vn, thue xe 7 cho sai gon, thue xe sai gon vung tau, thue xe sai gon can tho, xe hợp đồng tiết kiệm">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://xenow.vn/">
 
-    <!-- 📲 OPEN GRAPH (FACEBOOK & ZALO PREVIEW) -->
+    <!-- 📲 OPEN GRAPH (FACEBOOK & ZALO PREVIEW SẠCH SẼ) -->
     <meta property="og:type" content="article">
     <meta property="og:url" id="ogUrl" content="https://xenow.vn/">
-    <meta property="og:title" id="ogTitle" content="Dịch Vụ Xe 7 Chỗ Sài Gòn Đi Tỉnh Tiết Kiệm 30% - XENOW.VN">
-    <meta property="og:description" id="ogDesc" content="Đặt xe 7 chỗ đời mới đưa đón tận nơi Sài Gòn - Vũng Tàu - Cần Thơ - Miền Tây. Lái xe an toàn, giá cước minh bạch. Gọi ngay 0917 918 586.">
+    <meta property="og:title" id="ogTitle" content="XENOW.VN | Bài Viết Chia Sẻ">
+    <meta property="og:description" id="ogDesc" content="Thông tin tuyến đường & dịch vụ đưa đón liên tỉnh tiết kiệm. Bấm để xem chi tiết bài viết. Hotline: 0917 918 586.">
     <meta property="og:image" id="ogImage" content="https://xenow.vn/og-image.jpg">
 
     <!-- SCHEMA MARKUP FOR GOOGLE STRUCTURED DATA -->
@@ -552,10 +552,9 @@
         console.log("Khởi tạo Firebase thất bại:", e);
     }
 
-    // 🌟 HÀM TỰ ĐỘNG LÀM SẠCH TIẾNG VIỆT CÓ DẤU THÀNH KHÔNG DẤU SIÊU NGẮN
     function slugify(text) {
         return text.toString().toLowerCase().trim()
-            .replace(/^[\d]{4}-[\d]{2}-[\d]{2}-/, '') // Xóa ngày tháng ở đầu tệp
+            .replace(/^[\d]{4}-[\d]{2}-[\d]{2}-/, '')
             .replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a")
             .replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e")
             .replace(/ì|í|ị|ỉ|ĩ/g, "i")
@@ -563,11 +562,11 @@
             .replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u")
             .replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y")
             .replace(/đ/g, "d")
-            .replace(/\s+/g, '-')         // Thay khoảng trắng bằng dấu -
-            .replace(/[^\w\-]+/g, '')     // Xóa ký tự đặc biệt
-            .replace(/\-\-+/g, '-')       // Thay nhiều dấu - liên tiếp bằng 1 dấu -
-            .replace(/^-+/, '')           // Xóa dấu - ở đầu
-            .replace(/-+$/, '');          // Xóa dấu - ở cuối
+            .replace(/\s+/g, '-')
+            .replace(/[^\w\-]+/g, '')
+            .replace(/\-\-+/g, '-')
+            .replace(/^-+/, '')
+            .replace(/-+$/, '');
     }
 
     window.onload = function() {
@@ -629,7 +628,7 @@
     function parseMarkdownPost(text, filename = "") {
         let title = "", date = "", image = "", description = "", status = "published", body = "";
         let rawSlug = filename.replace(/\.md$/, '');
-        let cleanSlug = slugify(rawSlug); // Chuyển thành slug không dấu ngắn gọn
+        let cleanSlug = slugify(rawSlug);
         
         const parts = text.split("---");
         if (parts.length >= 3) {
@@ -691,12 +690,10 @@
         pagination.innerHTML = pagHtml;
     }
 
-    // 🌟 MỞ BÀI VIẾT TẠO URL KHÔNG DẤU SIÊU NGẮN
     function viewSinglePost(slug) {
         const post = allPosts.find(p => p.slug === slug || p.rawSlug === slug || encodeURIComponent(p.rawSlug) === slug);
         if (!post) return;
 
-        // Tạo URL ngắn sạch sẽ tuyệt đối
         const cleanBase = window.location.protocol + "//" + window.location.host + window.location.pathname;
         const newUrl = cleanBase + "?p=" + post.slug;
         window.history.pushState({slug: post.slug}, "", newUrl);
