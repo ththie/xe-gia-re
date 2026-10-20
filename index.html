@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dịch Vụ Xe 7 Chỗ Sài Gòn Đi Tỉnh Giá Rẻ - XENOW.VN</title>
+    <title id="dynamicTitle">Dịch Vụ Xe 7 Chỗ Sài Gòn Đi Tỉnh Giá Rẻ - XENOW.VN</title>
     
     <!-- 🚀 FIX CHỚP NỀN TỨC THÌ -->
     <style id="instant-theme-style">
@@ -12,18 +12,18 @@
         }
     </style>
     
-    <!-- 🎯 SEO META TAGS -->
-    <meta name="description" content="Dịch vụ đặt xe 7 chỗ Suzuki XL7 Hybrid đưa đón tận nơi Sài Gòn đi Vũng Tàu, Cần Thơ, Miền Tây, Sân bay Tân Sơn Nhất. Giá cước tiết kiệm 30%, lái xe an toàn, phục vụ 24/7. Hotline/Zalo: 0917 918 586.">
+    <!-- 🎯 SEO META TAGS GIỮ NGUYÊN BẢN BAN ĐẦU -->
+    <meta name="description" id="metaDesc" content="Dịch vụ đặt xe 7 chỗ Suzuki XL7 Hybrid đưa đón tận nơi Sài Gòn đi Vũng Tàu, Cần Thơ, Miền Tây, Sân bay Tân Sơn Nhất. Giá cước tiết kiệm 30%, lái xe an toàn, phục vụ 24/7. Hotline/Zalo: 0917 918 586.">
     <meta name="keywords" content="xenow, xenow.vn, thue xe 7 cho sai gon, thue xe sai gon vung tau, thue xe sai gon can tho, xe hợp đồng tiết kiệm, taxi đường dài giá rẻ">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://xenow.vn/">
 
     <!-- 📲 OPEN GRAPH (FACEBOOK & ZALO PREVIEW) -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://xenow.vn/">
-    <meta property="og:title" content="Dịch Vụ Xe 7 Chỗ Sài Gòn Đi Tỉnh Tiết Kiệm 30% - XENOW.VN">
-    <meta property="og:description" content="Đặt xe 7 chỗ đời mới đưa đón tận nơi Sài Gòn - Vũng Tàu - Cần Thơ - Miền Tây. Lái xe an toàn, giá cước minh bạch. Gọi ngay 0917 918 586.">
-    <meta property="og:image" content="https://xenow.vn/og-image.jpg">
+    <meta property="og:type" content="article">
+    <meta property="og:url" id="ogUrl" content="https://xenow.vn/">
+    <meta property="og:title" id="ogTitle" content="Dịch Vụ Xe 7 Chỗ Sài Gòn Đi Tỉnh Tiết Kiệm 30% - XENOW.VN">
+    <meta property="og:description" id="ogDesc" content="Đặt xe 7 chỗ đời mới đưa đón tận nơi Sài Gòn - Vũng Tàu - Cần Thơ - Miền Tây. Lái xe an toàn, giá cước minh bạch. Gọi ngay 0917 918 586.">
+    <meta property="og:image" id="ogImage" content="https://xenow.vn/og-image.jpg">
 
     <!-- SCHEMA MARKUP FOR GOOGLE STRUCTURED DATA -->
     <script type="application/ld+json">
@@ -207,7 +207,7 @@
             border: none; width: 28px; height: 28px; border-radius: 50%; font-weight: bold; cursor: pointer; font-size: 14px;
         }
 
-        /* BÀI VIẾT GIỚI THIỆU GỐC ĐẦU TIÊN & DÒNG XEM THÊM GÓC PHẢI */
+        /* BÀI VIẾT GIỚI THIỆU GỐC ĐẦU TIÊN */
         .intro-article-box {
             margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px dashed #ccc;
         }
@@ -224,7 +224,7 @@
         }
         .see-more-btn:hover { background: #004d99; }
 
-        /* DANH SÁCH BÀI VIẾT MỚI & PHÂN TRANG 1, 2, 3... CUỘN SANG TRANG */
+        /* DANH SÁCH BÀI VIẾT MỚI */
         .posts-list-view { display: none; }
         .back-to-intro-btn {
             background: #6c757d; color: white; border: none; padding: 5px 10px;
@@ -240,7 +240,6 @@
         .post-info h4 { font-size: 12px; color: #0066cc; margin: 0 0 3px 0; }
         .post-info p { font-size: 11px; color: #666; margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-        /* PHÂN TRANG (1, 2, 3...) */
         .pagination { display: flex; justify-content: center; gap: 5px; margin-top: 15px; }
         .page-num {
             padding: 5px 9px; font-size: 11px; font-weight: bold; border: 1px solid #ccc;
@@ -248,7 +247,6 @@
         }
         .page-num.active { background: #0066cc; color: white; border-color: #0066cc; }
 
-        /* XEM CHI TIẾT BÀI VIẾT MỚI */
         .single-post-view { display: none; }
         .back-to-list-btn { background: #6c757d; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; margin-bottom: 10px; font-weight: bold; }
 
@@ -603,7 +601,6 @@
             allPosts.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
             renderPostsPage(1);
 
-            // 🌟 TỰ ĐỘNG BẬT BÀI VIẾT NẾU TRUY CẬP TỪ LINK ZALO (?p=slug)
             checkUrlAndOpenPost();
 
         } catch (e) {
@@ -613,7 +610,8 @@
 
     function parseMarkdownPost(text, filename = "") {
         let title = "", date = "", image = "", description = "", status = "published", body = "";
-        let slug = filename.replace(/\.md$/, '');
+        // TẠO SLUG RÚT GỌN CHUẨN ĐẸP MẮT (Loại bỏ các ký tự có dấu/đặc biệt)
+        let slug = filename.replace(/\.md$/, '').replace(/^[\d]{4}-[\d]{2}-[\d]{2}-/, '');
         const parts = text.split("---");
         if (parts.length >= 3) {
             const frontmatter = parts[1];
@@ -674,17 +672,29 @@
         pagination.innerHTML = pagHtml;
     }
 
-    // 🌟 CHỈNH SỬA CHUẨN: LÀM SẠCH URL TRƯỚC KHI GÁN ?p=slug MỚI
+    // 🌟 MỞ BÀI VIẾT, ĐỔI URL SIÊU NGẮN VÀ CẬP NHẬT THẺ META SEO RIÊNG CHO BÀI VIẾT
     function viewSinglePost(slug) {
-        const post = allPosts.find(p => p.slug === slug);
+        const post = allPosts.find(p => p.slug === slug || encodeURIComponent(p.slug) === slug);
         if (!post) return;
 
-        // Xóa sạch tham số cũ, thay bằng ?p=slug mới chuẩn đét
+        // Tạo URL siêu ngắn
         const cleanBase = window.location.protocol + "//" + window.location.host + window.location.pathname;
         const newUrl = cleanBase + "?p=" + post.slug;
         window.history.pushState({slug: post.slug}, "", newUrl);
 
-        // Hiển thị khung xem bài viết
+        // ĐỔI ĐỘNG CÁC THẺ META CỦA BÀI VIẾT ĐỂ TỐI ƯU HIỂN THỊ
+        document.title = post.title + " - XENOW.VN";
+        document.getElementById('ogTitle').setAttribute('content', post.title);
+        if (post.description) {
+            document.getElementById('ogDesc').setAttribute('content', post.description);
+            document.getElementById('metaDesc').setAttribute('content', post.description);
+        }
+        if (post.image) {
+            document.getElementById('ogImage').setAttribute('content', post.image);
+        }
+        document.getElementById('ogUrl').setAttribute('content', newUrl);
+
+        // Hiển thị khung đọc bài viết
         document.getElementById('introArticleView').style.display = 'none';
         document.getElementById('postsListView').style.display = 'none';
         document.getElementById('seoInfoModal').style.display = 'flex';
@@ -695,18 +705,16 @@
         document.getElementById('detailContent').innerHTML = post.body;
     }
 
-    // 🌟 BẮT ĐÚNG THAM SỐ VÀ MỞ BÀI VIẾT TỪ LINK ZALO
     function checkUrlAndOpenPost() {
         const urlParams = new URLSearchParams(window.location.search);
         let slug = urlParams.get('p');
         
-        // Lọc sạch nếu slug bị dính vết nối ?p=
         if (slug && slug.includes('?p=')) {
             slug = slug.split('?p=')[0];
         }
 
         if (slug && allPosts.length > 0) {
-            const matchedPost = allPosts.find(p => p.slug === slug);
+            const matchedPost = allPosts.find(p => p.slug === slug || encodeURIComponent(p.slug) === slug);
             if (matchedPost) {
                 viewSinglePost(matchedPost.slug);
             }
