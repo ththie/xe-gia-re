@@ -5,24 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dịch Vụ Xe 7 Chỗ Sài Gòn Đi Tỉnh Giá Rẻ - XENOW.VN</title>
     
-    <!-- 🚀 FIX CHỚP NỀN TỨC THÌ & ROUTER HACK CHO GITHUB PAGES -->
+    <!-- 🚀 FIX CHỚP NỀN TỨC THÌ -->
     <style id="instant-theme-style">
         body { 
             background: linear-gradient(135deg, #0f4c81 0%, #1b262c 100%) !important; 
         }
     </style>
-    <script type="text/javascript">
-      (function(l) {
-        if (l.search[1] === 'p') {
-          var decoded = l.search.slice(1).split('&').map(function(s) { 
-            return s.replace(/~and~/g, '&') 
-          }).join('?');
-          window.history.replaceState(null, null,
-              l.pathname.slice(0, -1) + decoded + l.hash
-          );
-        }
-      }(window.location));
-    </script>
     
     <!-- 🎯 SEO META TAGS -->
     <meta name="description" content="Dịch vụ đặt xe 7 chỗ Suzuki XL7 Hybrid đưa đón tận nơi Sài Gòn đi Vũng Tàu, Cần Thơ, Miền Tây, Sân bay Tân Sơn Nhất. Giá cước tiết kiệm 30%, lái xe an toàn, phục vụ 24/7. Hotline/Zalo: 0917 918 586.">
@@ -475,7 +463,7 @@
     <div class="seo-modal-content" onclick="event.stopPropagation()">
         <button type="button" class="close-modal-btn" onclick="closeSeoModal()">✕</button>
         
-        <!-- 1. GIAO DIỆN BÀI VIẾT GIỚI THIỆU HIỆN ĐẦU TIÊN + NÚT "XEM THÊM BÀI VIẾT" GÓC PHẢI -->
+        <!-- 1. GIAO DIỆN BÀI VIẾT GIỚI THIỆU HIỆN ĐẦU TIÊN -->
         <div id="introArticleView" class="intro-article-box">
             <h1>Dịch Vụ Di Chuyển Tiết Kiệm - XENOW.VN</h1>
             <p>Chào mừng Quý khách đến với <b>Dịch Vụ Di Chuyển Tiết Kiệm (XENOW.VN)</b>! Chúng tôi chuyên cung cấp dịch vụ đưa đón hành khách bằng dòng xe 7 chỗ <b>Suzuki XL7 Hybrid</b> đời mới, vận hành êm ái, rộng rãi và tối ưu chi phí.</p>
@@ -495,13 +483,12 @@
                 <li><b>Lái xe an toàn, kinh nghiệm</b>: Chu đáo, lịch sự, đúng giờ.</li>
             </ul>
 
-            <!-- Dòng chữ "Xem thêm bài viết" nằm góc phải -->
             <div class="see-more-row">
                 <button type="button" class="see-more-btn" onclick="switchToListPosts()">Xem thêm bài viết →</button>
             </div>
         </div>
 
-        <!-- 2. GIAO DIỆN DANH SÁCH BÀI VIẾT MỚI (PHÂN TRANG 1, 2, 3... CUỘN SANG TRANG) -->
+        <!-- 2. GIAO DIỆN DANH SÁCH BÀI VIẾT MỚI -->
         <div id="postsListView" class="posts-list-view">
             <button type="button" class="back-to-intro-btn" onclick="switchToIntro()">← Quay lại giới thiệu</button>
             <h3 style="color: #0066cc; font-size: 13px; margin: 0 0 10px 0;">📖 Danh Sách Bài Viết Mới</h3>
@@ -527,7 +514,7 @@
     <p>📞 Hotline/Zalo: 0917 918 586</p>
 </footer>
 
-<!-- 🎧 CỤM NÚT NỔI GÓC MÀN HÌNH (CÓ NÚT SÁCH 📖 ĐỂ MỞ TAB MENU) -->
+<!-- 🎧 CỤM NÚT NỔI GÓC MÀN HÌNH -->
 <div id="floatingButtonsContainer" class="floating-container">
     <div class="sub-buttons-group">
         <button type="button" class="float-btn float-info" onclick="openSeoModal(); autoCloseMenu();" title="Mở danh mục bài viết">📖</button>
@@ -542,7 +529,7 @@
     let autoCloseTimer = null;
     let allPosts = [];
     let currentPage = 1;
-    const postsPerPage = 3; // Mỗi trang 3 bài (hiển thị 1, 2, 3...)
+    const postsPerPage = 3;
 
     const firebaseConfig = {
       apiKey: "AIzaSyDRaU7w47zX87-N13NFtsCinvz2CNSRD88",
@@ -567,9 +554,12 @@
         console.log("Khởi tạo Firebase thất bại:", e);
     }
 
+    // 🌟 LẮNG NGHE SỰ CỐ THAY ĐỔI HASH TRÊN thanh URL
+    window.addEventListener('hashchange', checkUrlAndOpenPost);
+
     window.onload = function() {
         loadSavedConfig();
-        loadDecapArticles(); // Tải bài viết từ Decap CMS / GitHub
+        loadDecapArticles();
         
         let now = new Date();
         document.getElementById('pickupTime').value = String(now.getHours()).padStart(2, '0') + 'h' + String(now.getMinutes()).padStart(2, '0');
@@ -591,7 +581,6 @@
         });
     };
 
-    // 📥 TẢI BÀI VIẾT TỪ GITHUB / DECAP CMS (CÓ TÍNH NĂNG LỌC HIỆN / ẨN)
     async function loadDecapArticles() {
         try {
             const repoOwner = "ththie";
@@ -607,9 +596,8 @@
             for (let file of mdFiles) {
                 const res = await fetch(file.download_url);
                 const text = await res.text();
-                const parsed = parseMarkdownPost(text);
+                const parsed = parseMarkdownPost(text, file.name);
                 
-                // CHỈ LẤY CÁC BÀI VIẾT ĐÃ BẬT TRẠNG THÁI HIỂN THỊ (publish / show: true)
                 if (parsed.status !== 'hidden' && parsed.status !== 'draft') {
                     allPosts.push(parsed);
                 }
@@ -618,13 +606,17 @@
             allPosts.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
             renderPostsPage(1);
 
+            // KIỂM TRA LINK LÚC VỪA VÀO TRANG
+            checkUrlAndOpenPost();
+
         } catch (e) {
             console.log("Lỗi tải bài viết:", e);
         }
     }
 
-    function parseMarkdownPost(text) {
+    function parseMarkdownPost(text, filename = "") {
         let title = "", date = "", image = "", description = "", status = "published", body = "";
+        let slug = filename.replace(/\.md$/, '');
         const parts = text.split("---");
         if (parts.length >= 3) {
             const frontmatter = parts[1];
@@ -645,7 +637,7 @@
         } else {
             body = text;
         }
-        return { title, date, image, description, status, body: marked.parse(body) };
+        return { slug, title, date, image, description, status, body: marked.parse(body) };
     }
 
     function renderPostsPage(page) {
@@ -664,10 +656,9 @@
         const pageItems = allPosts.slice(start, end);
 
         let html = "";
-        pageItems.forEach((post, idx) => {
-            let globalIdx = start + idx;
+        pageItems.forEach((post) => {
             html += `
-                <div class="post-card" onclick="viewSinglePost(${globalIdx})">
+                <div class="post-card" onclick="viewSinglePost('${post.slug}')">
                     <img src="${post.image || 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=100'}" alt="Thumb">
                     <div class="post-info">
                         <h4>${post.title || 'Bài viết'}</h4>
@@ -678,7 +669,6 @@
         });
         container.innerHTML = html;
 
-        // Tạo nút phân trang (1, 2, 3...)
         let totalPages = Math.ceil(allPosts.length / postsPerPage);
         let pagHtml = "";
         for (let i = 1; i <= totalPages; i++) {
@@ -687,16 +677,42 @@
         pagination.innerHTML = pagHtml;
     }
 
-    function viewSinglePost(index) {
-        const post = allPosts[index];
+    // 🌟 MỞ BÀI VIẾT & ĐỔI THANH URL SANG DẠNG HASH CHUẨN GITHUB PAGES
+    function viewSinglePost(slug) {
+        const post = allPosts.find(p => p.slug === slug);
+        if (!post) return;
+
+        // Đổi thanh URL trình duyệt
+        if (window.location.hash !== "#/" + post.slug) {
+            window.location.hash = "#/" + post.slug;
+        }
+
+        document.getElementById('introArticleView').style.display = 'none';
         document.getElementById('postsListView').style.display = 'none';
+        document.getElementById('seoInfoModal').style.display = 'flex';
         document.getElementById('singlePostView').style.display = 'block';
+        
         document.getElementById('detailTitle').innerText = post.title;
         document.getElementById('detailDate').innerText = "📅 Ngày đăng: " + post.date;
         document.getElementById('detailContent').innerHTML = post.body;
     }
 
+    // 🌟 NHẬN BIẾT URL HASH ĐỂ BẬT ĐÚNG BÀI VIẾT DÙ TRUY CẬP TỪ ZALO
+    function checkUrlAndOpenPost() {
+        const hash = window.location.hash;
+        if (hash && hash.startsWith('#/')) {
+            const currentSlug = hash.replace('#/', '').split('?')[0];
+            if (currentSlug && allPosts.length > 0) {
+                const matchedPost = allPosts.find(p => p.slug === currentSlug);
+                if (matchedPost) {
+                    viewSinglePost(matchedPost.slug);
+                }
+            }
+        }
+    }
+
     function backToList() {
+        window.location.hash = "";
         document.getElementById('singlePostView').style.display = 'none';
         document.getElementById('postsListView').style.display = 'block';
     }
@@ -713,12 +729,12 @@
         document.getElementById('singlePostView').style.display = 'none';
     }
 
-    // Mở / Đóng tab menu nút sách
     function openSeoModal() {
         document.getElementById('seoInfoModal').style.display = 'flex';
         switchToIntro();
     }
     function closeSeoModal() {
+        window.location.hash = "";
         document.getElementById('seoInfoModal').style.display = 'none';
     }
 
