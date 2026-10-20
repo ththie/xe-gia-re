@@ -5,24 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dịch Vụ Xe 7 Chỗ Sài Gòn Đi Tỉnh Giá Rẻ - XENOW.VN</title>
     
-    <!-- 🚀 FIX CHỚP NỀN TỨC THÌ & ROUTER HACK CHO GITHUB PAGES -->
+    <!-- 🚀 FIX CHỚP NỀN TỨC THÌ -->
     <style id="instant-theme-style">
         body { 
             background: linear-gradient(135deg, #0f4c81 0%, #1b262c 100%) !important; 
         }
     </style>
-    <script type="text/javascript">
-      (function(l) {
-        if (l.search[1] === 'p') {
-          var decoded = l.search.slice(1).split('&').map(function(s) { 
-            return s.replace(/~and~/g, '&') 
-          }).join('?');
-          window.history.replaceState(null, null,
-              l.pathname.slice(0, -1) + decoded + l.hash
-          );
-        }
-      }(window.location));
-    </script>
     
     <!-- 🎯 SEO META TAGS -->
     <meta name="description" content="Dịch vụ đặt xe 7 chỗ Suzuki XL7 Hybrid đưa đón tận nơi Sài Gòn đi Vũng Tàu, Cần Thơ, Miền Tây, Sân bay Tân Sơn Nhất. Giá cước tiết kiệm 30%, lái xe an toàn, phục vụ 24/7. Hotline/Zalo: 0917 918 586.">
@@ -615,7 +603,7 @@
             allPosts.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
             renderPostsPage(1);
 
-            // KIỂM TRA QUERY PARAM ?p=slug LÚC VỪA VÀO TRANG
+            // 🌟 TỰ ĐỘNG BẬT BÀI VIẾT NẾU TRUY CẬP TỪ LINK ZALO (?p=slug)
             checkUrlAndOpenPost();
 
         } catch (e) {
@@ -686,15 +674,17 @@
         pagination.innerHTML = pagHtml;
     }
 
-    // 🌟 MỞ BÀI VIẾT VÀ ĐỔI THANH URL THÀNH DẠNG ?p=slug
+    // 🌟 CHỈNH SỬA CHUẨN: LÀM SẠCH URL TRƯỚC KHI GÁN ?p=slug MỚI
     function viewSinglePost(slug) {
         const post = allPosts.find(p => p.slug === slug);
         if (!post) return;
 
-        // Đổi URL trình duyệt sang dạng ?p=slug
-        const newUrl = window.location.pathname + "?p=" + post.slug;
+        // Xóa sạch tham số cũ, thay bằng ?p=slug mới chuẩn đét
+        const cleanBase = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        const newUrl = cleanBase + "?p=" + post.slug;
         window.history.pushState({slug: post.slug}, "", newUrl);
 
+        // Hiển thị khung xem bài viết
         document.getElementById('introArticleView').style.display = 'none';
         document.getElementById('postsListView').style.display = 'none';
         document.getElementById('seoInfoModal').style.display = 'flex';
@@ -705,10 +695,16 @@
         document.getElementById('detailContent').innerHTML = post.body;
     }
 
-    // 🌟 KIỂM TRA THAM SỐ ?p=slug ĐỂ MỞ ĐÚNG BÀI VIẾT KHI CLICK TỪ ZALO
+    // 🌟 BẮT ĐÚNG THAM SỐ VÀ MỞ BÀI VIẾT TỪ LINK ZALO
     function checkUrlAndOpenPost() {
         const urlParams = new URLSearchParams(window.location.search);
-        const slug = urlParams.get('p');
+        let slug = urlParams.get('p');
+        
+        // Lọc sạch nếu slug bị dính vết nối ?p=
+        if (slug && slug.includes('?p=')) {
+            slug = slug.split('?p=')[0];
+        }
+
         if (slug && allPosts.length > 0) {
             const matchedPost = allPosts.find(p => p.slug === slug);
             if (matchedPost) {
@@ -718,7 +714,8 @@
     }
 
     function backToList() {
-        window.history.pushState({}, "", window.location.pathname);
+        const cleanBase = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        window.history.pushState({}, "", cleanBase);
         document.getElementById('singlePostView').style.display = 'none';
         document.getElementById('postsListView').style.display = 'block';
     }
@@ -740,7 +737,8 @@
         switchToIntro();
     }
     function closeSeoModal() {
-        window.history.pushState({}, "", window.location.pathname);
+        const cleanBase = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        window.history.pushState({}, "", cleanBase);
         document.getElementById('seoInfoModal').style.display = 'none';
     }
 
