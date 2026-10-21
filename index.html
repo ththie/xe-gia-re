@@ -13,7 +13,7 @@
     </style>
     
     <!-- 🎯 SEO META TAGS -->
-    <meta name="description" id="metaDesc" content="XENOW.VN - Dịch vụ di chuyển tiết kiệm, đặt xe 4-7 chỗ liên tỉnh an toàn, nhanh chóng, phục vụ 24/7. Hotline/Zalo: 0917 918 586.">
+    <meta name="description" id="metaDesc" content="XENOW.VN - Dịch vụ di chuyển tiết kiệm, đặt xe 4-7 chỗ liên tỉnh an toàn, nhanh chóng, phục vụ 24/7. Hotline/Zalo tư vấn nhanh: 0917 918 586.">
     <meta name="keywords" content="xenow, xenow.vn, thue xe 7 cho sai gon, thue xe sai gon vung tau, thue xe sai gon can tho, xe hợp đồng tiết kiệm">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://xenow.vn/">
@@ -21,8 +21,8 @@
     <!-- 📲 OPEN GRAPH (FACEBOOK & ZALO PREVIEW) -->
     <meta property="og:type" content="article">
     <meta property="og:url" id="ogUrl" content="https://xenow.vn/">
-    <meta property="og:title" id="ogTitle" content="XENOW.VN | Giới Thiệu Dịch Vụ">
-    <meta property="og:description" id="ogDesc" content="Thông tin tuyến đường & dịch vụ đưa đón liên tỉnh tiết kiệm. Bấm để xem chi tiết. Hotline: 0917 918 586.">
+    <meta property="og:title" id="ogTitle" content="XENOW.VN | Dịch Vụ Di Chuyển Tiết Kiệm">
+    <meta property="og:description" id="ogDesc" content="Thông tin tuyến đường & dịch vụ đưa đón liên tỉnh tiết kiệm. Hotline tư vấn nhanh: 0917 918 586.">
     <meta property="og:image" id="ogImage" content="https://xenow.vn/og-image.jpg">
 
     <!-- SCHEMA MARKUP FOR GOOGLE STRUCTURED DATA -->
@@ -74,8 +74,8 @@
             width: 100%;
             background: #ffffff;
             padding: 12px 15px;
-            border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
             position: relative;
             margin-bottom: 8px;
             box-sizing: border-box;
@@ -87,11 +87,30 @@
             text-align: center;
             font-size: 12px;
             font-weight: bold;
-            padding: 5px 8px;
-            border-radius: 5px;
-            margin-bottom: 8px;
+            padding: 6px 8px;
+            border-radius: 6px;
+            margin-bottom: 10px;
             border: 1px dashed #ffeeba;
         }
+
+        /* 📸 BANNER HÌNH ẢNH XE CHÍNH CHỦ (ĐÃ BỎ CẢ THẺ XE ĐỜI MỚI 100%) */
+        .hero-image-box {
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border: 1px solid #e0e0e0;
+            position: relative;
+        }
+        .hero-image-box img {
+            width: 100%;
+            height: auto;
+            max-height: 230px;
+            object-fit: cover;
+            display: block;
+        }
+
         h2 {
             text-align: center;
             color: #0066cc;
@@ -105,22 +124,25 @@
             font-size: 13px;
             color: #444;
             font-weight: bold;
-            margin-bottom: 5px;
-        }
-        .features-area {
             margin-bottom: 8px;
-            padding: 6px 4px;
+        }
+
+        /* 🚀 DÒNG CHỮ CHẠY ĐỘNG SINH ĐỘNG */
+        .features-area {
+            margin-bottom: 10px;
+            padding: 7px 4px;
             text-align: center;
             font-size: 11px;
             color: #008000;
             font-weight: 600;
             background: #f4f9f4;
-            border-radius: 5px;
+            border-radius: 6px;
             border: 1px solid #d4edda;
             display: block;
             width: 100%;
             box-sizing: border-box;
         }
+
         .admin-panel {
             display: none;
             background: #fff3cd;
@@ -132,7 +154,7 @@
             overflow-y: auto;
         }
         .admin-panel h4 { margin: 0 0 6px 0; font-size: 12px; color: #856404; }
-        .admin-panel input, .admin-panel select {
+        .admin-panel input, .admin-panel select, .admin-panel textarea {
             padding: 6px; font-size: 12px; margin-bottom: 6px; width: 100%;
             box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; background: #fff;
         }
@@ -175,11 +197,58 @@
         .price-note { font-size: 10px; color: #666; margin-top: 4px; font-style: italic; line-height: 1.3; }
         
         .btn-zalo {
-            display: block; background-color: #0068ff; color: white; border: none;
-            width: 100%; padding: 10px; font-size: 14px; font-weight: bold; border-radius: 6px;
+            display: block; 
+            background: linear-gradient(135deg, #0068ff, #004ecc); 
+            color: white; border: none;
+            width: 100%; padding: 11px; font-size: 14px; font-weight: bold; border-radius: 8px;
             cursor: pointer; text-align: center; text-decoration: none; box-sizing: border-box;
-            box-shadow: 0 3px 5px rgba(0, 104, 255, 0.2);
+            box-shadow: 0 4px 10px rgba(0, 104, 255, 0.3);
+            transition: transform 0.2s;
         }
+        .btn-zalo:hover { transform: translateY(-1px); }
+
+        /* ⭐ KHUNG ĐÁNH GIÁ KHÁCH HÀNG & FORM CHẤM SAO */
+        .testimonials-section {
+            margin-top: 14px;
+            margin-bottom: 10px;
+        }
+        .section-title {
+            font-size: 12px; font-weight: bold; color: #0066cc; margin-bottom: 6px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .testimonial-box {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 8px 10px;
+            margin-bottom: 6px;
+            font-size: 11px;
+            color: #555;
+            position: relative;
+        }
+        .testimonial-stars { color: #f39c12; font-size: 12px; margin-bottom: 2px; }
+        .testimonial-text { font-style: italic; margin: 0 0 4px 0; line-height: 1.4; color: #444; }
+        .testimonial-author { font-weight: bold; color: #0066cc; text-align: right; margin: 0; }
+        
+        .btn-open-review {
+            background: #ff9800; color: white; border: none; padding: 4px 8px; font-size: 10px;
+            font-weight: bold; border-radius: 4px; cursor: pointer; text-decoration: none;
+        }
+        
+        /* Modal viết đánh giá */
+        .review-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 10001; align-items: center; justify-content: center; padding: 15px; box-sizing: border-box;
+        }
+        .review-modal-content {
+            background: #fff; max-width: 400px; width: 100%; padding: 15px; border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.3); position: relative; font-size: 12px;
+        }
+        .star-rating-select {
+            display: flex; gap: 6px; font-size: 20px; cursor: pointer; justify-content: center; margin-bottom: 8px; color: #ccc;
+        }
+        .star-rating-select span.selected { color: #f39c12; }
+
         .success-box {
             display: none; background: #e6ffed; border: 1px solid #b7eb8f;
             padding: 12px; border-radius: 6px; text-align: center; margin-top: 10px;
@@ -190,7 +259,6 @@
             width: 100%; padding: 10px; font-size: 13px; font-weight: bold; border-radius: 6px;
             text-align: center; text-decoration: none; margin-top: 6px; box-sizing: border-box;
         }
-        .hotline { text-align: center; margin-top: 8px; font-size: 12px; color: #444; }
 
         /* TAB MENU KHI BẤM NÚT SÁCH (📖) */
         .seo-info-modal {
@@ -207,7 +275,6 @@
             border: none; width: 28px; height: 28px; border-radius: 50%; font-weight: bold; cursor: pointer; font-size: 14px;
         }
 
-        /* BÀI VIẾT GIỚI THIỆU GỐC ĐẦU TIÊN */
         .intro-article-box {
             margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px dashed #ccc;
         }
@@ -224,7 +291,6 @@
         }
         .see-more-btn:hover { background: #004d99; }
 
-        /* DANH SÁCH BÀI VIẾT MỚI */
         .posts-list-view { display: none; }
         .back-to-intro-btn {
             background: #6c757d; color: white; border: none; padding: 5px 10px;
@@ -314,11 +380,17 @@
         🌟 Xin kính chào Quý khách! Rất hân hạnh được phục vụ.
     </div>
 
+    <!-- 📸 BANNER HÌNH ẢNH XE CHÍNH CHỦ (ĐÃ SẠCH SẼ HOÀN TOÀN) -->
+    <div class="hero-image-box" id="heroImageBox">
+        <img id="mainHeroImg" src="https://xenow.vn/og-image.jpg" alt="">
+    </div>
+
     <h2 ondblclick="toggleAdmin()">🚗 DỊCH VỤ DI CHUYỂN TIẾT KIỆM</h2>
     <div class="subtitle">Xe 4 và 7 Chỗ Đời Mới</div>
     
+    <!-- 🚀 DÒNG CHỮ CHẠY ĐỘNG SINH ĐỘNG -->
     <marquee class="features-area" id="marqueeText" scrollamount="4">
-        ✨ Xe thơm sạch &nbsp;|&nbsp; 🛡️ Lái xe an toàn &nbsp;|&nbsp; 💰 Tiết kiệm 30%
+        🛡️ An toàn &nbsp;|&nbsp; ✨ Xe thơm sạch &nbsp;|&nbsp; 💰 Tiết kiệm 30% &nbsp;|&nbsp; ⏰ Đúng giờ 24/7
     </marquee>
 
     <div id="adminPanel" class="admin-panel">
@@ -331,6 +403,21 @@
             <button type="button" class="theme-btn btn-gray" id="btnThemeGray" onclick="selectTheme('modern-gray')">Xám Khói</button>
         </div>
         <input type="hidden" id="selectedThemeValue" value="tech-blue">
+
+        <div class="divider"></div>
+        <h4>🖼️ Cấu hình Ảnh Banner & Chữ Chạy</h4>
+        <div style="font-size: 11px; margin-bottom: 2px;">Link ảnh Banner (URL):</div>
+        <input type="text" id="adminHeroImgInput" placeholder="Dán link ảnh tại đây" value="https://xenow.vn/og-image.jpg">
+
+        <div style="font-size: 11px; margin-bottom: 2px;">Nội dung chữ chạy thông báo:</div>
+        <input type="text" id="adminMarqueeText" value="🛡️ An toàn &nbsp;|&nbsp; ✨ Xe thơm sạch &nbsp;|&nbsp; 💰 Tiết kiệm 30% &nbsp;|&nbsp; ⏰ Đúng giờ 24/7">
+
+        <div class="divider"></div>
+        <h4>⭐ Cấu hình Đánh Giá Mẫu (Testimonial Cố Định)</h4>
+        <div style="font-size: 11px; margin-bottom: 2px;">Lời nhận xét của khách:</div>
+        <textarea id="adminTestimonialText" rows="2" style="width:100%; font-size:12px; padding:6px; border:1px solid #ccc; border-radius:4px;">Xe XL7 Hybrid chạy êm ru, anh tài xế nhiệt tình hỗ trợ vali tận nhà. Giá tốt hơn taxi công nghệ nhiều!</textarea>
+        <div style="font-size: 11px; margin-bottom: 2px;">Tên khách hàng / Tuyến đi:</div>
+        <input type="text" id="adminTestimonialAuthor" value="– Anh Minh (Khách đi Vũng Tàu)">
 
         <div class="divider"></div>
         <h4>📞 Cấu hình Hotline & Giá cước</h4>
@@ -357,16 +444,13 @@
         
         <div class="divider"></div>
         <h4>⚙️ Tùy chỉnh khác & Bảo mật</h4>
-        <div style="font-size: 11px; margin-bottom: 2px;">Nội dung chữ chạy thông báo:</div>
-        <input type="text" id="adminMarqueeText" value="✨ Xe thơm sạch &nbsp;|&nbsp; 🛡️ Lái xe an toàn &nbsp;|&nbsp; 💰 Tiết kiệm 30%">
-
         <div style="font-size: 11px; margin-bottom: 2px;">Đổi mật khẩu quản trị mới:</div>
         <input type="password" id="adminNewPassword" placeholder="Để trống nếu không muốn đổi">
         
         <button type="button" class="btn-save-admin" onclick="saveAdminConfig()">☁️ LƯU & ĐỒNG BỘ TỚI TẤT CẢ THIẾT BỊ</button>
     </div>
 
-    <!-- PHẦN NHẬP LIỆU GỐC GIỮ NGUYÊN 100% -->
+    <!-- PHẦN NHẬP LIỆU GỐC -->
     <form id="bookingForm">
         <div class="form-group">
             <label>Chọn loại xe</label>
@@ -445,14 +529,65 @@
         <button type="button" class="btn-zalo" onclick="submitBooking()">💬 GỬI YÊU CẦU ĐẶT XE QUA ZALO</button>
     </form>
 
+    <!-- ⭐ KHUNG ĐÁNH GIÁ KHÁCH HÀNG & NÚT CHẤM SAO -->
+    <div class="testimonials-section">
+        <div class="section-title">
+            <span>⭐ Đánh giá từ khách hàng thực tế</span>
+            <button type="button" class="btn-open-review" onclick="openReviewModal()">✍️ Viết đánh giá</button>
+        </div>
+
+        <!-- Đánh giá cố định từ Admin -->
+        <div class="testimonial-box">
+            <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+            <p class="testimonial-text" id="displayTestimonialText">"Xe XL7 Hybrid chạy êm ru, anh tài xế nhiệt tình hỗ trợ vali tận nhà. Giá tốt hơn taxi công nghệ nhiều!"</p>
+            <p class="testimonial-author" id="displayTestimonialAuthor">– Anh Minh (Khách đi Vũng Tàu)</p>
+        </div>
+
+        <!-- Danh sách đánh giá thực tế khách gửi lên sẽ nằm ở đây -->
+        <div id="dynamicReviewsContainer"></div>
+    </div>
+
     <div id="successBox" class="success-box">
         <p>✅ ĐÃ LƯU ĐƠN & ĐÃ SAO CHÉP NỘI DUNG!<br>Vui lòng mở Zalo và <b>DÁN (Paste)</b> để gửi.</p>
         <a href="#" id="successZaloLink" class="btn-action" target="_blank">📱 MỞ ỨNG DỤNG ZALO NGAY</a>
         <a href="#" id="successCallLink" class="btn-action" style="background-color: #0066cc;">📞 GỌI HOTLINE</a>
     </div>
+</div>
 
-    <div class="hotline">
-        Cần tư vấn nhanh, gọi ngay Hotline: <b id="mainHotlineText">0917918586</b>
+<!-- ✍️ MODAL ĐỂ KHÁCH CHẤM SAO & VIẾT ĐÁNH GIÁ -->
+<div id="reviewModal" class="review-modal" onclick="closeReviewModal()">
+    <div class="review-modal-content" onclick="event.stopPropagation()">
+        <button type="button" class="close-modal-btn" onclick="closeReviewModal()">✕</button>
+        <h3 style="color: #0066cc; margin-top: 0; text-align: center; font-size: 14px;">✍️ Gửi Đánh Giá Của Bạn</h3>
+        
+        <div class="form-group">
+            <label>Chọn số sao hài lòng:</label>
+            <div class="star-rating-select" id="starRatingSelect">
+                <span onclick="setRating(1)" class="selected">★</span>
+                <span onclick="setRating(2)" class="selected">★</span>
+                <span onclick="setRating(3)" class="selected">★</span>
+                <span onclick="setRating(4)" class="selected">★</span>
+                <span onclick="setRating(5)" class="selected">★</span>
+            </div>
+            <input type="hidden" id="selectedStarCount" value="5">
+        </div>
+
+        <div class="form-group">
+            <label>Họ và tên của bạn:</label>
+            <input type="text" id="reviewAuthor" placeholder="Ví dụ: Chị Lan" required>
+        </div>
+
+        <div class="form-group">
+            <label>Tuyến đường đi (Tùy chọn):</label>
+            <input type="text" id="reviewRoute" placeholder="Ví dụ: Sài Gòn đi Cần Thơ">
+        </div>
+
+        <div class="form-group">
+            <label>Nội dung nhận xét:</label>
+            <textarea id="reviewComment" rows="3" placeholder="Trải nghiệm dịch vụ thế nào ạ..." style="width:100%; font-size:12px; padding:6px; border:1px solid #ccc; border-radius:4px; box-sizing: border-box;" required></textarea>
+        </div>
+
+        <button type="button" class="btn-zalo" onclick="submitReview()" style="padding: 8px; font-size: 12px; margin-top: 5px;">🚀 GỬI ĐÁNH GIÁ</button>
     </div>
 </div>
 
@@ -461,7 +596,6 @@
     <div class="seo-modal-content" onclick="event.stopPropagation()">
         <button type="button" class="close-modal-btn" onclick="closeSeoModal()">✕</button>
         
-        <!-- 1. GIAO DIỆN BÀI VIẾT GIỚI THIỆU HIỆN ĐẦU TIÊN -->
         <div id="introArticleView" class="intro-article-box">
             <h1>Dịch Vụ Di Chuyển Tiết Kiệm - XENOW.VN</h1>
             <p>Chào mừng Quý khách đến với <b>Dịch Vụ Di Chuyển Tiết Kiệm (XENOW.VN)</b>! Chúng tôi chuyên cung cấp dịch vụ đưa đón hành khách bằng dòng xe 7 chỗ <b>Suzuki XL7 Hybrid</b> đời mới, vận hành êm ái, rộng rãi và tối ưu chi phí.</p>
@@ -486,7 +620,6 @@
             </div>
         </div>
 
-        <!-- 2. GIAO DIỆN DANH SÁCH BÀI VIẾT MỚI -->
         <div id="postsListView" class="posts-list-view">
             <button type="button" class="back-to-intro-btn" onclick="switchToIntro()">← Quay lại giới thiệu</button>
             <h3 style="color: #0066cc; font-size: 13px; margin: 0 0 10px 0;">📖 Danh Sách Bài Viết Mới</h3>
@@ -496,7 +629,6 @@
             <div id="paginationContainer" class="pagination"></div>
         </div>
 
-        <!-- 3. GIAO DIỆN ĐỌC CHI TIẾT BÀI VIẾT MỚI -->
         <div id="singlePostView" class="single-post-view">
             <button type="button" class="back-to-list-btn" onclick="backToList()">← Quay lại danh sách</button>
             <h2 id="detailTitle" style="color: #0066cc; font-size: 14px; margin-top: 5px;"></h2>
@@ -506,10 +638,11 @@
     </div>
 </div>
 
+<!-- CHÂN TRANG ĐÃ THÊM TỪ TƯ VẤN NHANH -->
 <footer class="site-footer">
     <p class="brand-title">DỊCH VỤ DI CHUYỂN TIẾT KIỆM - XENOW.VN</p>
     <p>📍 Địa chỉ: 8/1A5 Đường Số 9, P. Hiệp Bình, TP. HCM</p>
-    <p>📞 Hotline/Zalo: 0917 918 586</p>
+    <p>📞 Hotline/Zalo tư vấn nhanh: <b id="mainHotlineText">0917 918 586</b></p>
 </footer>
 
 <!-- 🎧 CỤM NÚT NỔI GÓC MÀN HÌNH -->
@@ -719,7 +852,6 @@
         document.getElementById('detailContent').innerHTML = post.body;
     }
 
-    // 🌟 MỞ MỤC GIỚI THIỆU VỚI URL ?p=gioi-thieu
     function openIntroUrl() {
         const cleanBase = window.location.protocol + "//" + window.location.host + window.location.pathname;
         const newUrl = cleanBase + "?p=gioi-thieu";
@@ -738,7 +870,6 @@
             slug = slug.split('?p=')[0];
         }
 
-        // 🌟 BẮT RIÊNG THAM SỐ ?p=gioi-thieu
         if (slug === 'gioi-thieu') {
             openIntroUrl();
             return;
@@ -814,6 +945,88 @@
             console.log("Lỗi đồng bộ Firebase:", error);
             updateDbBadge(false);
         });
+
+        db.ref('xenow_reviews').on('value', (snapshot) => {
+            const reviewsData = snapshot.val();
+            renderDynamicReviews(reviewsData);
+        });
+    }
+
+    function renderDynamicReviews(reviewsData) {
+        let container = document.getElementById('dynamicReviewsContainer');
+        if (!reviewsData) {
+            container.innerHTML = "";
+            return;
+        }
+
+        let html = "";
+        let keys = Object.keys(reviewsData).reverse();
+        keys.forEach(key => {
+            let r = reviewsData[key];
+            let stars = "★".repeat(parseInt(r.rating) || 5) + "☆".repeat(5 - (parseInt(r.rating) || 5));
+            let routeText = r.route ? ` (Khách đi ${r.route})` : "";
+            html += `
+                <div class="testimonial-box">
+                    <div class="testimonial-stars">${stars}</div>
+                    <p class="testimonial-text">"${r.comment}"</p>
+                    <p class="testimonial-author">– ${r.author}${routeText}</p>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    function openReviewModal() {
+        document.getElementById('reviewModal').style.display = 'flex';
+    }
+    function closeReviewModal() {
+        document.getElementById('reviewModal').style.display = 'none';
+    }
+
+    let currentStarRating = 5;
+    function setRating(stars) {
+        currentStarRating = stars;
+        document.getElementById('selectedStarCount').value = stars;
+        let spans = document.querySelectorAll('#starRatingSelect span');
+        spans.forEach((span, idx) => {
+            if (idx < stars) {
+                span.classList.add('selected');
+            } else {
+                span.classList.remove('selected');
+            }
+        });
+    }
+
+    function submitReview() {
+        let author = document.getElementById('reviewAuthor').value.trim();
+        let route = document.getElementById('reviewRoute').value.trim();
+        let comment = document.getElementById('reviewComment').value.trim();
+        let rating = document.getElementById('selectedStarCount').value;
+
+        if (!author || !comment) {
+            alert("Vui lòng điền tên và nội dung đánh giá!");
+            return;
+        }
+
+        if (db) {
+            db.ref('xenow_reviews').push({
+                author: author,
+                route: route,
+                comment: comment,
+                rating: rating,
+                createdAt: new Date().toISOString()
+            }).then(() => {
+                alert("🎉 Cảm ơn bạn đã gửi đánh giá 5 sao!");
+                document.getElementById('reviewAuthor').value = "";
+                document.getElementById('reviewRoute').value = "";
+                document.getElementById('reviewComment').value = "";
+                closeReviewModal();
+            }).catch(err => {
+                alert("Lỗi khi gửi đánh giá: " + err.message);
+            });
+        } else {
+            alert("Chưa kết nối cơ sở dữ liệu mây để lưu đánh giá!");
+        }
     }
 
     function updateDbBadge(online) {
@@ -863,11 +1076,33 @@
         document.getElementById('floatingCallLink').href = `tel:${phone}`;
         document.getElementById('floatingZaloLink').href = `https://zalo.me/${phone}`;
 
-        let marquee = data.marquee || "✨ Xe thơm sạch &nbsp;|&nbsp; 🛡️ Lái xe an toàn &nbsp;|&nbsp; 💰 Tiết kiệm 30%";
+        let marquee = data.marquee || "🛡️ An toàn &nbsp;|&nbsp; ✨ Xe thơm sạch &nbsp;|&nbsp; 💰 Tiết kiệm 30% &nbsp;|&nbsp; ⏰ Đúng giờ 24/7";
         if (activeEl.id !== 'adminMarqueeText') {
             document.getElementById('adminMarqueeText').value = marquee;
         }
         document.getElementById('marqueeText').innerHTML = marquee;
+
+        let heroImg = data.heroImgUrl || "https://xenow.vn/og-image.jpg";
+        if (activeEl.id !== 'adminHeroImgInput') {
+            document.getElementById('adminHeroImgInput').value = heroImg;
+        }
+        if (heroImg && heroImg.trim() !== "") {
+            document.getElementById('mainHeroImg').src = heroImg;
+            document.getElementById('heroImageBox').style.display = 'block';
+        } else {
+            document.getElementById('heroImageBox').style.display = 'none';
+        }
+
+        let tText = data.testimonialText || "Xe XL7 Hybrid chạy êm ru, anh tài xế nhiệt tình hỗ trợ vali tận nhà. Giá tốt hơn taxi công nghệ nhiều!";
+        let tAuthor = data.testimonialAuthor || "– Anh Minh (Khách đi Vũng Tàu)";
+        if (activeEl.id !== 'adminTestimonialText') {
+            document.getElementById('adminTestimonialText').value = tText;
+        }
+        if (activeEl.id !== 'adminTestimonialAuthor') {
+            document.getElementById('adminTestimonialAuthor').value = tAuthor;
+        }
+        document.getElementById('displayTestimonialText').innerText = `"${tText}"`;
+        document.getElementById('displayTestimonialAuthor').innerText = tAuthor;
 
         if (data.admin_password) {
             localStorage.setItem('admin_password', data.admin_password);
@@ -974,6 +1209,9 @@
             package2: parseFloat(document.getElementById('adminPackage2').value) || 0,
             phone: document.getElementById('adminPhoneInput').value.trim(),
             marquee: document.getElementById('adminMarqueeText').value.trim(),
+            heroImgUrl: document.getElementById('adminHeroImgInput').value.trim(),
+            testimonialText: document.getElementById('adminTestimonialText').value.trim(),
+            testimonialAuthor: document.getElementById('adminTestimonialAuthor').value.trim(),
             updatedAt: new Date().toISOString()
         };
 
