@@ -93,7 +93,7 @@
             border: 1px dashed #ffeeba;
         }
 
-        /* 📸 BANNER HÌNH ẢNH XE CHÍNH CHỦ */
+        /* 📸 BANNER HÌNH ẢNH XE CHÍNH CHỦ (ĐÃ BỎ CẢ THẺ XE ĐỜI MỚI 100%) */
         .hero-image-box {
             width: 100%;
             border-radius: 8px;
@@ -380,9 +380,9 @@
         🌟 Xin kính chào Quý khách! Rất hân hạnh được phục vụ.
     </div>
 
-    <!-- 📸 BANNER HÌNH ẢNH XE CHÍNH CHỦ -->
+    <!-- 📸 BANNER HÌNH ẢNH XE CHÍNH CHỦ (ĐÃ SẠCH SẼ HOÀN TOÀN) -->
     <div class="hero-image-box" id="heroImageBox">
-        <img id="mainHeroImg" src="https://xenow.vn/og-image.jpg" alt="XENOW Banner">
+        <img id="mainHeroImg" src="https://xenow.vn/og-image.jpg" alt="">
     </div>
 
     <h2 ondblclick="toggleAdmin()">🚗 DỊCH VỤ DI CHUYỂN TIẾT KIỆM</h2>
@@ -543,7 +543,7 @@
             <p class="testimonial-author" id="displayTestimonialAuthor">– Anh Minh (Khách đi Vũng Tàu)</p>
         </div>
 
-        <!-- Danh sách đánh giá thực tế khách gửi lên -->
+        <!-- Danh sách đánh giá thực tế khách gửi lên sẽ nằm ở đây -->
         <div id="dynamicReviewsContainer"></div>
     </div>
 
@@ -638,7 +638,7 @@
     </div>
 </div>
 
-<!-- CHÂN TRANG -->
+<!-- CHÂN TRANG ĐÃ THÊM TỪ TƯ VẤN NHANH -->
 <footer class="site-footer">
     <p class="brand-title">DỊCH VỤ DI CHUYỂN TIẾT KIỆM - XENOW.VN</p>
     <p>📍 Địa chỉ: 8/1A5 Đường Số 9, P. Hiệp Bình, TP. HCM</p>
@@ -705,7 +705,6 @@
     window.onload = function() {
         loadSavedConfig();
         loadDecapArticles();
-        loadDecapHomepageConfig(); // 🚀 ĐỌC TỰ ĐỘNG CẤU HÌNH TRANG CHỦ TỪ DECAP CMS
         
         let now = new Date();
         document.getElementById('pickupTime').value = String(now.getHours()).padStart(2, '0') + 'h' + String(now.getMinutes()).padStart(2, '0');
@@ -726,26 +725,6 @@
             });
         });
     };
-
-    // 🚀 TỰ ĐỘNG ĐỌC BANNER TỪ DECAP CMS JSON
-    async function loadDecapHomepageConfig() {
-        try {
-            const res = await fetch('/content/homepage.json');
-            if (res.ok) {
-                const data = await res.json();
-                if (data.banner_url) {
-                    document.getElementById('mainHeroImg').src = data.banner_url;
-                    document.getElementById('adminHeroImgInput').value = data.banner_url;
-                }
-                if (data.marquee) {
-                    document.getElementById('marqueeText').innerHTML = data.marquee;
-                    document.getElementById('adminMarqueeText').value = data.marquee;
-                }
-            }
-        } catch (e) {
-            console.log("Dùng ảnh mặc định hoặc cấu hình Firebase:", e);
-        }
-    }
 
     async function loadDecapArticles() {
         try {
