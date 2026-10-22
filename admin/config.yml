@@ -1,3 +1,11 @@
+backend:
+  name: github
+  repo: ththie/xe-gia-re
+  branch: main
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
 collections:
   - name: "homepage"
     label: "Trang chủ"
@@ -8,3 +16,15 @@ collections:
         fields:
           - { label: "Hình Banner Trang Chủ", name: "banner_url", widget: "image" }
           - { label: "Nội dung chữ chạy", name: "marquee", widget: "string" }
+
+  - name: "blog"
+    label: "Bài viết SEO"
+    folder: "content"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Tiêu đề", name: "title", widget: "string" }
+      - { label: "Ngày đăng", name: "date", widget: "datetime" }
+      - { label: "Ảnh đại diện", name: "image", widget: "image" }
+      - { label: "Mô tả ngắn", name: "description", widget: "text" }
+      - { label: "Nội dung", name: "body", widget: "markdown" }
