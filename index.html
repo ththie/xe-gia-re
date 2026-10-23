@@ -318,32 +318,21 @@
         }
         .posts-grid { display: flex; flex-direction: column; gap: 8px; }
         
-        /* 📌 CẤU HÌNH BÀI VIẾT BÌNH THƯỜNG & BÀI NỔI BẬT ĐƯỢC GHIM */
+        /* 📌 CẤU HÌNH BÀI VIẾT BÌNH THƯỜNG & CHỈ CÒN ICON GHIM GỌN GÀNG */
         .post-card {
             background: #fdfdfd; border: 1px solid #e0e0e0; border-radius: 8px; padding: 8px;
             cursor: pointer; display: flex; gap: 10px; align-items: center; transition: 0.2s;
             position: relative;
         }
         .post-card:hover { border-color: #0066cc; background: #f0f7ff; }
-        .post-card.featured-card {
-            background: #fffdf5;
-            border: 1.5px solid #ffb300;
-            box-shadow: 0 2px 8px rgba(255, 179, 0, 0.15);
-        }
         .pinned-badge {
             position: absolute;
             top: 4px;
             right: 8px;
-            font-size: 10px;
-            font-weight: bold;
-            color: #d97706;
-            background: #fef3c7;
-            padding: 2px 6px;
-            border-radius: 4px;
-            border: 1px solid #fcd34d;
+            font-size: 13px;
         }
         .post-card img { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; flex-shrink: 0; background: #eee; }
-        .post-info h4 { font-size: 12.5px; color: #0066cc; margin: 0 0 3px 0; padding-right: 40px; line-height: 1.35; }
+        .post-info h4 { font-size: 12.5px; color: #0066cc; margin: 0 0 3px 0; padding-right: 30px; line-height: 1.35; }
         .post-info p { font-size: 11.5px; color: #666; margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.3; }
 
         .pagination { display: flex; justify-content: center; gap: 6px; margin-top: 15px; }
@@ -801,20 +790,21 @@
                 }
             }
 
-            // Sắp xếp bài viết: Bài ghim (featured: true) hoặc 3 bài ghim ưu tiên lên đầu, các bài khác sắp theo ngày mới nhất
+            // Sắp xếp bài viết: Đưa tối đa 1 bài ghim (featured: true) lên đầu tiên, các bài khác theo ngày mới nhất
             allPosts.sort((a, b) => {
                 if (a.isFeatured && !b.isFeatured) return -1;
                 if (!a.isFeatured && b.isFeatured) return 1;
                 return new Date(b.date || 0) - new Date(a.date || 0);
             });
 
-            // Nếu không khai báo featured cụ thể trong Markdown thì mặc định đánh dấu 3 bài đầu tiên làm Bài Nổi Bật Ghim
-            let hasExplicitFeatured = allPosts.some(p => p.isFeatured);
-            if (!hasExplicitFeatured) {
-                for (let i = 0; i < Math.min(3, allPosts.length); i++) {
-                    allPosts[i].isFeatured = true;
+            // Đảm bảo chỉ giới hạn 1 bài ghim lên đầu nếu không đánh dấu tường minh
+            let featuredCount = 0;
+            allPosts.forEach((post, idx) => {
+                if (post.isFeatured) {
+                    featuredCount++;
+                    if (featuredCount > 1) post.isFeatured = false; // Chỉ giữ 1 bài ghim duy nhất
                 }
-            }
+            });
 
             renderPostsPage(1);
             checkUrlAndOpenPost();
@@ -870,11 +860,10 @@
 
         let html = "";
         pageItems.forEach((post) => {
-            let featuredClass = post.isFeatured ? "featured-card" : "";
-            let pinnedBadge = post.isFeatured ? `<span class="pinned-badge">📌 Nổi bật</span>` : "";
+            let pinnedBadge = post.isFeatured ? `<span class="pinned-badge" title="Bài viết ghim nổi bật">📌</span>` : "";
 
             html += `
-                <div class="post-card ${featuredClass}" onclick="viewSinglePost('${post.slug}')">
+                <div class="post-card" onclick="viewSinglePost('${post.slug}')">
                     ${pinnedBadge}
                     <img src="${post.image || 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=100'}" alt="Thumb">
                     <div class="post-info">
