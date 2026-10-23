@@ -25,10 +25,10 @@ Bạn đang tìm kiếm dịch vụ \*\*thuê xe 7 chỗ Sài Gòn đi Vũng Tà
 
 \## 📞 Hướng Dẫn Đặt Xe Nhanh Nhất
 
-Quý khách chỉ cần liên hệ qua Hotline/Zalo hoặc điền thông tin đặt xe trực tiếp tại website <https://xenow.vn>
+Quý khách điền thông tin đặt xe trực tiếp tại website <https://xenow.vn>
 
 \* \*\*Hotline / Zalo\*\*: \*\*0917 918 586\**
 
 \* \*\*Địa chỉ\**: 8/1A5 Đường Số 9, P. Hiệp Bình, TP. Hồ Chí Minh
 
-<https://xenow.vn> - Đồng hành cùng bạn trên mọi nẻo đường an toàn và tiết kiệm!*
+Dịch Vụ Di Chuyển Tiết Kiệm Đồng hành cùng bạn trên mọi nẻo đường an toàn & tận tâm!*
