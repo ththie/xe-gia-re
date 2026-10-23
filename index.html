@@ -5,12 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="dynamicTitle">XENOW.VN - Di Chuyển Tiết Kiệm</title>
     
-    <!-- 🚀 FIX CHỚP NỀN TỨC THÌ -->
+    <!-- 🚀 FIX CHỚP NỀN TỨC THÌ (Đọc trực tiếp localStorage chống chớp) -->
     <style id="instant-theme-style">
         body { 
             background: linear-gradient(135deg, #0f4c81 0%, #1b262c 100%) !important; 
         }
     </style>
+    <script>
+        (function() {
+            let savedTheme = localStorage.getItem('cfg_theme') || 'tech-blue';
+            let bgCode = "linear-gradient(135deg, #0f4c81 0%, #1b262c 100%)";
+            if (savedTheme === 'eco-green') bgCode = "linear-gradient(135deg, #2e7d32 0%, #a5d6a7 100%)";
+            if (savedTheme === 'modern-gray') bgCode = "linear-gradient(135deg, #e9ecef 0%, #ced4da 100%)";
+            let styleEl = document.getElementById('instant-theme-style');
+            if(styleEl) styleEl.innerHTML = `body { background: ${bgCode} !important; }`;
+            document.documentElement.className = savedTheme;
+        })();
+    </script>
     
     <!-- 🎯 SEO META TAGS -->
     <meta name="description" id="metaDesc" content="XENOW.VN - Dịch vụ di chuyển tiết kiệm, đặt xe 4-7 chỗ liên tỉnh an toàn, nhanh chóng, phục vụ 24/7. Hotline/Zalo tư vấn nhanh: 0917 918 586.">
@@ -93,7 +104,6 @@
             border: 1px dashed #ffeeba;
         }
 
-        /* 📸 BANNER HÌNH ẢNH XE CHÍNH CHỦ (ĐÃ BỎ CẢ THẺ XE ĐỜI MỚI 100%) */
         .hero-image-box {
             width: 100%;
             border-radius: 8px;
@@ -127,7 +137,6 @@
             margin-bottom: 8px;
         }
 
-        /* 🚀 DÒNG CHỮ CHẠY ĐỘNG SINH ĐỘNG */
         .features-area {
             margin-bottom: 10px;
             padding: 7px 4px;
@@ -207,7 +216,6 @@
         }
         .btn-zalo:hover { transform: translateY(-1px); }
 
-        /* ⭐ KHUNG ĐÁNH GIÁ KHÁCH HÀNG & FORM CHẤM SAO */
         .testimonials-section {
             margin-top: 14px;
             margin-bottom: 10px;
@@ -235,7 +243,6 @@
             font-weight: bold; border-radius: 4px; cursor: pointer; text-decoration: none;
         }
         
-        /* Modal viết đánh giá */
         .review-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.6); z-index: 10001; align-items: center; justify-content: center; padding: 15px; box-sizing: border-box;
@@ -260,7 +267,6 @@
             text-align: center; text-decoration: none; margin-top: 6px; box-sizing: border-box;
         }
 
-        /* TAB MENU KHI BẤM NÚT SÁCH (📖) */
         .seo-info-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.6); z-index: 10000; align-items: center; justify-content: center; padding: 15px; box-sizing: border-box;
@@ -373,14 +379,14 @@
         .float-info { background-color: #009688; font-size: 17px; }
     </style>
 </head>
-<body class="tech-blue">
+<body>
 
 <div class="container" onclick="event.stopPropagation()">
     <div class="welcome-banner" id="welcomeBannerText">
         🌟 Xin kính chào Quý khách! Rất hân hạnh được phục vụ.
     </div>
 
-    <!-- 📸 BANNER HÌNH ẢNH XE CHÍNH CHỦ (ĐÃ SẠCH SẼ HOÀN TOÀN) -->
+    <!-- 📸 BANNER HÌNH ẢNH XE CHÍNH CHỦ -->
     <div class="hero-image-box" id="heroImageBox">
         <img id="mainHeroImg" src="https://xenow.vn/og-image.jpg" alt="">
     </div>
@@ -543,7 +549,6 @@
             <p class="testimonial-author" id="displayTestimonialAuthor">– Anh Minh (Khách đi Vũng Tàu)</p>
         </div>
 
-        <!-- Danh sách đánh giá thực tế khách gửi lên sẽ nằm ở đây -->
         <div id="dynamicReviewsContainer"></div>
     </div>
 
@@ -638,7 +643,6 @@
     </div>
 </div>
 
-<!-- CHÂN TRANG ĐÃ THÊM TỪ TƯ VẤN NHANH -->
 <footer class="site-footer">
     <p class="brand-title">DỊCH VỤ DI CHUYỂN TIẾT KIỆM - XENOW.VN</p>
     <p>📍 Địa chỉ: 8/1A5 Đường Số 9, P. Hiệp Bình, TP. HCM</p>
