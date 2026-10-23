@@ -267,31 +267,32 @@
             text-align: center; text-decoration: none; margin-top: 6px; box-sizing: border-box;
         }
 
-        /* 🚀 KHUNG MODAL BÀI VIẾT */
+        /* 🚀 CẤU HÌNH KHUNG MODAL CHUẨN ĐIỆN THOẠI VÀ MÁY TÍNH MAC */
         .seo-info-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.75); z-index: 10000; align-items: center; justify-content: center; padding: 0; box-sizing: border-box;
+            background: rgba(0,0,0,0.75); z-index: 10000; align-items: center; justify-content: center; padding: 10px; box-sizing: border-box;
         }
         .seo-modal-content {
             background: #fff; 
             width: 100% !important; 
-            height: 100vh !important;
-            max-width: 100% !important;
-            max-height: 100vh !important;
+            max-width: 720px !important; /* Giới hạn độ rộng vừa đẹp trên Mac/PC */
+            height: 92vh !important;
+            max-height: 92vh !important;
             overflow-y: auto; 
-            padding: 50px 16px 30px 16px; 
-            border-radius: 0; 
-            box-shadow: none;
+            padding: 40px 20px 30px 20px; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             position: relative; 
             font-size: 14px; 
             color: #333; 
             line-height: 1.65;
             box-sizing: border-box;
+            margin: auto;
         }
         .close-modal-btn {
-            position: fixed; top: 10px; right: 10px; background: #e53935; color: white;
-            border: none; width: 36px; height: 36px; border-radius: 50%; font-weight: bold; cursor: pointer; font-size: 18px; z-index: 99999;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            position: absolute; top: 10px; right: 10px; background: #e53935; color: white;
+            border: none; width: 34px; height: 34px; border-radius: 50%; font-weight: bold; cursor: pointer; font-size: 16px; z-index: 99999;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
 
         .intro-article-box {
@@ -335,11 +336,12 @@
         .single-post-view { display: none; }
         .back-to-list-btn { background: #6c757d; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; margin-bottom: 15px; font-weight: bold; }
 
-        /* 🎯 TỐI ƯU HÌNH ẢNH MỞ RỘNG BẰNG 100% CHIỀU NGANG DÒNG TIÊU ĐỀ & VĂN BẢN */
+        /* 🎯 TỐI ƯU HÌNH ẢNH TRONG BÀI VIẾT VỪA VẶN TRÊN MỌI THIẾT BỊ */
         #detailContent img {
             width: 100% !important;
             max-width: 100% !important;
-            height: auto !important;
+            max-height: 420px !important; /* Khống chế chiều cao ảnh không bị tràn màn hình Mac */
+            object-fit: cover;
             border-radius: 8px;
             margin: 15px 0 !important;
             display: block !important;
