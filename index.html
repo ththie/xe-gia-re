@@ -275,11 +275,11 @@
         .seo-modal-content {
             background: #fff; 
             width: 100% !important; 
-            max-width: 720px !important; /* Giới hạn độ rộng vừa đẹp trên Mac/PC */
+            max-width: 720px !important;
             height: 92vh !important;
             max-height: 92vh !important;
             overflow-y: auto; 
-            padding: 40px 20px 30px 20px; 
+            padding: 40px 18px 30px 18px; 
             border-radius: 12px; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             position: relative; 
@@ -316,19 +316,39 @@
             background: #6c757d; color: white; border: none; padding: 6px 12px;
             border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; margin-bottom: 12px;
         }
-        .posts-grid { display: flex; flex-direction: column; gap: 10px; }
+        .posts-grid { display: flex; flex-direction: column; gap: 8px; }
+        
+        /* 📌 CẤU HÌNH BÀI VIẾT BÌNH THƯỜNG & BÀI NỔI BẬT ĐƯỢC GHIM */
         .post-card {
-            background: #fdfdfd; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px;
+            background: #fdfdfd; border: 1px solid #e0e0e0; border-radius: 8px; padding: 8px;
             cursor: pointer; display: flex; gap: 10px; align-items: center; transition: 0.2s;
+            position: relative;
         }
         .post-card:hover { border-color: #0066cc; background: #f0f7ff; }
-        .post-card img { width: 65px; height: 65px; object-fit: cover; border-radius: 6px; flex-shrink: 0; background: #eee; }
-        .post-info h4 { font-size: 13px; color: #0066cc; margin: 0 0 4px 0; }
-        .post-info p { font-size: 12px; color: #666; margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .post-card.featured-card {
+            background: #fffdf5;
+            border: 1.5px solid #ffb300;
+            box-shadow: 0 2px 8px rgba(255, 179, 0, 0.15);
+        }
+        .pinned-badge {
+            position: absolute;
+            top: 4px;
+            right: 8px;
+            font-size: 10px;
+            font-weight: bold;
+            color: #d97706;
+            background: #fef3c7;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid #fcd34d;
+        }
+        .post-card img { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; flex-shrink: 0; background: #eee; }
+        .post-info h4 { font-size: 12.5px; color: #0066cc; margin: 0 0 3px 0; padding-right: 40px; line-height: 1.35; }
+        .post-info p { font-size: 11.5px; color: #666; margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.3; }
 
-        .pagination { display: flex; justify-content: center; gap: 6px; margin-top: 20px; }
+        .pagination { display: flex; justify-content: center; gap: 6px; margin-top: 15px; }
         .page-num {
-            padding: 6px 10px; font-size: 12px; font-weight: bold; border: 1px solid #ccc;
+            padding: 5px 10px; font-size: 12px; font-weight: bold; border: 1px solid #ccc;
             background: #fff; cursor: pointer; border-radius: 6px; color: #333;
         }
         .page-num.active { background: #0066cc; color: white; border-color: #0066cc; }
@@ -336,11 +356,11 @@
         .single-post-view { display: none; }
         .back-to-list-btn { background: #6c757d; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; margin-bottom: 15px; font-weight: bold; }
 
-        /* 🎯 TỐI ƯU HÌNH ẢNH TRONG BÀI VIẾT VỪA VẶN TRÊN MỌI THIẾT BỊ */
+        /* 🎯 TỐI ƯU HÌNH ẢNH TRONG BÀI VIẾT */
         #detailContent img {
             width: 100% !important;
             max-width: 100% !important;
-            max-height: 420px !important; /* Khống chế chiều cao ảnh không bị tràn màn hình Mac */
+            max-height: 420px !important;
             object-fit: cover;
             border-radius: 8px;
             margin: 15px 0 !important;
@@ -691,7 +711,9 @@
     let autoCloseTimer = null;
     let allPosts = [];
     let currentPage = 1;
-    const postsPerPage = 3;
+    
+    // 🚀 TĂNG SỐ BÀI VIẾT TỚI 5 BÀI/TRANG GIÚP ĐẦY KHUNG
+    const postsPerPage = 5;
 
     const firebaseConfig = {
       apiKey: "AIzaSyDRaU7w47zX87-N13NFtsCinvz2CNSRD88",
@@ -779,9 +801,22 @@
                 }
             }
 
-            allPosts.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
-            renderPostsPage(1);
+            // Sắp xếp bài viết: Bài ghim (featured: true) hoặc 3 bài ghim ưu tiên lên đầu, các bài khác sắp theo ngày mới nhất
+            allPosts.sort((a, b) => {
+                if (a.isFeatured && !b.isFeatured) return -1;
+                if (!a.isFeatured && b.isFeatured) return 1;
+                return new Date(b.date || 0) - new Date(a.date || 0);
+            });
 
+            // Nếu không khai báo featured cụ thể trong Markdown thì mặc định đánh dấu 3 bài đầu tiên làm Bài Nổi Bật Ghim
+            let hasExplicitFeatured = allPosts.some(p => p.isFeatured);
+            if (!hasExplicitFeatured) {
+                for (let i = 0; i < Math.min(3, allPosts.length); i++) {
+                    allPosts[i].isFeatured = true;
+                }
+            }
+
+            renderPostsPage(1);
             checkUrlAndOpenPost();
 
         } catch (e) {
@@ -790,7 +825,7 @@
     }
 
     function parseMarkdownPost(text, filename = "") {
-        let title = "", date = "", image = "", description = "", status = "published", body = "";
+        let title = "", date = "", image = "", description = "", status = "published", isFeatured = false, body = "";
         let rawSlug = filename.replace(/\.md$/, '');
         let cleanSlug = slugify(rawSlug);
         
@@ -809,12 +844,13 @@
                     if (key === 'image') image = val;
                     if (key === 'description') description = val;
                     if (key === 'status' || key === 'draft') status = val;
+                    if (key === 'featured' || key === 'pin') isFeatured = (val === 'true' || val === '1');
                 }
             });
         } else {
             body = text;
         }
-        return { slug: cleanSlug, rawSlug, title, date, image, description, status, body: marked.parse(body) };
+        return { slug: cleanSlug, rawSlug, title, date, image, description, status, isFeatured, body: marked.parse(body) };
     }
 
     function renderPostsPage(page) {
@@ -834,8 +870,12 @@
 
         let html = "";
         pageItems.forEach((post) => {
+            let featuredClass = post.isFeatured ? "featured-card" : "";
+            let pinnedBadge = post.isFeatured ? `<span class="pinned-badge">📌 Nổi bật</span>` : "";
+
             html += `
-                <div class="post-card" onclick="viewSinglePost('${post.slug}')">
+                <div class="post-card ${featuredClass}" onclick="viewSinglePost('${post.slug}')">
+                    ${pinnedBadge}
                     <img src="${post.image || 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=100'}" alt="Thumb">
                     <div class="post-info">
                         <h4>${post.title || 'Bài viết'}</h4>
@@ -1193,7 +1233,7 @@
                 let returnDiscount = basePrice * (discountPercent / 100);
                 finalPrice = basePrice + (basePrice - returnDiscount);
                 let total2WayKm = distance > 0 ? (distance * 2) : 0;
-                noteHTML = `* Đã tính 2 chiều (${total2WayKm} Km) và giảm ${discountPercent}% chiều về.`;
+                noteHTML = `* Đã tính 2 chiều (${total2WayKm} Km) me giảm ${discountPercent}% chiều về.`;
             }
         } else if (tripType === 3) {
             distanceLabel.innerText = "Quãng đường 1 chiều (Km)";
