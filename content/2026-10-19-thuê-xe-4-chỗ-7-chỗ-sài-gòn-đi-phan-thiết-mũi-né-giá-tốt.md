@@ -22,4 +22,4 @@ Hành trình du lịch hay công tác từ TP.HCM đi Phan Thiết - Mũi Né tr
 
 Dịch vụ cam kết mức giá cạnh tranh nhất thị trường, trọn gói đã bao gồm chi phí xăng xe và cầu đường cao tốc. 
 
-Quý khách vui lòng liên hệ trực tiếp \*\*Hotline/Zalo: 0917918586\*\* để được tư vấn nhanh!
+Quý khách vui lòng liên hệ trực tiếp \*\*Hotline/Zalo:0917918586\*\* để được tư vấn nhanh!
