@@ -18,7 +18,7 @@ Hành trình du lịch hay công tác từ TP.HCM đi Phan Thiết - Mũi Né tr
 
 \* \*\*Đa dạng hình thức:\** Nhận chở khách đi 1 chiều, 2 chiều trong ngày hoặc đưa đón đi du lịch nhiều ngày.
 
-\### Bảng Giá Thuê Xe Tham Khảo
+\### Vào đặt xe nhanh tham khảo: <https://xenow.vn>
 
 Dịch vụ cam kết mức giá cạnh tranh nhất thị trường, trọn gói đã bao gồm chi phí xăng xe và cầu đường cao tốc. 
 
