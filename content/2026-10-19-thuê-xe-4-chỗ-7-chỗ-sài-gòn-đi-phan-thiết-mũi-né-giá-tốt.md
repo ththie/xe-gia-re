@@ -18,8 +18,8 @@ Hành trình du lịch hay công tác từ TP.HCM đi Phan Thiết - Mũi Né tr
 
 \* \*\*Đa dạng hình thức:\** Nhận chở khách đi 1 chiều, 2 chiều trong ngày hoặc đưa đón đi du lịch nhiều ngày.
 
-\### Vào đặt xe nhanh tham khảo: <https://xenow.vn>
+\### Ưu đãi 30% đặt xe tại: <https://xenow.vn>
 
 Dịch vụ cam kết mức giá cạnh tranh nhất thị trường, trọn gói đã bao gồm chi phí xăng xe và cầu đường cao tốc. 
 
-Quý khách vui lòng liên hệ trực tiếp \*\*Hotline/Zalo: 0917 918 586\*\* để được báo giá chính xác theo vị trí đón trả!
+Quý khách vui lòng liên hệ trực tiếp \*\*Hotline/Zalo: 0917 918 586\*\* để được tư vấn nhanh!
