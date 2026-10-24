@@ -289,10 +289,25 @@
             box-sizing: border-box;
             margin: auto;
         }
+        /* NÚT X ĐỎ MẶC ĐỊNH CHO GIỚI THIỆU & DANH SÁCH BÀI VIẾT */
         .close-modal-btn {
             position: absolute; top: 10px; right: 10px; background: #e53935; color: white;
             border: none; width: 34px; height: 34px; border-radius: 50%; font-weight: bold; cursor: pointer; font-size: 16px; z-index: 99999;
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            display: flex; align-items: center; justify-content: center;
+        }
+        /* 🟠 NÚT "ĐẶT XE" (MÀU CAM NHẸ, GỌN GÀNG, SANG TRỌNG) */
+        .close-modal-btn.book-now-mode {
+            background: linear-gradient(135deg, #ff9800, #f57c00) !important;
+            width: auto !important;
+            height: auto !important;
+            padding: 6px 14px !important;
+            border-radius: 18px !important;
+            font-size: 12px !important;
+            font-weight: bold !important;
+            box-shadow: 0 3px 8px rgba(255, 152, 0, 0.35) !important;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .intro-article-box {
@@ -345,7 +360,7 @@
         .single-post-view { display: none; }
         .back-to-list-btn { background: #6c757d; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; margin-bottom: 15px; font-weight: bold; }
 
-        /* 🎯 TỐI ƯU HÌNH ẢNH TRONG BÀI VIẾT */
+        /* 🎯 TỐI ƯU HÌNH ẢNH TRONG BÀI VIẾT - KHUÔN MẪU KHUNG CŨ ĐẸP TRÀN VIỀN */
         #detailContent img {
             width: 100% !important;
             max-width: 100% !important;
@@ -635,7 +650,8 @@
 <!-- 🌐 TAB MENU KHI BẤM NÚT SÁCH (📖) -->
 <div id="seoInfoModal" class="seo-info-modal" onclick="closeSeoModal()">
     <div class="seo-modal-content" onclick="event.stopPropagation()">
-        <button type="button" class="close-modal-btn" onclick="closeSeoModal()">✕</button>
+        <!-- NÚT GÓC TRÊN CÙNG LINH HOẠT THAY ĐỔI THEO TRẠNG THÁI -->
+        <button type="button" id="topCornerBtn" class="close-modal-btn" onclick="handleTopCornerClick()">✕</button>
         
         <div id="introArticleView" class="intro-article-box">
             <h1>Dịch Vụ Di Chuyển Tiết Kiệm - XENOW.VN</h1>
@@ -700,8 +716,8 @@
     let autoCloseTimer = null;
     let allPosts = [];
     let currentPage = 1;
-    
-    // 🚀 TĂNG SỐ BÀI VIẾT TỚI 5 BÀI/TRANG GIÚP ĐẦY KHUNG
+    let currentModalMode = 'intro';
+
     const postsPerPage = 5;
 
     const firebaseConfig = {
@@ -790,19 +806,17 @@
                 }
             }
 
-            // Sắp xếp bài viết: Đưa tối đa 1 bài ghim (featured: true) lên đầu tiên, các bài khác theo ngày mới nhất
             allPosts.sort((a, b) => {
                 if (a.isFeatured && !b.isFeatured) return -1;
                 if (!a.isFeatured && b.isFeatured) return 1;
                 return new Date(b.date || 0) - new Date(a.date || 0);
             });
 
-            // Đảm bảo chỉ giới hạn 1 bài ghim lên đầu nếu không đánh dấu tường minh
             let featuredCount = 0;
-            allPosts.forEach((post, idx) => {
+            allPosts.forEach((post) => {
                 if (post.isFeatured) {
                     featuredCount++;
-                    if (featuredCount > 1) post.isFeatured = false; // Chỉ giữ 1 bài ghim duy nhất
+                    if (featuredCount > 1) post.isFeatured = false;
                 }
             });
 
@@ -883,6 +897,30 @@
         pagination.innerHTML = pagHtml;
     }
 
+    function updateCornerButtonUI(mode) {
+        currentModalMode = mode;
+        const btn = document.getElementById('topCornerBtn');
+        if (mode === 'post') {
+            btn.className = "close-modal-btn book-now-mode";
+            btn.innerHTML = "ĐẶT XE";
+        } else {
+            btn.className = "close-modal-btn";
+            btn.innerHTML = "✕";
+        }
+    }
+
+    function handleTopCornerClick() {
+        if (currentModalMode === 'post') {
+            closeSeoModal();
+            const bookingForm = document.getElementById('bookingForm');
+            if (bookingForm) {
+                bookingForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        } else {
+            closeSeoModal();
+        }
+    }
+
     function viewSinglePost(slug) {
         const post = allPosts.find(p => p.slug === slug || p.rawSlug === slug || encodeURIComponent(p.rawSlug) === slug);
         if (!post) return;
@@ -910,6 +948,8 @@
         document.getElementById('detailTitle').innerText = post.title;
         document.getElementById('detailDate').innerText = "📅 Ngày đăng: " + post.date;
         document.getElementById('detailContent').innerHTML = post.body;
+
+        updateCornerButtonUI('post');
     }
 
     function openIntroUrl() {
@@ -948,18 +988,21 @@
         window.history.pushState({}, "", cleanBase);
         document.getElementById('singlePostView').style.display = 'none';
         document.getElementById('postsListView').style.display = 'block';
+        updateCornerButtonUI('list');
     }
 
     function switchToListPosts() {
         document.getElementById('introArticleView').style.display = 'none';
         document.getElementById('postsListView').style.display = 'block';
         document.getElementById('singlePostView').style.display = 'none';
+        updateCornerButtonUI('list');
     }
 
     function switchToIntro() {
         document.getElementById('postsListView').style.display = 'none';
         document.getElementById('introArticleView').style.display = 'block';
         document.getElementById('singlePostView').style.display = 'none';
+        updateCornerButtonUI('intro');
     }
 
     function openSeoModal() {
