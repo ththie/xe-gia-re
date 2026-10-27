@@ -27,7 +27,7 @@ collections:
     create: true
     slug: "{{slug}}"
     fields:
-      - {label: "Ghim nổi bật", name: "isFeatured", widget: "boolean", default: false, required: false" }
+      - { label: "Ghim nổi bật", name: "isFeatured", widget: "boolean", default: false, required: false }
       - { label: "Tiêu đề", name: "title", widget: "string" }
       - { label: "Ngày đăng", name: "date", widget: "datetime" }
       - { label: "Ảnh đại diện", name: "image", widget: "image" }
