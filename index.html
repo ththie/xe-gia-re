@@ -27,7 +27,7 @@
     <meta name="description" id="metaDesc" content="XENOW.VN - Dịch vụ di chuyển tiết kiệm, đặt xe 4-7 chỗ liên tỉnh an toàn, nhanh chóng, phục vụ 24/7. Hotline/Zalo tư vấn nhanh: 0917 918 586.">
     <meta name="keywords" content="xenow, xenow.vn, thue xe 7 cho sai gon, thue xe sai gon vung tau, thue xe sai gon can tho, xe hợp đồng tiết kiệm">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://xenow.vn/">
+    <link rel="canonical" id="canonicalLink" href="https://xenow.vn/">
 
     <!-- 📲 OPEN GRAPH (FACEBOOK & ZALO PREVIEW) -->
     <meta property="og:type" content="article">
@@ -744,7 +744,6 @@
     }
 
     function slugify(text) {
-        if (!text) return "";
         return text.toString().toLowerCase().trim()
             .replace(/^[\d]{4}-[\d]{2}-[\d]{2}-/, '')
             .replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a")
@@ -785,39 +784,25 @@
         });
     };
 
-    // 🚀 SỬA LỖI TẢI BÀI VIẾT: XỬ LÝ AN TOÀN CHO BÀI VIẾT TỪ GITHUB
     async function loadDecapArticles() {
         try {
             const repoOwner = "ththie";
             const repoName = "xe-gia-re";
             const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/content`);
             
-            if (!response.ok) {
-                renderPostsPage(1);
-                return;
-            }
+            if (!response.ok) return;
             
             const files = await response.json();
-            if (!Array.isArray(files)) {
-                renderPostsPage(1);
-                return;
-            }
-
-            const mdFiles = files.filter(f => f.name && f.name.endsWith('.md'));
+            const mdFiles = files.filter(f => f.name.endsWith('.md'));
 
             allPosts = [];
             for (let file of mdFiles) {
-                try {
-                    const res = await fetch(file.download_url);
-                    if (!res.ok) continue;
-                    const text = await res.text();
-                    const parsed = parseMarkdownPost(text, file.name);
-                    
-                    if (parsed && parsed.status !== 'hidden' && parsed.status !== 'draft') {
-                        allPosts.push(parsed);
-                    }
-                } catch (err) {
-                    console.log("Lỗi đọc file:", file.name, err);
+                const res = await fetch(file.download_url);
+                const text = await res.text();
+                const parsed = parseMarkdownPost(text, file.name);
+                
+                if (parsed.status !== 'hidden' && parsed.status !== 'draft') {
+                    allPosts.push(parsed);
                 }
             }
 
@@ -840,7 +825,6 @@
 
         } catch (e) {
             console.log("Lỗi tải bài viết:", e);
-            renderPostsPage(1);
         }
     }
 
@@ -849,37 +833,28 @@
         let rawSlug = filename.replace(/\.md$/, '');
         let cleanSlug = slugify(rawSlug);
         
-        try {
-            const parts = text.split("---");
-            if (parts.length >= 3) {
-                const frontmatter = parts[1];
-                body = parts.slice(2).join("---");
+        const parts = text.split("---");
+        if (parts.length >= 3) {
+            const frontmatter = parts[1];
+            body = parts.slice(2).join("---");
 
-                frontmatter.split("\n").forEach(line => {
-                    let kv = line.split(":");
-                    if (kv.length >= 2) {
-                        let key = kv[0].trim();
-                        let val = kv.slice(1).join(":").trim().replace(/^["'](.*)["']$/, '$1');
-                        if (key === 'title') title = val;
-                        if (key === 'date') date = val;
-                        if (key === 'image') image = val;
-                        if (key === 'description') description = val;
-                        if (key === 'status' || key === 'draft') status = val;
-                        if (key === 'featured' || key === 'pin') isFeatured = (val === 'true' || val === '1');
-                    }
-                });
-            } else {
-                body = text;
-            }
-            
-            if (!title) title = rawSlug;
-            let parsedBody = typeof marked !== 'undefined' ? marked.parse(body) : body;
-            
-            return { slug: cleanSlug, rawSlug, title, date, image, description, status, isFeatured, body: parsedBody };
-        } catch (err) {
-            console.log("Lỗi parse markdown bài viết:", filename, err);
-            return null;
+            frontmatter.split("\n").forEach(line => {
+                let kv = line.split(":");
+                if (kv.length >= 2) {
+                    let key = kv[0].trim();
+                    let val = kv.slice(1).join(":").trim().replace(/^["'](.*)["']$/, '$1');
+                    if (key === 'title') title = val;
+                    if (key === 'date') date = val;
+                    if (key === 'image') image = val;
+                    if (key === 'description') description = val;
+                    if (key === 'status' || key === 'draft') status = val;
+                    if (key === 'featured' || key === 'pin') isFeatured = (val === 'true' || val === '1');
+                }
+            });
+        } else {
+            body = text;
         }
+        return { slug: cleanSlug, rawSlug, title, date, image, description, status, isFeatured, body: marked.parse(body) };
     }
 
     function renderPostsPage(page) {
@@ -887,11 +862,9 @@
         const container = document.getElementById('postsContainer');
         const pagination = document.getElementById('paginationContainer');
 
-        if (!container) return;
-
-        if (!allPosts || allPosts.length === 0) {
-            container.innerHTML = `<p style="text-align: center; color: #777; font-size: 12px;">Chưa có bài viết nào được hiển thị.</p>`;
-            if (pagination) pagination.innerHTML = "";
+        if (allPosts.length === 0) {
+            container.innerHTML = `<p style="text-align: center; color: #777; font-size: 12px;">Chưa có bài viết mới nào được hiển thị.</p>`;
+            pagination.innerHTML = "";
             return;
         }
 
@@ -916,20 +889,17 @@
         });
         container.innerHTML = html;
 
-        if (pagination) {
-            let totalPages = Math.ceil(allPosts.length / postsPerPage);
-            let pagHtml = "";
-            for (let i = 1; i <= totalPages; i++) {
-                pagHtml += `<button class="page-num ${i === page ? 'active' : ''}" onclick="renderPostsPage(${i})">${i}</button>`;
-            }
-            pagination.innerHTML = pagHtml;
+        let totalPages = Math.ceil(allPosts.length / postsPerPage);
+        let pagHtml = "";
+        for (let i = 1; i <= totalPages; i++) {
+            pagHtml += `<button class="page-num ${i === page ? 'active' : ''}" onclick="renderPostsPage(${i})">${i}</button>`;
         }
+        pagination.innerHTML = pagHtml;
     }
 
     function updateCornerButtonUI(mode) {
         currentModalMode = mode;
         const btn = document.getElementById('topCornerBtn');
-        if (!btn) return;
         if (mode === 'post') {
             btn.className = "close-modal-btn book-now-mode";
             btn.innerHTML = "ĐẶT XE";
@@ -959,6 +929,9 @@
         const newUrl = cleanBase + "?p=" + post.slug;
         window.history.pushState({slug: post.slug}, "", newUrl);
 
+        // 🚀 CẬP NHẬT THẺ CANONICAL ĐỘNG CHO TỪNG BÀI VIẾT (CHUẨN SEO)
+        document.getElementById('canonicalLink').setAttribute('href', newUrl);
+
         document.title = post.title + " - XENOW.VN";
         document.getElementById('ogTitle').setAttribute('content', post.title);
         if (post.description) {
@@ -986,6 +959,7 @@
         const cleanBase = window.location.protocol + "//" + window.location.host + window.location.pathname;
         const newUrl = cleanBase + "?p=gioi-thieu";
         window.history.pushState({slug: "gioi-thieu"}, "", newUrl);
+        document.getElementById('canonicalLink').setAttribute('href', newUrl);
 
         document.title = "Giới Thiệu Dịch Vụ - XENOW.VN";
         document.getElementById('seoInfoModal').style.display = 'flex';
@@ -1016,6 +990,7 @@
     function backToList() {
         const cleanBase = window.location.protocol + "//" + window.location.host + window.location.pathname;
         window.history.pushState({}, "", cleanBase);
+        document.getElementById('canonicalLink').setAttribute('href', "https://xenow.vn/");
         document.getElementById('singlePostView').style.display = 'none';
         document.getElementById('postsListView').style.display = 'block';
         updateCornerButtonUI('list');
@@ -1041,6 +1016,7 @@
     function closeSeoModal() {
         const cleanBase = window.location.protocol + "//" + window.location.host + window.location.pathname;
         window.history.pushState({}, "", cleanBase);
+        document.getElementById('canonicalLink').setAttribute('href', "https://xenow.vn/");
         document.getElementById('seoInfoModal').style.display = 'none';
     }
 
