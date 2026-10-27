@@ -32,5 +32,4 @@ collections:
       - { label: "Ngày đăng", name: "date", widget: "datetime" }
       - { label: "Ảnh đại diện", name: "image", widget: "image" }
       - { label: "Mô tả ngắn", name: "description", widget: "text" }
-      - { label: "Ghim nổi bật", name: "featured", widget: "boolean", default: false, required: false }
       - { label: "Nội dung", name: "body", widget: "markdown" }
