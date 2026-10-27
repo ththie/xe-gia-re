@@ -812,14 +812,6 @@
                 return new Date(b.date || 0) - new Date(a.date || 0);
             });
 
-            let featuredCount = 0;
-            allPosts.forEach((post) => {
-                if (post.isFeatured) {
-                    featuredCount++;
-                    if (featuredCount > 1) post.isFeatured = false;
-                }
-            });
-
             renderPostsPage(1);
             checkUrlAndOpenPost();
 
