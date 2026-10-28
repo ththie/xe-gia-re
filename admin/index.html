@@ -1,25 +1,22 @@
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quản Trị Content</title>
-  <!-- Tải Widget đăng nhập Netlify Identity -->
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-</head>
-<body>
-  <!-- Tải Decap CMS -->
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-  <script>
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.on("init", user => {
-        if (!user) {
-          window.netlifyIdentity.on("login", () => {
-            document.location.href = "/admin/";
-          });
-        }
-      });
-    }
-  </script>
-</body>
-</html>
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "static/images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "posts"
+    label: "Bài Viết & Tin Tức"
+    folder: "content/posts"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Tiêu đề bài viết (Title)", name: "title", widget: "string"}
+      - {label: "Đường dẫn SEO (Slug)", name: "slug", widget: "string"}
+      - {label: "Mô tả ngắn SEO (Meta Description)", name: "description", widget: "text"}
+      - {label: "Ảnh đại diện bài viết (Thumbnail)", name: "image", widget: "image"}
+      - {label: "Danh mục", name: "category", widget: "select", options: ["Dịch Vụ", "Tin Tức", "Chia Sẻ"]}
+      - {label: "Ghim bài viết nổi bật", name: "featured", widget: "boolean", default: false, hint: "Bật để ghim bài viết lên đầu trang"}
+      - {label: "Ngày đăng", name: "date", widget: "datetime"}
+      - {label: "Nội dung chi tiết", name: "body", widget: "markdown"}
