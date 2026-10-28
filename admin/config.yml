@@ -2,6 +2,7 @@ backend:
   name: github
   repo: ththie/xe-gia-re
   branch: main
+  auth_type: implicit
 
 media_folder: "public/uploads"
 public_folder: "/uploads"
