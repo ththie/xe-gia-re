@@ -32,8 +32,18 @@ collections:
         widget: "boolean"
         default: false
         required: false
-      - { label: "Tiêu đề", name: "title", widget: "string" }
-      - { label: "Ngày đăng", name: "date", widget: "datetime" }
-      - { label: "Ảnh đại diện", name: "image", widget: "image" }
-      - { label: "Mô tả ngắn", name: "description", widget: "text" }
-      - { label: "Nội dung", name: "body", widget: "markdown" }
+      - label: "Tiêu đề"
+        name: "title"
+        widget: "string"
+      - label: "Ngày đăng"
+        name: "date"
+        widget: "datetime"
+      - label: "Ảnh đại diện"
+        name: "image"
+        widget: "image"
+      - label: "Mô tả ngắn"
+        name: "description"
+        widget: "text"
+      - label: "Nội dung"
+        name: "body"
+        widget: "markdown"
