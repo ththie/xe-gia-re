@@ -3,13 +3,23 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Trang Quản Trị - XENOW.VN</title>
+  <title>Quản Trị Content</title>
+  <!-- Tải Widget đăng nhập Netlify Identity -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
-  <!-- Sử dụng Static CMS chạy trực tiếp trên Vercel, loại bỏ hoàn toàn Netlify -->
-  <script src="https://unpkg.com/@staticcms/app@^3.0.0/dist/static-cms-app.js"></script>
+  <!-- Tải Decap CMS -->
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   <script>
-    CMS.init();
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", user => {
+        if (!user) {
+          window.netlifyIdentity.on("login", () => {
+            document.location.href = "/admin/";
+          });
+        }
+      });
+    }
   </script>
 </body>
 </html>
