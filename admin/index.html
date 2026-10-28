@@ -1,25 +1,12 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Trang Quản Trị Nội Dung - XENOW.VN</title>
-  <!-- Nhúng Netlify Identity Widget -->
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <title>Trang Quản Trị - XENOW.VN</title>
 </head>
 <body>
-  <!-- Nhúng Decap CMS -->
+  <!-- Include the script that builds the page and powers Decap CMS -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-  <script>
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.on("init", user => {
-        if (!user) {
-          window.netlifyIdentity.on("login", () => {
-            document.location.reload();
-          });
-        }
-      });
-    }
-  </script>
 </body>
 </html>
