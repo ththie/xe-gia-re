@@ -1,14 +1,17 @@
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quản Trị Nội Dung</title>
-  <!-- Nhúng Netlify Identity Widget để hiển thị bảng đăng nhập -->
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-</head>
-<body>
-  <!-- Thư viện CMS -->
-  <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
-</body>
-</html>
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+collections:
+  - name: "homepage"
+    label: "Quản Lý Trang Chủ"
+    files:
+      - file: "content/homepage.md"
+        label: "Nội Dung Trang Chủ"
+        name: "homepage"
+        fields:
+          - {label: "Tiêu đề", name: "title", widget: "string"}
+          - {label: "Mô tả", name: "description", widget: "text"}
