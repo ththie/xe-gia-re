@@ -1,5 +1,5 @@
 backend:
-  name: githud
+  name: github
   repo: ththie/xe-gia-re
   branch: main
 
