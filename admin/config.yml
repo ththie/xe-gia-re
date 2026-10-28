@@ -2,7 +2,7 @@ backend:
   name: github
   repo: ththie/xe-gia-re
   branch: main
-  base_url: https://decap-cms-oauth-provider.vercel.app
+  auth_type: implicit
 
 media_folder: "public/uploads"
 public_folder: "/uploads"
