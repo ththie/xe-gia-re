@@ -1,55 +1,16 @@
 backend:
   name: git-gateway
-  repo: ththie/xe-gia-re
   branch: main
-  base_url: https://xe-gia-re.vercel.app
-  auth_endpoint: /api/auth
-
-media_folder: "public/uploads"
-public_folder: "/uploads"
-
-backend:
-  name: git-gateway
 
 media_folder: "public/uploads"
 public_folder: "/uploads"
 
 collections:
-  - name: "homepage"
-    label: "Quản Lý Trang Chủ"
+  - name: "config"
+    label: "Cấu hình"
     files:
-      - file: "content/homepage.md"
-        label: "Nội Dung Trang Chủ"
-        name: "homepage"
+      - file: "content/settings.md"
+        label: "Thông tin chung"
+        name: "settings"
         fields:
           - {label: "Tiêu đề", name: "title", widget: "string"}
-          - {label: "Mô tả", name: "description", widget: "text"}
-
-  - name: "blog"
-    label: "Bài viết SEO"
-    folder: "content"
-    create: true
-    slug: "{{slug}}"
-    fields:
-      - label: "Ghim nổi bật"
-        name: "isFeatured"
-        widget: "boolean"
-        default: false
-        required: false
-      - label: "Tiêu đề"
-        name: "title"
-        widget: "string"
-      - label: "Ngày đăng"
-        name: "date"
-        widget: "datetime"
-      - label: "Ảnh đại diện"
-        name: "image"
-        widget: "image"
-      - label: "Mô tả ngắn"
-        name: "description"
-        widget: "text"
-      - label: "Nội dung"
-        name: "body"
-        widget: "markdown"
-
- 
