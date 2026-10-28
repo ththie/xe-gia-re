@@ -6,7 +6,10 @@
   <title>Trang Quản Trị - XENOW.VN</title>
 </head>
 <body>
-  <!-- Include the script that builds the page and powers Decap CMS -->
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <!-- Sử dụng Static CMS chạy trực tiếp trên Vercel, loại bỏ hoàn toàn Netlify -->
+  <script src="https://unpkg.com/@staticcms/app@^3.0.0/dist/static-cms-app.js"></script>
+  <script>
+    CMS.init();
+  </script>
 </body>
 </html>
