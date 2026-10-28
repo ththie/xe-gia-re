@@ -1,5 +1,5 @@
 backend:
-  name: github
+  name: git-gateway
   repo: ththie/xe-gia-re
   branch: main
   base_url: https://xe-gia-re.vercel.app
@@ -8,20 +8,22 @@ backend:
 media_folder: "public/uploads"
 public_folder: "/uploads"
 
+backend:
+  name: git-gateway
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
 collections:
   - name: "homepage"
     label: "Quản Lý Trang Chủ"
     files:
-      - file: "content/homepage.json"
-        label: "Cấu hình Banner & Chữ Chạy"
-        name: "homepage_config"
+      - file: "content/homepage.md"
+        label: "Nội Dung Trang Chủ"
+        name: "homepage"
         fields:
-          - label: "Hình Banner Trang Chủ"
-            name: "banner_url"
-            widget: "image"
-          - label: "Nội dung chữ chạy"
-            name: "marquee"
-            widget: "string"
+          - {label: "Tiêu đề", name: "title", widget: "string"}
+          - {label: "Mô tả", name: "description", widget: "text"}
 
   - name: "blog"
     label: "Bài viết SEO"
