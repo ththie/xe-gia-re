@@ -20,3 +20,4 @@ collections:
       - {label: "Ghim nổi bật", name: "featured", widget: "boolean", default: false}
       - {label: "Ngày đăng", name: "date", widget: "datetime"}
       - {label: "Nội dung", name: "body", widget: "markdown"}
+
