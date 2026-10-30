@@ -74,7 +74,7 @@
         <!-- Tab: Cập Nhật Bài Cũ -->
         <section id="tab-bulk" class="hidden space-y-4 bg-slate-800 p-5 rounded-xl border border-slate-700 shadow-lg">
             <h2 class="text-lg font-semibold text-blue-400">🔄 Tối Ưu & Cập Nhật Hàng Loạt Bài Cũ</h2>
-            <p class="text-sm text-slate-400">Tính năng này sẽ quét qua toàn bộ các bài viết cũ trong thư mục <code class="text-blue-300">content/posts</code> và tự động chuẩn hóa lại cấu trúc SEO.</p>
+            <p class="text-sm text-slate-400">Tính năng này sẽ quét toàn bộ kho GitHub để tìm các bài viết cũ và tự động chuẩn hóa lại cấu trúc SEO.</p>
             <button onclick="runBulkUpdate()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2.5 rounded-lg shadow transition">⚡ Chạy Cập Nhật Hàng Loạt</button>
             <div id="bulk-status" class="text-sm font-medium space-y-2 pt-2"></div>
         </section>
@@ -254,7 +254,7 @@
             let owner = localStorage.getItem('gh_owner');
             let repo = localStorage.getItem('gh_repo');
             let branch = localStorage.getItem('gh_branch');
-            let folder = localStorage.getItem('gh_folder');
+            let folder = localStorage.getItem('gh_folder').trim();
             
             let title = document.getElementById('post-title').value.trim();
             let slug = document.getElementById('post-slug').value.trim();
@@ -342,7 +342,7 @@ ${content}`;
             let owner = localStorage.getItem('gh_owner');
             let repo = localStorage.getItem('gh_repo');
             let branch = localStorage.getItem('gh_branch');
-            let folder = localStorage.getItem('gh_folder').trim();
+            let folder = document.getElementById('cfg-folder').value.trim();
             let status = document.getElementById('bulk-status');
 
             if (!token) {
@@ -351,36 +351,34 @@ ${content}`;
                 return;
             }
 
-            status.innerHTML = "<span class='text-yellow-400'>Đang quét danh sách bài viết cũ từ GitHub...</span>";
+            status.innerHTML = "<span class='text-yellow-400'>Đang quét toàn bộ kho GitHub để tìm bài viết cũ...</span>";
 
-            // Thử quét thư mục chính, nếu lỗi thử các biến thể phổ biến
-            let possibleFolders = [folder, 'posts', 'content/posts', '_posts'];
-            let files = null;
+            let markdownFiles = [];
 
-            for (let f of possibleFolders) {
+            // Thử quét qua các đường dẫn thư mục phổ biến
+            let foldersToTry = [folder, 'content/posts', 'posts', '_posts', ''];
+            for (let f of foldersToTry) {
                 try {
-                    let res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${f}?ref=${branch}`, {
+                    let url = f ? `https://api.github.com/repos/${owner}/${repo}/contents/${f}?ref=${branch}` : `https://api.github.com/repos/${owner}/${repo}/git/trees/${branch}?recursive=1`;
+                    let res = await fetch(url, {
                         headers: { 'Authorization': `token ${token}` }
                     });
                     if (res.ok) {
                         let data = await res.json();
-                        if (Array.isArray(data)) {
-                            files = data;
-                            break;
+                        let items = data.tree || data;
+                        if (Array.isArray(items)) {
+                            let found = items.filter(item => item.path && item.path.endsWith('.md'));
+                            if (found.length > 0) {
+                                markdownFiles = found;
+                                break;
+                            }
                         }
                     }
                 } catch(e) {}
             }
 
-            if (!files) {
-                status.innerHTML = "<span class='text-red-400'>Không thể đọc thư mục bài viết. Vui lòng kiểm tra lại tên Thư mục trong phần Cấu Hình (ví dụ: content/posts)!</span>";
-                return;
-            }
-
-            let markdownFiles = files.filter(f => f.name.endsWith('.md'));
-
             if (markdownFiles.length === 0) {
-                status.innerHTML = "<span class='text-red-400'>Không tìm thấy bài viết .md nào trong thư mục này.</span>";
+                status.innerHTML = "<span class='text-red-400'>Không tìm thấy file bài viết (.md) nào trên nhánh này. Vui lòng kiểm tra lại cấu hình kho!</span>";
                 return;
             }
 
@@ -388,7 +386,8 @@ ${content}`;
 
             try {
                 for (let file of markdownFiles) {
-                    let fileRes = await fetch(file.url, {
+                    let fileUrl = file.url || `https://api.github.com/repos/${owner}/${repo}/contents/${file.path}?ref=${branch}`;
+                    let fileRes = await fetch(fileUrl, {
                         headers: { 'Authorization': `token ${token}` }
                     });
                     if (fileRes.ok) {
@@ -407,7 +406,7 @@ ${content}`;
                                 'Content-Type': 'application/json'
                             },
                             body: JSON.stringify({
-                                message: `Bulk SEO update for ${file.name}`,
+                                message: `Bulk SEO update for ${file.path}`,
                                 content: reEncoded,
                                 sha: fileJson.sha,
                                 branch: branch
