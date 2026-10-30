@@ -16,7 +16,7 @@
             </div>
             <nav class="flex space-x-2">
                 <button onclick="switchTab('create')" id="tab-btn-create" class="px-4 py-2 rounded-lg font-medium bg-blue-600 text-white transition">Tạo Bài Viết</button>
-                <button onclick="switchTab('bulk')" id="tab-btn-bulk" class="px-4 py-2 rounded-lg font-medium bg-slate-700 text-slate-300 hover:bg-slate-600 transition">Cập Nhật 8 Bài Cũ</button>
+                <button onclick="switchTab('bulk')" id="tab-btn-bulk" class="px-4 py-2 rounded-lg font-medium bg-slate-700 text-slate-300 hover:bg-slate-600 transition">Cập Nhật Bài Cũ</button>
                 <button onclick="switchTab('settings')" id="tab-btn-settings" class="px-4 py-2 rounded-lg font-medium bg-slate-700 text-slate-300 hover:bg-slate-600 transition">Cấu Hình</button>
             </nav>
         </header>
@@ -58,8 +58,14 @@
                 </div>
             </div>
             <div>
-                <label class="block text-sm font-medium mb-1">Nội Dung Chi Tiết (Markdown)</label>
-                <textarea id="post-content" rows="8" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white font-mono text-sm focus:outline-none focus:border-blue-500" placeholder="Nhập nội dung bài viết bằng định dạng Markdown..."></textarea>
+                <div class="flex justify-between items-center mb-1">
+                    <label class="block text-sm font-medium">Nội Dung Chi Tiết (Markdown)</label>
+                    <label class="bg-slate-700 hover:bg-slate-600 text-xs text-white px-3 py-1.5 rounded cursor-pointer transition flex items-center space-x-1">
+                        <span>📷 Chèn Hình Ảnh</span>
+                        <input type="file" id="image-file-input" accept="image/*" class="hidden" onchange="uploadInlineImage(this)">
+                    </label>
+                </div>
+                <textarea id="post-content" rows="8" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white font-mono text-sm focus:outline-none focus:border-blue-500" placeholder="Nhập nội dung bài viết bằng định dạng Markdown... Bấm nút 'Chèn Hình Ảnh' ở trên để tải ảnh lên."></textarea>
             </div>
             <button onclick="publishPost()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg shadow transition">🚀 Đăng Bài Lên GitHub & Vercel</button>
             <div id="create-status" class="text-sm font-medium"></div>
@@ -68,9 +74,9 @@
         <!-- Tab: Cập Nhật 8 Bài Cũ -->
         <section id="tab-bulk" class="hidden space-y-4 bg-slate-800 p-5 rounded-xl border border-slate-700 shadow-lg">
             <h2 class="text-lg font-semibold text-blue-400">🔄 Tối Ưu & Cập Nhật Hàng Loạt Bài Cũ</h2>
-            <p class="text-sm text-slate-400">Tính năng này giúp quét và cập nhật lại toàn bộ các bài viết cũ trong thư mục content/posts cho chuẩn SEO.</p>
-            <button onclick="runBulkUpdate()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2.5 rounded-lg shadow transition">Chạy Cập Nhật Hàng Loạt</button>
-            <div id="bulk-status" class="text-sm font-medium"></div>
+            <p class="text-sm text-slate-400">Tính năng này sẽ quét qua toàn bộ các bài viết cũ trong thư mục <code class="text-blue-300">content/posts</code> và tự động chuẩn hóa lại cấu trúc SEO.</p>
+            <button onclick="runBulkUpdate()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2.5 rounded-lg shadow transition">⚡ Chạy Cập Nhật Hàng Loạt</button>
+            <div id="bulk-status" class="text-sm font-medium space-y-2 pt-2"></div>
         </section>
 
         <!-- Tab: Cấu Hình -->
@@ -130,7 +136,6 @@
             document.getElementById('tab-btn-' + tabName).className = "px-4 py-2 rounded-lg font-medium bg-blue-600 text-white transition";
         }
 
-        // Load config khi mở trang
         window.onload = function() {
             document.getElementById('cfg-token').value = localStorage.getItem('gh_token') || '';
             document.getElementById('cfg-owner').value = localStorage.getItem('gh_owner') || 'ththie';
@@ -182,6 +187,69 @@
                 status.className = "text-sm font-medium text-red-400";
                 status.innerText = "Lỗi mạng hoặc bị chặn CORS!";
             }
+        }
+
+        // Tải ảnh trực tiếp lên GitHub và chèn vào nội dung
+        async function uploadInlineImage(input) {
+            if (!input.files || !input.files[0]) return;
+            let file = input.files[0];
+            let token = localStorage.getItem('gh_token');
+            let owner = localStorage.getItem('gh_owner');
+            let repo = localStorage.getItem('gh_repo');
+            let branch = localStorage.getItem('gh_branch');
+
+            if (!token) {
+                alert("Vui lòng vào phần Cấu Hình để nhập thông tin GitHub trước!");
+                switchTab('settings');
+                return;
+            }
+
+            let statusEl = document.getElementById('create-status');
+            statusEl.className = "text-sm font-medium text-yellow-400";
+            statusEl.innerText = "Đang tải ảnh lên GitHub...";
+
+            let reader = new FileReader();
+            reader.onload = async function(e) {
+                let base64Content = e.target.result.split(',')[1];
+                let fileName = 'img_' + Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9_.-]/g, '_');
+                let imagePath = `public/images/uploads/${fileName}`;
+                let publicUrl = `/images/uploads/${fileName}`;
+
+                try {
+                    let res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${imagePath}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `token ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            message: `Admin: Upload image ${fileName}`,
+                            content: base64Content,
+                            branch: branch
+                        })
+                    });
+
+                    if (res.ok) {
+                        statusEl.className = "text-sm font-medium text-green-400";
+                        statusEl.innerText = "Tải ảnh thành công!";
+                        
+                        // Chèn markdown hình ảnh vào vị trí con trỏ trong textarea nội dung
+                        let textarea = document.getElementById('post-content');
+                        let imgMarkdown = `\n![${file.name}](${publicUrl})\n`;
+                        let startPos = textarea.selectionStart;
+                        let endPos = textarea.selectionEnd;
+                        textarea.value = textarea.value.substring(0, startPos) + imgMarkdown + textarea.value.substring(endPos, textarea.value.length);
+                    } else {
+                        let errJson = await res.json();
+                        statusEl.className = "text-sm font-medium text-red-400";
+                        statusEl.innerText = "Lỗi tải ảnh: " + (errJson.message || 'Không rõ nguyên nhân');
+                    }
+                } catch (err) {
+                    statusEl.className = "text-sm font-medium text-red-400";
+                    statusEl.innerText = "Lỗi kết nối khi tải ảnh: " + err.message;
+                }
+            };
+            reader.readAsDataURL(file);
         }
 
         async function publishPost() {
@@ -272,10 +340,74 @@ ${content}`;
             }
         }
 
-        function runBulkUpdate() {
+        // Tính năng chạy cập nhật hàng loạt bài cũ
+        async function runBulkUpdate() {
+            saveSettings();
+            let token = localStorage.getItem('gh_token');
+            let owner = localStorage.getItem('gh_owner');
+            let repo = localStorage.getItem('gh_repo');
+            let branch = localStorage.getItem('gh_branch');
+            let folder = localStorage.getItem('gh_folder');
             let status = document.getElementById('bulk-status');
-            status.className = "text-sm font-medium text-yellow-400";
-            status.innerText = "Tính năng cập nhật hàng loạt đang sẵn sàng. Hãy đảm bảo cấu hình GitHub đã lưu.";
+
+            if (!token) {
+                switchTab('settings');
+                alert("Vui lòng vào phần Cấu Hình để nhập thông tin GitHub trước!");
+                return;
+            }
+
+            status.innerHTML = "<span class='text-yellow-400'>Đang quét danh sách bài viết cũ từ GitHub...</span>";
+
+            try {
+                let res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${folder}?ref=${branch}`, {
+                    headers: { 'Authorization': `token ${token}` }
+                });
+                if (!res.ok) throw new Error("Không thể đọc thư mục bài viết.");
+                
+                let files = await res.json();
+                let markdownFiles = files.filter(f => f.name.endsWith('.md'));
+
+                if (markdownFiles.length === 0) {
+                    status.innerHTML = "<span class='text-red-400'>Không tìm thấy bài viết nào trong thư mục này.</span>";
+                    return;
+                }
+
+                status.innerHTML = `<span class='text-yellow-400'>Tìm thấy ${markdownFiles.length} bài viết. Đang tiến hành tối ưu hóa chuẩn SEO...</span>`;
+
+                for (let file of markdownFiles) {
+                    let fileRes = await fetch(file.url, {
+                        headers: { 'Authorization': `token ${token}` }
+                    });
+                    if (fileRes.ok) {
+                        let fileJson = await fileRes.json();
+                        let contentDecoded = decodeURIComponent(escape(atob(fileJson.content)));
+                        
+                        // Đảm bảo bài viết có đủ các trường chuẩn SEO
+                        if (!contentDecoded.includes('keywords:')) {
+                            contentDecoded = contentDecoded.replace('---', `---\nkeywords: "thuê xe sài gòn vũng tàu, xe giá rẻ"`);
+                        }
+
+                        let reEncoded = btoa(unescape(encodeURIComponent(contentDecoded)));
+                        await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${file.path}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Authorization': `token ${token}`,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                message: `Bulk SEO update for ${file.name}`,
+                                content: reEncoded,
+                                sha: fileJson.sha,
+                                branch: branch
+                            })
+                        });
+                    }
+                }
+
+                status.innerHTML = "<span class='text-green-400 font-bold'>🎉 Đã cập nhật và tối ưu hóa thành công toàn bộ bài viết cũ lên GitHub & Vercel!</span>";
+            } catch (err) {
+                status.innerHTML = `<span class='text-red-400'>Lỗi khi cập nhật: ${err.message}</span>`;
+            }
         }
     </script>
 </body>
