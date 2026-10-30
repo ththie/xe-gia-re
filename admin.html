@@ -191,7 +191,7 @@
             localStorage.setItem('gh_repo', document.getElementById('gh-repo').value);
             localStorage.setItem('gh_branch', document.getElementById('gh-branch').value);
             localStorage.setItem('gh_folder', document.getElementById('gh-folder').value);
-            document.getElementById('settings-msg.innerHTML = '<span class="text-green-400">Đã lưu cấu hình thành công!</span>';
+            document.getElementById('settings-msg').innerHTML = '<span class="text-green-400">Đã lưu cấu hình thành công!</span>';
         }
 
         async function testConnection() {
@@ -259,7 +259,6 @@ ${body}`;
             const encodedContent = btoa(unescape(encodeURIComponent(content)));
 
             try {
-                // Check if file exists to get SHA if updating
                 let sha = '';
                 const checkRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filename}?ref=${branch}`, {
                     headers: { 'Authorization': `token ${token}` }
@@ -334,11 +333,9 @@ ${body}`;
                 let featuredCount = 0;
 
                 for (let file of mdFiles) {
-                    // Fetch file content
                     const fileRes = await fetch(file.download_url);
                     let text = await fileRes.text();
                     
-                    // Simple frontmatter injection/update
                     let nowIso = new Date().toISOString();
                     if (!text.includes('lastmod:')) {
                         text = text.replace('---', `---\nlastmod: "${nowIso}"`);
@@ -346,7 +343,6 @@ ${body}`;
                         text = text.replace(/lastmod: ".*?"/, `lastmod: "${nowIso}"`);
                     }
 
-                    // Limit featured to 3
                     if (text.includes('featured: true')) {
                         if (featuredCount >= 3) {
                             text = text.replace('featured: true', 'featured: false');
