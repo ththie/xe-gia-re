@@ -58,14 +58,22 @@
                 </div>
             </div>
             <div>
-                <div class="flex justify-between items-center mb-1">
+                <div class="flex flex-wrap justify-between items-center mb-1.5 gap-2">
                     <label class="block text-sm font-medium">Nội Dung Chi Tiết (Markdown)</label>
-                    <label class="bg-slate-700 hover:bg-slate-600 text-xs text-white px-3 py-1.5 rounded cursor-pointer transition flex items-center space-x-1">
-                        <span>📷 Chèn Hình Ảnh</span>
-                        <input type="file" id="image-file-input" accept="image/*" class="hidden" onchange="uploadInlineImage(this)">
-                    </label>
+                    <!-- Thanh công cụ định dạng nhanh -->
+                    <div class="flex flex-wrap items-center gap-1">
+                        <button type="button" onclick="formatText('bold')" class="bg-slate-700 hover:bg-slate-600 text-xs text-white font-bold px-2.5 py-1 rounded transition" title="In đậm">B</button>
+                        <button type="button" onclick="formatText('italic')" class="bg-slate-700 hover:bg-slate-600 text-xs text-white italic px-2.5 py-1 rounded transition" title="In nghiêng">I</button>
+                        <button type="button" onclick="formatText('link')" class="bg-slate-700 hover:bg-slate-600 text-xs text-blue-300 px-2.5 py-1 rounded transition" title="Chèn Link / Backlink">🔗 Link</button>
+                        <button type="button" onclick="formatText('ul')" class="bg-slate-700 hover:bg-slate-600 text-xs text-white px-2.5 py-1 rounded transition" title="Danh sách chấm">• Danh sách</button>
+                        <button type="button" onclick="formatText('ol')" class="bg-slate-700 hover:bg-slate-600 text-xs text-white px-2.5 py-1 rounded transition" title="Danh sách số">1. Danh sách</button>
+                        <label class="bg-slate-700 hover:bg-slate-600 text-xs text-white px-2.5 py-1 rounded cursor-pointer transition flex items-center space-x-1" title="Chèn hình ảnh">
+                            <span>📷 Ảnh</span>
+                            <input type="file" id="image-file-input" accept="image/*" class="hidden" onchange="uploadInlineImage(this)">
+                        </label>
+                    </div>
                 </div>
-                <textarea id="post-content" rows="8" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white font-mono text-sm focus:outline-none focus:border-blue-500" placeholder="Nhập nội dung bài viết bằng định dạng Markdown... Bấm nút 'Chèn Hình Ảnh' ở trên để tải ảnh lên."></textarea>
+                <textarea id="post-content" rows="10" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white font-mono text-sm focus:outline-none focus:border-blue-500" placeholder="Nhập nội dung bài viết hoặc bấm các nút định dạng ở trên..."></textarea>
             </div>
             <button onclick="publishPost()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg shadow transition">🚀 Đăng Bài Lên GitHub & Vercel</button>
             <div id="create-status" class="text-sm font-medium"></div>
@@ -186,6 +194,33 @@
                 status.className = "text-sm font-medium text-red-400";
                 status.innerText = "Lỗi mạng hoặc bị chặn CORS!";
             }
+        }
+
+        // Hàm hỗ trợ định dạng văn bản nhanh khi bấm nút trên thanh công cụ
+        function formatText(type) {
+            let textarea = document.getElementById('post-content');
+            let start = textarea.selectionStart;
+            let end = textarea.selectionEnd;
+            let selectedText = textarea.value.substring(start, end);
+            let replacement = '';
+
+            if (type === 'bold') {
+                replacement = `**${selectedText || 'chữ in đậm'}**`;
+            } else if (type === 'italic') {
+                replacement = `*${selectedText || 'chữ in nghiêng'}*`;
+            } else if (type === 'link') {
+                let url = prompt("Nhập đường dẫn URL (Link / Backlink):", "https://");
+                if (!url) return;
+                replacement = `[${selectedText || 'tên hiển thị link'}](${url})`;
+            } else if (type === 'ul') {
+                replacement = `\n- ${selectedText || 'Ý chính dòng này'}\n`;
+            } else if (type === 'ol') {
+                replacement = `\n1. ${selectedText || 'Ý chính dòng này'}\n`;
+            }
+
+            textarea.value = textarea.value.substring(0, start) + replacement + textarea.value.substring(end);
+            textarea.focus();
+            textarea.setSelectionRange(start + replacement.length, start + replacement.length);
         }
 
         async function uploadInlineImage(input) {
@@ -354,8 +389,6 @@ ${content}`;
             status.innerHTML = "<span class='text-yellow-400'>Đang quét toàn bộ kho GitHub để tìm bài viết cũ...</span>";
 
             let markdownFiles = [];
-
-            // Thử quét qua các đường dẫn thư mục phổ biến
             let foldersToTry = [folder, 'content/posts', 'posts', '_posts', ''];
             for (let f of foldersToTry) {
                 try {
