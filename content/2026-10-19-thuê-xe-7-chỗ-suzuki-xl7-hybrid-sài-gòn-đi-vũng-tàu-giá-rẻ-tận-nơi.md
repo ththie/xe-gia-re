@@ -1,4 +1,5 @@
 ---
+keywords: "thuê xe sài gòn vũng tàu, xe giá rẻ"
 title: Thuê Xe 7 Chỗ Suzuki XL7 Hybrid Sài Gòn Đi Vũng Tàu Giá Rẻ Tận Nơi
 date: 2026-10-19T14:36:00.000+07:00
 image: https://res.cloudinary.com/zwn264iv/image/upload/f_auto,q_auto/v1792392354/IMG_20261014_092341_697.jpg
