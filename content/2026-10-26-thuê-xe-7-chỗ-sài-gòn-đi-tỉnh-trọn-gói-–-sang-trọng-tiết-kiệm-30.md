@@ -1,4 +1,5 @@
 ---
+keywords: "thuê xe sài gòn vũng tàu, xe giá rẻ"
 title: Thuê Xe 7 Chỗ Sài Gòn Đi Tỉnh Trọn Gói – Sang Trọng, Tiết Kiệm 30%
 date: 2026-10-26T13:21:00.000+07:00
 image: https://res.cloudinary.com/zwn264iv/image/upload/f_auto,q_auto/v1792994668/1792993563087_2.jpg
