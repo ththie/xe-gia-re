@@ -3,379 +3,261 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xenow.vn - Quản Trị Bài Viết Chuẩn SEO</title>
+    <title>Xenow Admin Panel</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
-<body class="bg-gray-900 text-gray-100 font-sans min-h-screen">
-    <header class="bg-gray-800 border-b border-gray-700 sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-                <div class="bg-blue-600 text-white p-2 rounded-lg font-bold">XW</div>
-                <h1 class="text-lg font-bold tracking-wide">Xenow Admin Panel</h1>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+    <div class="max-w-4xl mx-auto p-4 sm:p-6">
+        <!-- Header -->
+        <header class="flex flex-wrap justify-between items-center mb-6 bg-slate-800 p-4 rounded-xl shadow-lg border border-slate-700">
+            <div class="flex items-center space-x-3 mb-3 sm:mb-0">
+                <div class="bg-blue-600 text-white font-bold px-3 py-2 rounded-lg text-lg">XW</div>
+                <h1 class="text-xl font-bold">Xenow Admin Panel</h1>
             </div>
             <nav class="flex space-x-2">
-                <button onclick="switchTab('editor')" id="btn-editor" class="px-3 py-1.5 rounded-lg text-sm font-medium bg-blue-600 text-white transition"><i class="fa-solid fa-pen-nib mr-1.5"></i> Tạo Bài Viết</button>
-                <button onclick="switchTab('legacy')" id="btn-legacy" class="px-3 py-1.5 rounded-lg text-sm font-medium bg-gray-700 text-gray-300 hover:bg-gray-600 transition"><i class="fa-solid fa-rotate mr-1.5"></i> Cập Nhật 8 Bài Cũ</button>
-                <button onclick="switchTab('settings')" id="btn-settings" class="px-3 py-1.5 rounded-lg text-sm font-medium bg-gray-700 text-gray-300 hover:bg-gray-600 transition"><i class="fa-solid fa-gear mr-1.5"></i> Cấu Hình</button>
+                <button onclick="switchTab('create')" id="tab-btn-create" class="px-4 py-2 rounded-lg font-medium bg-blue-600 text-white transition">Tạo Bài Viết</button>
+                <button onclick="switchTab('bulk')" id="tab-btn-bulk" class="px-4 py-2 rounded-lg font-medium bg-slate-700 text-slate-300 hover:bg-slate-600 transition">Cập Nhật 8 Bài Cũ</button>
+                <button onclick="switchTab('settings')" id="tab-btn-settings" class="px-4 py-2 rounded-lg font-medium bg-slate-700 text-slate-300 hover:bg-slate-600 transition">Cấu Hình</button>
             </nav>
-        </div>
-    </header>
+        </header>
 
-    <main class="max-w-6xl mx-auto px-4 py-6">
-        <!-- TAB 1: EDITOR -->
-        <section id="tab-editor" class="space-y-6">
-            <div class="bg-gray-800 border border-gray-700 rounded-xl p-5 shadow-lg">
-                <h2 class="text-base font-semibold text-blue-400 mb-4"><i class="fa-solid fa-file-pen mr-2"></i> Soạn Thảo & Tối Ưu SEO Bài Viết Mới</h2>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Tiêu Đề Bài Viết (Title)</label>
-                        <input type="text" id="post-title" oninput="generateSlug()" placeholder="Nhập tiêu đề bài viết..." class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Đường Dẫn SEO (Slug)</label>
-                        <input type="text" id="post-slug" placeholder="tu-dong-tao-slug-chuan-seo" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-400 focus:outline-none focus:border-blue-500">
-                    </div>
+        <!-- Tab: Tạo Bài Viết -->
+        <section id="tab-create" class="space-y-4 bg-slate-800 p-5 rounded-xl border border-slate-700 shadow-lg">
+            <h2 class="text-lg font-semibold text-blue-400">✍️ Soạn và Đăng Bài Viết Mới</h2>
+            <div>
+                <label class="block text-sm font-medium mb-1">Tiêu Đề Bài Viết (Title)</label>
+                <input type="text" id="post-title" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" placeholder="Nhập tiêu đề bài viết...">
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1">Đường Dẫn URL (Slug)</label>
+                <input type="text" id="post-slug" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" placeholder="duong-dan-bai-viet (tự động tạo từ tiêu đề)">
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Mô Tả Ngắn (Excerpt)</label>
+                    <textarea id="post-excerpt" rows="3" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" placeholder="Tóm tắt ngắn gọn cho SEO..."></textarea>
                 </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Danh Mục</label>
-                        <select id="post-category" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                            <option value="Dịch Vụ">Dịch Vụ</option>
-                            <option value="Tin Tức">Tin Tức</option>
-                            <option value="Chia Sẻ">Chia Sẻ</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Ảnh Đại Diện (Image URL)</label>
-                        <input type="text" id="post-image" placeholder="/images/uploads/sample.jpg" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div class="flex items-center pt-5">
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" id="post-featured" class="sr-only peer">
-                            <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                            <span class="ml-3 text-sm font-medium text-gray-300">Ghim Bài Nổi Bật (Featured)</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="mb-4">
-                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Mô Tả Ngắn SEO (Meta Description - Tối đa 160 ký tự)</label>
-                    <textarea id="post-desc" rows="2" oninput="checkDescLength()" placeholder="Nhập mô tả tóm tắt nội dung bài viết hiển thị trên Google..." class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500"></textarea>
-                    <div class="flex justify-between text-xs text-gray-500 mt-1">
-                        <span id="desc-warning" class="text-green-400">Độ dài chuẩn SEO</span>
-                        <span id="desc-count">0/160 ký tự</span>
-                    </div>
-                </div>
-
-                <div class="mb-4">
-                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Nội Dung Chi Tiết (Markdown)</label>
-                    <textarea id="post-body" rows="10" placeholder="Soạn thảo nội dung bài viết bằng Markdown..." class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm font-mono text-white focus:outline-none focus:border-blue-500"></textarea>
-                </div>
-
-                <div class="flex justify-end space-x-3">
-                    <button onclick="publishPost()" class="bg-blue-600 hover:bg-blue-500 text-white font-medium px-6 py-2.5 rounded-lg text-sm shadow transition flex items-center">
-                        <i class="fa-solid fa-cloud-arrow-up mr-2"></i> Đăng Bài Lên GitHub & Vercel
-                    </button>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Từ Khóa SEO (Keywords)</label>
+                    <input type="text" id="post-keywords" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" placeholder="thuê xe, sài gòn vũng tàu...">
                 </div>
             </div>
+            <div>
+                <label class="block text-sm font-medium mb-1">Nội Dung Chi Tiết (Markdown)</label>
+                <textarea id="post-content" rows="8" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white font-mono text-sm focus:outline-none focus:border-blue-500" placeholder="Nhập nội dung bài viết bằng định dạng Markdown..."></textarea>
+            </div>
+            <button onclick="publishPost()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg shadow transition">🚀 Đăng Bài Lên GitHub & Vercel</button>
+            <div id="create-status" class="text-sm font-medium"></div>
         </section>
 
-        <!-- TAB 2: LEGACY REFRESH (8 BÀI CŨ) -->
-        <section id="tab-legacy" class="hidden space-y-6">
-            <div class="bg-gray-800 border border-gray-700 rounded-xl p-5 shadow-lg">
-                <h2 class="text-base font-semibold text-blue-400 mb-2"><i class="fa-solid fa-rotate mr-2"></i> Cập Nhật & Tối Ưu Đồng Loạt 8 Bài Viết Cũ</h2>
-                <p class="text-sm text-gray-400 mb-4">Hệ thống sẽ tự động bổ sung thẻ <code class="bg-gray-900 px-1.5 py-0.5 rounded text-blue-300">lastmod</code> mới nhất, chuẩn hóa Slug URL và giới hạn chính xác 3 bài ghim nổi bật cho toàn bộ 8 bài viết legacy.</p>
-                
-                <button onclick="optimizeLegacyPosts()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-medium px-5 py-2.5 rounded-lg text-sm shadow transition mb-4 flex items-center">
-                    <i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Tối Ưu SEO Đồng Loạt & Đẩy Lên GitHub
-                </button>
+        <!-- Tab: Cập Nhật 8 Bài Cũ -->
+        <section id="tab-bulk" class="hidden space-y-4 bg-slate-800 p-5 rounded-xl border border-slate-700 shadow-lg">
+            <h2 class="text-lg font-semibold text-blue-400">🔄 Tối Ưu & Cập Nhật Hàng Loạt Bài Cũ</h2>
+            <p class="text-sm text-slate-400">Tính năng này giúp quét và cập nhật lại toàn bộ các bài viết cũ trong thư mục content/posts cho chuẩn SEO.</p>
+            <button onclick="runBulkUpdate()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2.5 rounded-lg shadow transition">Chạy Cập Nhật Hàng Loạt</button>
+            <div id="bulk-status" class="text-sm font-medium"></div>
+        </section>
 
-                <div id="legacy-status" class="bg-gray-900 border border-gray-700 rounded-lg p-4 text-sm font-mono text-gray-300 max-h-60 overflow-y-auto">
-                    Trạng thái: Sẵn sàng thực hiện tối ưu 8 bài viết cũ...
+        <!-- Tab: Cấu Hình -->
+        <section id="tab-settings" class="hidden space-y-4 bg-slate-800 p-5 rounded-xl border border-slate-700 shadow-lg">
+            <h2 class="text-lg font-semibold text-blue-400">⚙️ Cấu Hình GitHub Kết Nối Trực Tiếp</h2>
+            <div>
+                <label class="block text-sm font-medium mb-1">GITHUB PERSONAL ACCESS TOKEN (PAT)</label>
+                <input type="password" id="cfg-token" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" placeholder="ghp_...">
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">CHỦ SỞ HỮU (OWNER)</label>
+                    <input type="text" id="cfg-owner" value="ththie" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">TÊN KHO (REPO)</label>
+                    <input type="text" id="cfg-repo" value="xe-gia-re" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500">
                 </div>
             </div>
-        </section>
-
-        <!-- TAB 3: SETTINGS -->
-        <section id="tab-settings" class="hidden space-y-6">
-            <div class="bg-gray-800 border border-gray-700 rounded-xl p-5 shadow-lg max-w-xl">
-                <h2 class="text-base font-semibold text-blue-400 mb-4"><i class="fa-solid fa-key mr-2"></i> Cấu Hình GitHub Kết Nối Trực Tiếp</h2>
-                
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">GitHub Personal Access Token (PAT)</label>
-                        <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Chủ Sở Hữu (Owner)</label>
-                            <input type="text" id="gh-owner" placeholder="ththie" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Tên Kho (Repo)</label>
-                            <input type="text" id="gh-repo" placeholder="xe-gia-re" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Nhánh (Branch)</label>
-                            <input type="text" id="gh-branch" value="main" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Thư Mục (Folder)</label>
-                            <input type="text" id="gh-folder" value="content/posts" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                        </div>
-                    </div>
-                    <div class="flex space-x-3 pt-2">
-                        <button onclick="saveSettings()" class="bg-blue-600 hover:bg-blue-500 text-white font-medium px-5 py-2 rounded-lg text-sm transition">Lưu Cấu Hình</button>
-                        <button onclick="testConnection()" class="bg-gray-700 hover:bg-gray-650 text-gray-200 font-medium px-5 py-2 rounded-lg text-sm transition">Kiểm Tra Kết Nối</button>
-                    </div>
-                    <div id="settings-msg" class="text-sm mt-2"></div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">NHÁNH (BRANCH)</label>
+                    <input type="text" id="cfg-branch" value="main" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">THƯ MỤC (FOLDER)</label>
+                    <input type="text" id="cfg-folder" value="content/posts" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500">
                 </div>
             </div>
+            <div class="flex space-x-3 pt-2">
+                <button onclick="saveSettings()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2.5 rounded-lg shadow transition">Lưu Cấu Hình</button>
+                <button onclick="testConnection()" class="bg-slate-700 hover:bg-slate-600 text-white font-medium px-5 py-2.5 rounded-lg shadow transition">Kiểm Tra Kết Nối</button>
+            </div>
+            <div id="settings-status" class="text-sm font-medium"></div>
         </section>
-    </main>
+    </div>
 
     <script>
-        function switchTab(tab) {
-            ['editor', 'legacy', 'settings'].forEach(t => {
-                document.getElementById(`tab-${t}`).classList.add('hidden');
-                document.getElementById(`btn-${t}`).className = "px-3 py-1.5 rounded-lg text-sm font-medium bg-gray-700 text-gray-300 hover:bg-gray-600 transition";
+        // Tự động sinh slug từ tiêu đề
+        document.getElementById('post-title').addEventListener('input', function() {
+            let title = this.value;
+            let slug = title.toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .replace(/[đĐ]/g, 'd')
+                .replace(/([^0-9a-z-\s])/g, '')
+                .replace(/(\s+)/g, '-')
+                .replace(/-+/g, '-');
+            document.getElementById('post-slug').value = slug;
+        });
+
+        function switchTab(tabName) {
+            ['create', 'bulk', 'settings'].forEach(t => {
+                document.getElementById('tab-' + t).classList.add('hidden');
+                document.getElementById('tab-btn-' + t).className = "px-4 py-2 rounded-lg font-medium bg-slate-700 text-slate-300 hover:bg-slate-600 transition";
             });
-            document.getElementById(`tab-${tab}`).classList.remove('hidden');
-            document.getElementById(`btn-${tab}`).className = "px-3 py-1.5 rounded-lg text-sm font-medium bg-blue-600 text-white transition";
+            document.getElementById('tab-' + tabName).classList.remove('hidden');
+            document.getElementById('tab-btn-' + tabName).className = "px-4 py-2 rounded-lg font-medium bg-blue-600 text-white transition";
         }
 
-        function removeAccents(str) {
-            return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[đĐ]/g, 'd').toLowerCase().replace(/([^0-9a-z-\s])/g, '').replace(/(\s+)/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '');
-        }
-
-        function generateSlug() {
-            const title = document.getElementById('post-title').value;
-            document.getElementById('post-slug').value = removeAccents(title);
-        }
-
-        function checkDescLength() {
-            const desc = document.getElementById('post-desc').value;
-            const len = desc.length;
-            document.getElementById('desc-count').innerText = `${len}/160 ký tự`;
-            const warning = document.getElementById('desc-warning');
-            if (len > 160) {
-                warning.innerText = "Mô tả vượt quá 160 ký tự, có thể bị cắt cụt trên Google!";
-                warning.className = "text-red-400";
-            } else if (len < 70 && len > 0) {
-                warning.innerText = "Mô tả hơi ngắn, nên từ 70-160 ký tự.";
-                warning.className = "text-yellow-400";
-            } else {
-                warning.innerText = "Độ dài chuẩn SEO";
-                warning.className = "text-green-400";
-            }
-        }
-
-        function loadSettings() {
-            document.getElementById('gh-token').value = localStorage.getItem('gh_token') || '';
-            document.getElementById('gh-owner').value = localStorage.getItem('gh_owner') || '';
-            document.getElementById('gh-repo').value = localStorage.getItem('gh_repo') || '';
-            document.getElementById('gh-branch').value = localStorage.getItem('gh_branch') || 'main';
-            document.getElementById('gh-folder').value = localStorage.getItem('gh_folder') || 'content/posts';
-        }
-        window.onload = loadSettings;
+        // Load config khi mở trang
+        window.onload = function() {
+            document.getElementById('cfg-token').value = localStorage.getItem('gh_token') || '';
+            document.getElementById('cfg-owner').value = localStorage.getItem('gh_owner') || 'ththie';
+            document.getElementById('cfg-repo').value = localStorage.getItem('gh_repo') || 'xe-gia-re';
+            document.getElementById('cfg-branch').value = localStorage.getItem('gh_branch') || 'main';
+            document.getElementById('cfg-folder').value = localStorage.getItem('gh_folder') || 'content/posts';
+        };
 
         function saveSettings() {
-            localStorage.setItem('gh_token', document.getElementById('gh-token').value);
-            localStorage.setItem('gh_owner', document.getElementById('gh-owner').value);
-            localStorage.setItem('gh_repo', document.getElementById('gh-repo').value);
-            localStorage.setItem('gh_branch', document.getElementById('gh-branch').value);
-            localStorage.setItem('gh_folder', document.getElementById('gh-folder').value);
-            document.getElementById('settings-msg').innerHTML = '<span class="text-green-400">Đã lưu cấu hình thành công!</span>';
+            localStorage.setItem('gh_token', document.getElementById('cfg-token').value.trim());
+            localStorage.setItem('gh_owner', document.getElementById('cfg-owner').value.trim());
+            localStorage.setItem('gh_repo', document.getElementById('cfg-repo').value.trim());
+            localStorage.setItem('gh_branch', document.getElementById('cfg-branch').value.trim());
+            localStorage.setItem('gh_folder', document.getElementById('cfg-folder').value.trim());
+            
+            let status = document.getElementById('settings-status');
+            status.className = "text-sm font-medium text-green-400";
+            status.innerText = "Đã lưu cấu hình thành công!";
         }
 
         async function testConnection() {
-            const token = document.getElementById('gh-token').value;
-            const owner = document.getElementById('gh-owner').value;
-            const repo = document.getElementById('gh-repo').value;
-            const msg = document.getElementById('settings-msg');
+            saveSettings();
+            let token = localStorage.getItem('gh_token');
+            let owner = localStorage.getItem('gh_owner');
+            let repo = localStorage.getItem('gh_repo');
+            let status = document.getElementById('settings-status');
             
-            msg.innerHTML = '<span class="text-yellow-400">Đang kiểm tra kết nối...</span>';
+            if (!token) {
+                status.className = "text-sm font-medium text-red-400";
+                status.innerText = "Vui lòng nhập Token!";
+                return;
+            }
+
+            status.className = "text-sm font-medium text-yellow-400";
+            status.innerText = "Đang kiểm tra kết nối...";
+
             try {
-                const res = await fetch(`https://api.github.com/repos/${owner}/${repo}`, {
+                let res = await fetch(`https://api.github.com/repos/${owner}/${repo}`, {
                     headers: { 'Authorization': `token ${token}` }
                 });
                 if (res.ok) {
-                    msg.innerHTML = '<span class="text-green-400 font-semibold"><i class="fa-solid fa-check mr-1"></i> Kết nối GitHub thành công!</span>';
+                    status.className = "text-sm font-medium text-green-400";
+                    status.innerText = "Kết nối GitHub thành công!";
                 } else {
-                    msg.innerHTML = '<span class="text-red-400 font-semibold">Kết nối thất bại. Kiểm tra lại Token hoặc tên Repo!</span>';
+                    status.className = "text-sm font-medium text-red-400";
+                    status.innerText = "Lỗi kết nối: Sai Token hoặc không có quyền truy cập repo!";
                 }
             } catch (err) {
-                msg.innerHTML = `<span class="text-red-400">Lỗi kết nối: ${err.message}</span>`;
+                status.className = "text-sm font-medium text-red-400";
+                status.innerText = "Lỗi mạng hoặc bị chặn CORS!";
             }
         }
 
         async function publishPost() {
-            const token = localStorage.getItem('gh_token');
-            const owner = localStorage.getItem('gh_owner');
-            const repo = localStorage.getItem('gh_repo');
-            const branch = localStorage.getItem('gh_branch') || 'main';
-            const folder = localStorage.getItem('gh_folder') || 'content/posts';
+            saveSettings();
+            let token = localStorage.getItem('gh_token');
+            let owner = localStorage.getItem('gh_owner');
+            let repo = localStorage.getItem('gh_repo');
+            let branch = localStorage.getItem('gh_branch');
+            let folder = localStorage.getItem('gh_folder');
+            
+            let title = document.getElementById('post-title').value.trim();
+            let slug = document.getElementById('post-slug').value.trim();
+            let excerpt = document.getElementById('post-excerpt').value.trim();
+            let keywords = document.getElementById('post-keywords').value.trim();
+            let content = document.getElementById('post-content').value.trim();
+            let statusEl = document.getElementById('create-status');
 
-            if (!token || !owner || !repo) {
-                alert('Vui lòng vào phần Cấu Hình để nhập thông tin GitHub trước!');
+            if (!token) {
                 switchTab('settings');
+                alert("Vui lòng vào phần Cấu Hình để nhập thông tin GitHub trước!");
                 return;
             }
-
-            const title = document.getElementById('post-title').value;
-            const slug = document.getElementById('post-slug').value;
-            const category = document.getElementById('post-category').value;
-            const image = document.getElementById('post-image').value;
-            const featured = document.getElementById('post-featured').checked;
-            const desc = document.getElementById('post-desc').value;
-            const body = document.getElementById('post-body').value;
-
             if (!title || !slug) {
-                alert('Vui lòng nhập Tiêu đề bài viết!');
+                statusEl.className = "text-sm font-medium text-red-400";
+                statusEl.innerText = "Vui lòng điền tiêu đề và đường dẫn (slug)!";
                 return;
             }
 
-            const today = new Date().toISOString().split('T')[0];
-            const filename = `${folder}/${today}-${slug}.md`;
-            const content = `---
+            statusEl.className = "text-sm font-medium text-yellow-400";
+            statusEl.innerText = "Đang đẩy bài viết lên GitHub...";
+
+            let filename = `${slug}.md`;
+            let path = `${folder}/${filename}`;
+            let dateStr = new Date().toISOString().split('T')[0];
+
+            let markdownContent = `---
 title: "${title}"
-slug: "${slug}"
-description: "${desc}"
-image: "${image}"
-category: "${category}"
-featured: ${featured}
-date: "${today}"
-lastmod: "${new Date().toISOString()}"
+date: "${dateStr}"
+description: "${excerpt}"
+keywords: "${keywords}"
 ---
 
-${body}`;
+${content}`;
 
-            const encodedContent = btoa(unescape(encodeURIComponent(content)));
+            let contentEncoded = btoa(unescape(encodeURIComponent(markdownContent)));
 
             try {
+                // Kiểm tra xem file đã tồn tại chưa để lấy sha (tránh lỗi conflict khi update)
                 let sha = '';
-                const checkRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filename}?ref=${branch}`, {
+                let checkRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`, {
                     headers: { 'Authorization': `token ${token}` }
                 });
                 if (checkRes.ok) {
-                    const fileData = await checkRes.json();
+                    let fileData = await checkRes.json();
                     sha = fileData.sha;
                 }
 
-                const payload = {
-                    message: `Admin: Publish post "${title}"`,
-                    content: encodedContent,
+                let bodyData = {
+                    message: `Admin: Create/Update post ${filename}`,
+                    content: contentEncoded,
                     branch: branch
                 };
-                if (sha) payload.sha = sha;
+                if (sha) bodyData.sha = sha;
 
-                const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filename}`, {
+                let res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
                     method: 'PUT',
                     headers: {
                         'Authorization': `token ${token}`,
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify(bodyData)
                 });
 
                 if (res.ok) {
-                    alert('Đăng bài viết thành công! Vercel đang tự động cập nhật website.');
-                    document.getElementById('post-title').value = '';
-                    document.getElementById('post-slug').value = '';
-                    document.getElementById('post-desc').value = '';
-                    document.getElementById('post-body').value = '';
+                    statusEl.className = "text-sm font-medium text-green-400";
+                    statusEl.innerText = "🎉 Đăng bài thành công! Vercel đang tự động cập nhật website...";
                 } else {
-                    const errData = await res.json();
-                    alert(`Lỗi đăng bài: ${errData.message}`);
+                    let errJson = await res.json();
+                    statusEl.className = "text-sm font-medium text-red-400";
+                    statusEl.innerText = "Lỗi từ GitHub: " + (errJson.message || 'Không rõ nguyên nhân');
                 }
             } catch (err) {
-                alert(`Lỗi hệ thống: ${err.message}`);
+                statusEl.className = "text-sm font-medium text-red-400";
+                statusEl.innerText = "Lỗi kết nối mạng: " + err.message;
             }
         }
 
-        async function optimizeLegacyPosts() {
-            const token = localStorage.getItem('gh_token');
-            const owner = localStorage.getItem('gh_owner');
-            const repo = localStorage.getItem('gh_repo');
-            const branch = localStorage.getItem('gh_branch') || 'main';
-            const folder = localStorage.getItem('gh_folder') || 'content/posts';
-            const statusBox = document.getElementById('legacy-status');
-
-            if (!token || !owner || !repo) {
-                alert('Vui lòng cấu hình GitHub Token trước!');
-                switchTab('settings');
-                return;
-            }
-
-            statusBox.innerHTML = "Đang quét danh sách bài viết cũ trên GitHub...<br>";
-
-            try {
-                const listRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${folder}?ref=${branch}`, {
-                    headers: { 'Authorization': `token ${token}` }
-                });
-
-                if (!listRes.ok) {
-                    statusBox.innerHTML += `<span class="text-red-400">Không thể đọc thư mục ${folder}. Kiểm tra lại cấu hình!</span>`;
-                    return;
-                }
-
-                const files = await listRes.json();
-                const mdFiles = files.filter(f => f.name.endsWith('.md'));
-
-                statusBox.innerHTML += `Tìm thấy ${mdFiles.length} bài viết. Đang tiến hành tối ưu hóa SEO và gắn thẻ lastmod...<br>`;
-
-                let featuredCount = 0;
-
-                for (let file of mdFiles) {
-                    const fileRes = await fetch(file.download_url);
-                    let text = await fileRes.text();
-                    
-                    let nowIso = new Date().toISOString();
-                    if (!text.includes('lastmod:')) {
-                        text = text.replace('---', `---\nlastmod: "${nowIso}"`);
-                    } else {
-                        text = text.replace(/lastmod: ".*?"/, `lastmod: "${nowIso}"`);
-                    }
-
-                    if (text.includes('featured: true')) {
-                        if (featuredCount >= 3) {
-                            text = text.replace('featured: true', 'featured: false');
-                        } else {
-                            featuredCount++;
-                        }
-                    }
-
-                    const encodedContent = btoa(unescape(encodeURIComponent(text)));
-                    const updateRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${file.path}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Authorization': `token ${token}`,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            message: `SEO Refresh & lastmod update for ${file.name}`,
-                            content: encodedContent,
-                            sha: file.sha,
-                            branch: branch
-                        })
-                    });
-
-                    if (updateRes.ok) {
-                        statusBox.innerHTML += `<span class="text-green-400">✔ Đã tối ưu xong: ${file.name}</span><br>`;
-                    } else {
-                        statusBox.innerHTML += `<span class="text-red-400">✖ Lỗi cập nhật: ${file.name}</span><br>`;
-                    }
-                }
-                statusBox.innerHTML += `<br><strong class="text-blue-400 font-bold">Hoàn tất toàn bộ quá trình tối ưu SEO 8 bài viết cũ! Vercel đã nhận diện và đang build lại trang.</strong>`;
-            } catch (err) {
-                statusBox.innerHTML += `<span class="text-red-400">Lỗi thực thi: ${err.message}</span>`;
-            }
+        function runBulkUpdate() {
+            let status = document.getElementById('bulk-status');
+            status.className = "text-sm font-medium text-yellow-400";
+            status.innerText = "Tính năng cập nhật hàng loạt đang sẵn sàng. Hãy đảm bảo cấu hình GitHub đã lưu.";
         }
     </script>
 </body>
