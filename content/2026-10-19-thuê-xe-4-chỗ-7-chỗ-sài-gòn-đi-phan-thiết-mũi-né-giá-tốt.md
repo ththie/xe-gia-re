@@ -1,4 +1,5 @@
 ---
+keywords: "thuê xe sài gòn vũng tàu, xe giá rẻ"
 title: Thuê Xe 4 Chỗ 7 Chỗ Sài Gòn Đi Phan Thiết Mũi Né Giá Tốt
 date: 2026-10-19T16:57:00.000+07:00
 image: https://res.cloudinary.com/zwn264iv/image/upload/f_auto,q_auto/v1792403821/IMG_20261019_165435.jpg
