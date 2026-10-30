@@ -1,4 +1,5 @@
 ---
+keywords: "thuê xe sài gòn vũng tàu, xe giá rẻ"
 title: "Đặt Xe 7 Chỗ Sài Gòn Đi Tỉnh: Nhập Km Hiện Giá Tự Động, Minh Bạch"
 date: 2026-10-23T11:12:00.000+07:00
 image: https://res.cloudinary.com/zwn264iv/image/upload/f_auto,q_auto/v1792728960/IMG_20260702_072708.jpg
