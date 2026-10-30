@@ -71,7 +71,7 @@
             <div id="create-status" class="text-sm font-medium"></div>
         </section>
 
-        <!-- Tab: Cập Nhật 8 Bài Cũ -->
+        <!-- Tab: Cập Nhật Bài Cũ -->
         <section id="tab-bulk" class="hidden space-y-4 bg-slate-800 p-5 rounded-xl border border-slate-700 shadow-lg">
             <h2 class="text-lg font-semibold text-blue-400">🔄 Tối Ưu & Cập Nhật Hàng Loạt Bài Cũ</h2>
             <p class="text-sm text-slate-400">Tính năng này sẽ quét qua toàn bộ các bài viết cũ trong thư mục <code class="text-blue-300">content/posts</code> và tự động chuẩn hóa lại cấu trúc SEO.</p>
@@ -115,7 +115,6 @@
     </div>
 
     <script>
-        // Tự động sinh slug từ tiêu đề
         document.getElementById('post-title').addEventListener('input', function() {
             let title = this.value;
             let slug = title.toLowerCase()
@@ -189,7 +188,6 @@
             }
         }
 
-        // Tải ảnh trực tiếp lên GitHub và chèn vào nội dung
         async function uploadInlineImage(input) {
             if (!input.files || !input.files[0]) return;
             let file = input.files[0];
@@ -232,8 +230,6 @@
                     if (res.ok) {
                         statusEl.className = "text-sm font-medium text-green-400";
                         statusEl.innerText = "Tải ảnh thành công!";
-                        
-                        // Chèn markdown hình ảnh vào vị trí con trỏ trong textarea nội dung
                         let textarea = document.getElementById('post-content');
                         let imgMarkdown = `\n![${file.name}](${publicUrl})\n`;
                         let startPos = textarea.selectionStart;
@@ -340,14 +336,13 @@ ${content}`;
             }
         }
 
-        // Tính năng chạy cập nhật hàng loạt bài cũ
         async function runBulkUpdate() {
             saveSettings();
             let token = localStorage.getItem('gh_token');
             let owner = localStorage.getItem('gh_owner');
             let repo = localStorage.getItem('gh_repo');
             let branch = localStorage.getItem('gh_branch');
-            let folder = localStorage.getItem('gh_folder');
+            let folder = localStorage.getItem('gh_folder').trim();
             let status = document.getElementById('bulk-status');
 
             if (!token) {
@@ -358,22 +353,40 @@ ${content}`;
 
             status.innerHTML = "<span class='text-yellow-400'>Đang quét danh sách bài viết cũ từ GitHub...</span>";
 
+            // Thử quét thư mục chính, nếu lỗi thử các biến thể phổ biến
+            let possibleFolders = [folder, 'posts', 'content/posts', '_posts'];
+            let files = null;
+
+            for (let f of possibleFolders) {
+                try {
+                    let res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${f}?ref=${branch}`, {
+                        headers: { 'Authorization': `token ${token}` }
+                    });
+                    if (res.ok) {
+                        let data = await res.json();
+                        if (Array.isArray(data)) {
+                            files = data;
+                            break;
+                        }
+                    }
+                } catch(e) {}
+            }
+
+            if (!files) {
+                status.innerHTML = "<span class='text-red-400'>Không thể đọc thư mục bài viết. Vui lòng kiểm tra lại tên Thư mục trong phần Cấu Hình (ví dụ: content/posts)!</span>";
+                return;
+            }
+
+            let markdownFiles = files.filter(f => f.name.endsWith('.md'));
+
+            if (markdownFiles.length === 0) {
+                status.innerHTML = "<span class='text-red-400'>Không tìm thấy bài viết .md nào trong thư mục này.</span>";
+                return;
+            }
+
+            status.innerHTML = `<span class='text-yellow-400'>Tìm thấy ${markdownFiles.length} bài viết. Đang tiến hành tối ưu hóa chuẩn SEO...</span>`;
+
             try {
-                let res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${folder}?ref=${branch}`, {
-                    headers: { 'Authorization': `token ${token}` }
-                });
-                if (!res.ok) throw new Error("Không thể đọc thư mục bài viết.");
-                
-                let files = await res.json();
-                let markdownFiles = files.filter(f => f.name.endsWith('.md'));
-
-                if (markdownFiles.length === 0) {
-                    status.innerHTML = "<span class='text-red-400'>Không tìm thấy bài viết nào trong thư mục này.</span>";
-                    return;
-                }
-
-                status.innerHTML = `<span class='text-yellow-400'>Tìm thấy ${markdownFiles.length} bài viết. Đang tiến hành tối ưu hóa chuẩn SEO...</span>`;
-
                 for (let file of markdownFiles) {
                     let fileRes = await fetch(file.url, {
                         headers: { 'Authorization': `token ${token}` }
@@ -382,7 +395,6 @@ ${content}`;
                         let fileJson = await fileRes.json();
                         let contentDecoded = decodeURIComponent(escape(atob(fileJson.content)));
                         
-                        // Đảm bảo bài viết có đủ các trường chuẩn SEO
                         if (!contentDecoded.includes('keywords:')) {
                             contentDecoded = contentDecoded.replace('---', `---\nkeywords: "thuê xe sài gòn vũng tàu, xe giá rẻ"`);
                         }
