@@ -34,6 +34,21 @@
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
+                    <label class="block text-sm font-medium mb-1">Ảnh Đại Diện (Image URL)</label>
+                    <input type="text" id="post-image" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" value="/images/uploads/sample.jpg" placeholder="/images/uploads/...">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Trạng Thái Bài Viết</label>
+                    <div class="flex items-center space-x-3 mt-2.5">
+                        <label class="flex items-center space-x-2 cursor-pointer">
+                            <input type="checkbox" id="post-featured" class="w-4 h-4 text-blue-600 bg-slate-900 border-slate-700 rounded focus:ring-blue-500">
+                            <span class="text-sm font-medium text-slate-200">📌 Ghim bài viết này (Featured/Pinned)</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
                     <label class="block text-sm font-medium mb-1">Mô Tả Ngắn (Excerpt)</label>
                     <textarea id="post-excerpt" rows="3" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" placeholder="Tóm tắt ngắn gọn cho SEO..."></textarea>
                 </div>
@@ -179,6 +194,8 @@
             
             let title = document.getElementById('post-title').value.trim();
             let slug = document.getElementById('post-slug').value.trim();
+            let image = document.getElementById('post-image').value.trim();
+            let featured = document.getElementById('post-featured').checked;
             let excerpt = document.getElementById('post-excerpt').value.trim();
             let keywords = document.getElementById('post-keywords').value.trim();
             let content = document.getElementById('post-content').value.trim();
@@ -205,6 +222,8 @@
             let markdownContent = `---
 title: "${title}"
 date: "${dateStr}"
+image: "${image}"
+featured: ${featured}
 description: "${excerpt}"
 keywords: "${keywords}"
 ---
@@ -214,7 +233,6 @@ ${content}`;
             let contentEncoded = btoa(unescape(encodeURIComponent(markdownContent)));
 
             try {
-                // Kiểm tra xem file đã tồn tại chưa để lấy sha (tránh lỗi conflict khi update)
                 let sha = '';
                 let checkRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`, {
                     headers: { 'Authorization': `token ${token}` }
