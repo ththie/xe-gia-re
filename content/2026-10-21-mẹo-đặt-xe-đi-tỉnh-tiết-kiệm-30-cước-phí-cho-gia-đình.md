@@ -1,4 +1,5 @@
 ---
+keywords: "thuê xe sài gòn vũng tàu, xe giá rẻ"
 title: Mẹo đặt xe đi tỉnh tiết kiệm 30% cước phí cho gia đình
 date: 2026-10-21T17:26:00.000+07:00
 image: https://res.cloudinary.com/zwn264iv/image/upload/f_auto,q_auto/v1792578318/IMG_1792576427473_1792576682431.jpg
