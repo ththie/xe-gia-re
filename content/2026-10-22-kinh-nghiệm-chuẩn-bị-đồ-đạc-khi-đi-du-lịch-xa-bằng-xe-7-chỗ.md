@@ -1,4 +1,5 @@
 ---
+keywords: "thuê xe sài gòn vũng tàu, xe giá rẻ"
 title: Kinh nghiệm chuẩn bị đồ đạc khi đi du lịch xa bằng xe 7 chỗ
 date: 2026-10-22T11:31:00.000+07:00
 image: https://res.cloudinary.com/zwn264iv/image/upload/f_auto,q_auto/v1792643438/FB_IMG_1792643347235.jpg
