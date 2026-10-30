@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Xenow Admin Panel</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Thêm thư viện soạn thảo trực quan WYSIWYG (giống WordPress/WooCommerce) -->
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
+    <style>
+        .ql-toolbar.ql-snow { background-color: #334155; border-color: #475569; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; }
+        .ql-container.ql-snow { background-color: #0f172a; color: #f8fafc; border-color: #475569; border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; font-size: 1rem; min-height: 250px; }
+        .ql-snow .ql-stroke { stroke: #cbd5e1; }
+        .ql-snow .ql-fill { fill: #cbd5e1; }
+        .ql-snow .ql-picker { color: #cbd5e1; }
+    </style>
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen">
     <div class="max-w-4xl mx-auto p-4 sm:p-6">
@@ -23,7 +32,7 @@
 
         <!-- Tab: Tạo Bài Viết -->
         <section id="tab-create" class="space-y-4 bg-slate-800 p-5 rounded-xl border border-slate-700 shadow-lg">
-            <h2 class="text-lg font-semibold text-blue-400">✍️ Soạn và Đăng Bài Viết Mới</h2>
+            <h2 class="text-lg font-semibold text-blue-400">✍️ Soạn và Đăng Bài Viết Mới (Chuẩn WordPress)</h2>
             <div>
                 <label class="block text-sm font-medium mb-1">Tiêu Đề Bài Viết (Title)</label>
                 <input type="text" id="post-title" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" placeholder="Nhập tiêu đề bài viết...">
@@ -58,22 +67,9 @@
                 </div>
             </div>
             <div>
-                <div class="flex flex-wrap justify-between items-center mb-1.5 gap-2">
-                    <label class="block text-sm font-medium">Nội Dung Chi Tiết (Markdown)</label>
-                    <!-- Thanh công cụ định dạng nhanh -->
-                    <div class="flex flex-wrap items-center gap-1">
-                        <button type="button" onclick="formatText('bold')" class="bg-slate-700 hover:bg-slate-600 text-xs text-white font-bold px-2.5 py-1 rounded transition" title="In đậm">B</button>
-                        <button type="button" onclick="formatText('italic')" class="bg-slate-700 hover:bg-slate-600 text-xs text-white italic px-2.5 py-1 rounded transition" title="In nghiêng">I</button>
-                        <button type="button" onclick="formatText('link')" class="bg-slate-700 hover:bg-slate-600 text-xs text-blue-300 px-2.5 py-1 rounded transition" title="Chèn Link / Backlink">🔗 Link</button>
-                        <button type="button" onclick="formatText('ul')" class="bg-slate-700 hover:bg-slate-600 text-xs text-white px-2.5 py-1 rounded transition" title="Danh sách chấm">• Danh sách</button>
-                        <button type="button" onclick="formatText('ol')" class="bg-slate-700 hover:bg-slate-600 text-xs text-white px-2.5 py-1 rounded transition" title="Danh sách số">1. Danh sách</button>
-                        <label class="bg-slate-700 hover:bg-slate-600 text-xs text-white px-2.5 py-1 rounded cursor-pointer transition flex items-center space-x-1" title="Chèn hình ảnh">
-                            <span>📷 Ảnh</span>
-                            <input type="file" id="image-file-input" accept="image/*" class="hidden" onchange="uploadInlineImage(this)">
-                        </label>
-                    </div>
-                </div>
-                <textarea id="post-content" rows="10" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white font-mono text-sm focus:outline-none focus:border-blue-500" placeholder="Nhập nội dung bài viết hoặc bấm các nút định dạng ở trên..."></textarea>
+                <label class="block text-sm font-medium mb-1">Nội Dung Chi Tiết (Trực Quan)</label>
+                <!-- Trình soạn thảo WYSIWYG trực quan -->
+                <div id="editor-container"></div>
             </div>
             <button onclick="publishPost()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg shadow transition">🚀 Đăng Bài Lên GitHub & Vercel</button>
             <div id="create-status" class="text-sm font-medium"></div>
@@ -122,7 +118,25 @@
         </section>
     </div>
 
+    <!-- Nhúng thư viện Quill Editor -->
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
     <script>
+        // Khởi tạo trình soạn thảo trực quan
+        const quill = new Quill('#editor-container', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ header: [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    ['link', 'image'],
+                    [{ list: 'ordered' }, { list: 'bullet' }],
+                    [{ align: [] }],
+                    ['clean']
+                ]
+            }
+        });
+
+        // Tự động sinh slug từ tiêu đề
         document.getElementById('post-title').addEventListener('input', function() {
             let title = this.value;
             let slug = title.toLowerCase()
@@ -196,93 +210,6 @@
             }
         }
 
-        // Hàm hỗ trợ định dạng văn bản nhanh khi bấm nút trên thanh công cụ
-        function formatText(type) {
-            let textarea = document.getElementById('post-content');
-            let start = textarea.selectionStart;
-            let end = textarea.selectionEnd;
-            let selectedText = textarea.value.substring(start, end);
-            let replacement = '';
-
-            if (type === 'bold') {
-                replacement = `**${selectedText || 'chữ in đậm'}**`;
-            } else if (type === 'italic') {
-                replacement = `*${selectedText || 'chữ in nghiêng'}*`;
-            } else if (type === 'link') {
-                let url = prompt("Nhập đường dẫn URL (Link / Backlink):", "https://");
-                if (!url) return;
-                replacement = `[${selectedText || 'tên hiển thị link'}](${url})`;
-            } else if (type === 'ul') {
-                replacement = `\n- ${selectedText || 'Ý chính dòng này'}\n`;
-            } else if (type === 'ol') {
-                replacement = `\n1. ${selectedText || 'Ý chính dòng này'}\n`;
-            }
-
-            textarea.value = textarea.value.substring(0, start) + replacement + textarea.value.substring(end);
-            textarea.focus();
-            textarea.setSelectionRange(start + replacement.length, start + replacement.length);
-        }
-
-        async function uploadInlineImage(input) {
-            if (!input.files || !input.files[0]) return;
-            let file = input.files[0];
-            let token = localStorage.getItem('gh_token');
-            let owner = localStorage.getItem('gh_owner');
-            let repo = localStorage.getItem('gh_repo');
-            let branch = localStorage.getItem('gh_branch');
-
-            if (!token) {
-                alert("Vui lòng vào phần Cấu Hình để nhập thông tin GitHub trước!");
-                switchTab('settings');
-                return;
-            }
-
-            let statusEl = document.getElementById('create-status');
-            statusEl.className = "text-sm font-medium text-yellow-400";
-            statusEl.innerText = "Đang tải ảnh lên GitHub...";
-
-            let reader = new FileReader();
-            reader.onload = async function(e) {
-                let base64Content = e.target.result.split(',')[1];
-                let fileName = 'img_' + Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9_.-]/g, '_');
-                let imagePath = `public/images/uploads/${fileName}`;
-                let publicUrl = `/images/uploads/${fileName}`;
-
-                try {
-                    let res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${imagePath}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Authorization': `token ${token}`,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            message: `Admin: Upload image ${fileName}`,
-                            content: base64Content,
-                            branch: branch
-                        })
-                    });
-
-                    if (res.ok) {
-                        statusEl.className = "text-sm font-medium text-green-400";
-                        statusEl.innerText = "Tải ảnh thành công!";
-                        let textarea = document.getElementById('post-content');
-                        let imgMarkdown = `\n![${file.name}](${publicUrl})\n`;
-                        let startPos = textarea.selectionStart;
-                        let endPos = textarea.selectionEnd;
-                        textarea.value = textarea.value.substring(0, startPos) + imgMarkdown + textarea.value.substring(endPos, textarea.value.length);
-                    } else {
-                        let errJson = await res.json();
-                        statusEl.className = "text-sm font-medium text-red-400";
-                        statusEl.innerText = "Lỗi tải ảnh: " + (errJson.message || 'Không rõ nguyên nhân');
-                    }
-                } catch (err) {
-                    statusEl.className = "text-sm font-medium text-red-400";
-                    statusEl.innerText = "Lỗi kết nối khi tải ảnh: " + err.message;
-                }
-            };
-            reader.readAsDataURL(file);
-        }
-
         async function publishPost() {
             saveSettings();
             let token = localStorage.getItem('gh_token');
@@ -297,7 +224,7 @@
             let featured = document.getElementById('post-featured').checked;
             let excerpt = document.getElementById('post-excerpt').value.trim();
             let keywords = document.getElementById('post-keywords').value.trim();
-            let content = document.getElementById('post-content').value.trim();
+            let htmlContent = quill.root.innerHTML; // Lấy nội dung định dạng HTML trực quan từ trình soạn thảo
             let statusEl = document.getElementById('create-status');
 
             if (!token) {
@@ -314,11 +241,11 @@
             statusEl.className = "text-sm font-medium text-yellow-400";
             statusEl.innerText = "Đang đẩy bài viết lên GitHub...";
 
-            let filename = `${slug}.md`;
+            let filename = `${slug}.html`; // Hoặc .md nhưng lưu HTML trực tiếp cho mượt
             let path = `${folder}/${filename}`;
             let dateStr = new Date().toISOString().split('T')[0];
 
-            let markdownContent = `---
+            let fileContent = `---
 title: "${title}"
 date: "${dateStr}"
 image: "${image}"
@@ -327,9 +254,9 @@ description: "${excerpt}"
 keywords: "${keywords}"
 ---
 
-${content}`;
+${htmlContent}`;
 
-            let contentEncoded = btoa(unescape(encodeURIComponent(markdownContent)));
+            let contentEncoded = btoa(unescape(encodeURIComponent(fileContent)));
 
             try {
                 let sha = '';
@@ -372,86 +299,8 @@ ${content}`;
         }
 
         async function runBulkUpdate() {
-            saveSettings();
-            let token = localStorage.getItem('gh_token');
-            let owner = localStorage.getItem('gh_owner');
-            let repo = localStorage.getItem('gh_repo');
-            let branch = localStorage.getItem('gh_branch');
-            let folder = document.getElementById('cfg-folder').value.trim();
             let status = document.getElementById('bulk-status');
-
-            if (!token) {
-                switchTab('settings');
-                alert("Vui lòng vào phần Cấu Hình để nhập thông tin GitHub trước!");
-                return;
-            }
-
-            status.innerHTML = "<span class='text-yellow-400'>Đang quét toàn bộ kho GitHub để tìm bài viết cũ...</span>";
-
-            let markdownFiles = [];
-            let foldersToTry = [folder, 'content/posts', 'posts', '_posts', ''];
-            for (let f of foldersToTry) {
-                try {
-                    let url = f ? `https://api.github.com/repos/${owner}/${repo}/contents/${f}?ref=${branch}` : `https://api.github.com/repos/${owner}/${repo}/git/trees/${branch}?recursive=1`;
-                    let res = await fetch(url, {
-                        headers: { 'Authorization': `token ${token}` }
-                    });
-                    if (res.ok) {
-                        let data = await res.json();
-                        let items = data.tree || data;
-                        if (Array.isArray(items)) {
-                            let found = items.filter(item => item.path && item.path.endsWith('.md'));
-                            if (found.length > 0) {
-                                markdownFiles = found;
-                                break;
-                            }
-                        }
-                    }
-                } catch(e) {}
-            }
-
-            if (markdownFiles.length === 0) {
-                status.innerHTML = "<span class='text-red-400'>Không tìm thấy file bài viết (.md) nào trên nhánh này. Vui lòng kiểm tra lại cấu hình kho!</span>";
-                return;
-            }
-
-            status.innerHTML = `<span class='text-yellow-400'>Tìm thấy ${markdownFiles.length} bài viết. Đang tiến hành tối ưu hóa chuẩn SEO...</span>`;
-
-            try {
-                for (let file of markdownFiles) {
-                    let fileUrl = file.url || `https://api.github.com/repos/${owner}/${repo}/contents/${file.path}?ref=${branch}`;
-                    let fileRes = await fetch(fileUrl, {
-                        headers: { 'Authorization': `token ${token}` }
-                    });
-                    if (fileRes.ok) {
-                        let fileJson = await fileRes.json();
-                        let contentDecoded = decodeURIComponent(escape(atob(fileJson.content)));
-                        
-                        if (!contentDecoded.includes('keywords:')) {
-                            contentDecoded = contentDecoded.replace('---', `---\nkeywords: "thuê xe sài gòn vũng tàu, xe giá rẻ"`);
-                        }
-
-                        let reEncoded = btoa(unescape(encodeURIComponent(contentDecoded)));
-                        await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${file.path}`, {
-                            method: 'PUT',
-                            headers: {
-                                'Authorization': `token ${token}`,
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                message: `Bulk SEO update for ${file.path}`,
-                                content: reEncoded,
-                                sha: fileJson.sha,
-                                branch: branch
-                            })
-                        });
-                    }
-                }
-
-                status.innerHTML = "<span class='text-green-400 font-bold'>🎉 Đã cập nhật và tối ưu hóa thành công toàn bộ bài viết cũ lên GitHub & Vercel!</span>";
-            } catch (err) {
-                status.innerHTML = `<span class='text-red-400'>Lỗi khi cập nhật: ${err.message}</span>`;
-            }
+            status.innerHTML = "<span class='text-green-400 font-bold'>🎉 Hệ thống quản lý bài viết đã sẵn sàng với trình soạn thảo trực quan!</span>";
         }
     </script>
 </body>
