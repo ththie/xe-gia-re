@@ -1,4 +1,5 @@
 ---
+keywords: "thuê xe sài gòn vũng tàu, xe giá rẻ"
 title: Thuê Xe 7 Chỗ Sài Gòn Đi Cần Thơ Giá Rẻ Đưa Đón Tận Nơi
 date: 2026-10-19T16:38:00.000+07:00
 image: https://res.cloudinary.com/zwn264iv/image/upload/f_auto,q_auto/v1792402788/IMG_20261019_163111.jpg
