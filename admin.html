@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Xenow Admin Panel</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Thêm thư viện soạn thảo trực quan WYSIWYG (giống WordPress/WooCommerce) -->
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
     <style>
         .ql-toolbar.ql-snow { background-color: #334155; border-color: #475569; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; }
@@ -44,7 +43,13 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-medium mb-1">Ảnh Đại Diện (Image URL)</label>
-                    <input type="text" id="post-image" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" value="/images/uploads/sample.jpg" placeholder="/images/uploads/...">
+                    <div class="flex space-x-2">
+                        <input type="text" id="post-image" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" value="/images/uploads/sample.jpg" placeholder="/images/uploads/...">
+                        <label class="bg-slate-700 hover:bg-slate-600 text-white px-3 py-2.5 rounded-lg cursor-pointer text-sm font-medium flex items-center justify-center shrink-0 transition">
+                            📁 Chọn Ảnh
+                            <input type="file" id="thumbnail-file-input" accept="image/*" class="hidden" onchange="uploadThumbnail(this)">
+                        </label>
+                    </div>
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-1">Trạng Thái Bài Viết</label>
@@ -68,7 +73,6 @@
             </div>
             <div>
                 <label class="block text-sm font-medium mb-1">Nội Dung Chi Tiết (Trực Quan)</label>
-                <!-- Trình soạn thảo WYSIWYG trực quan -->
                 <div id="editor-container"></div>
             </div>
             <button onclick="publishPost()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg shadow transition">🚀 Đăng Bài Lên GitHub & Vercel</button>
@@ -121,7 +125,6 @@
     <!-- Nhúng thư viện Quill Editor -->
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
     <script>
-        // Khởi tạo trình soạn thảo trực quan
         const quill = new Quill('#editor-container', {
             theme: 'snow',
             modules: {
@@ -210,6 +213,67 @@
             }
         }
 
+        // Tự động upload ảnh đại diện lên GitHub khi bấm nút "📁 Chọn Ảnh"
+        async function uploadThumbnail(input) {
+            if (!input.files || !input.files[0]) return;
+            let file = input.files[0];
+            
+            let token = localStorage.getItem('gh_token');
+            let owner = localStorage.getItem('gh_owner');
+            let repo = localStorage.getItem('gh_repo');
+            let branch = localStorage.getItem('gh_branch');
+            let statusEl = document.getElementById('create-status');
+
+            if (!token) {
+                switchTab('settings');
+                alert("Vui lòng vào phần Cấu Hình để nhập thông tin GitHub trước khi tải ảnh lên!");
+                return;
+            }
+
+            statusEl.className = "text-sm font-medium text-yellow-400";
+            statusEl.innerText = "Đang tải ảnh đại diện lên GitHub...";
+
+            let reader = new FileReader();
+            reader.onload = async function(e) {
+                let base64Content = e.target.result.split(',')[1];
+                let timestamp = Date.now();
+                let cleanFileName = file.name.toLowerCase().replace(/[^a-z0-9.]/g, '-');
+                let path = `public/images/uploads/${timestamp}-${cleanFileName}`;
+
+                try {
+                    let res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `token ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            message: `Admin: Upload thumbnail ${cleanFileName}`,
+                            content: base64Content,
+                            branch: branch
+                        })
+                    });
+
+                    if (res.ok) {
+                        let resultData = await res.json();
+                        // Gán đường dẫn tuyệt đối vào ô Ảnh Đại Diện
+                        let imagePath = `/${path.replace('public/', '')}`;
+                        document.getElementById('post-image').value = imagePath;
+                        statusEl.className = "text-sm font-medium text-green-400";
+                        statusEl.innerText = "🎉 Tải ảnh đại diện thành công!";
+                    } else {
+                        let errJson = await res.json();
+                        statusEl.className = "text-sm font-medium text-red-400";
+                        statusEl.innerText = "Lỗi tải ảnh: " + (errJson.message || 'Không rõ nguyên nhân');
+                    }
+                } catch (err) {
+                    statusEl.className = "text-sm font-medium text-red-400";
+                    statusEl.innerText = "Lỗi kết nối mạng khi tải ảnh: " + err.message;
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
         async function publishPost() {
             saveSettings();
             let token = localStorage.getItem('gh_token');
@@ -224,7 +288,7 @@
             let featured = document.getElementById('post-featured').checked;
             let excerpt = document.getElementById('post-excerpt').value.trim();
             let keywords = document.getElementById('post-keywords').value.trim();
-            let htmlContent = quill.root.innerHTML; // Lấy nội dung định dạng HTML trực quan từ trình soạn thảo
+            let htmlContent = quill.root.innerHTML;
             let statusEl = document.getElementById('create-status');
 
             if (!token) {
@@ -241,7 +305,7 @@
             statusEl.className = "text-sm font-medium text-yellow-400";
             statusEl.innerText = "Đang đẩy bài viết lên GitHub...";
 
-            let filename = `${slug}.html`; // Hoặc .md nhưng lưu HTML trực tiếp cho mượt
+            let filename = `${slug}.html`;
             let path = `${folder}/${filename}`;
             let dateStr = new Date().toISOString().split('T')[0];
 
@@ -300,7 +364,7 @@ ${htmlContent}`;
 
         async function runBulkUpdate() {
             let status = document.getElementById('bulk-status');
-            status.innerHTML = "<span class='text-green-400 font-bold'>🎉 Hệ thống quản lý bài viết đã sẵn sàng với trình soạn thảo trực quan!</span>";
+            status.innerHTML = "<span class='text-green-400 font-bold'>🎉 Hệ thống quản lý bài viết đã sẵn sàng!</span>";
         }
     </script>
 </body>
