@@ -45,10 +45,10 @@
                     <label class="block text-sm font-medium mb-1">Ảnh Đại Diện (Image URL)</label>
                     <div class="flex space-x-2">
                         <input type="text" id="post-image" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" value="/images/uploads/sample.jpg" placeholder="/images/uploads/...">
-                        <label class="bg-slate-700 hover:bg-slate-600 text-white px-3 py-2.5 rounded-lg cursor-pointer text-sm font-medium flex items-center justify-center shrink-0 transition">
+                        <button type="button" onclick="document.getElementById('thumbnail-file-input').click()" class="bg-slate-700 hover:bg-slate-600 text-white px-3 py-2.5 rounded-lg text-sm font-medium shrink-0 transition">
                             📁 Chọn Ảnh
-                            <input type="file" id="thumbnail-file-input" accept="image/*" class="hidden" onchange="uploadThumbnail(this)">
-                        </label>
+                        </button>
+                        <input type="file" id="thumbnail-file-input" accept="image/*" class="hidden" onchange="uploadThumbnail(this)">
                     </div>
                 </div>
                 <div>
@@ -213,7 +213,7 @@
             }
         }
 
-        // Tự động upload ảnh đại diện lên GitHub khi bấm nút "📁 Chọn Ảnh"
+        // Tự động upload ảnh đại diện lên GitHub khi chọn file
         async function uploadThumbnail(input) {
             if (!input.files || !input.files[0]) return;
             let file = input.files[0];
@@ -255,8 +255,6 @@
                     });
 
                     if (res.ok) {
-                        let resultData = await res.json();
-                        // Gán đường dẫn tuyệt đối vào ô Ảnh Đại Diện
                         let imagePath = `/${path.replace('public/', '')}`;
                         document.getElementById('post-image').value = imagePath;
                         statusEl.className = "text-sm font-medium text-green-400";
@@ -369,4 +367,3 @@ ${htmlContent}`;
     </script>
 </body>
 </html>
-
