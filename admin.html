@@ -44,7 +44,7 @@
                 <div>
                     <label class="block text-sm font-medium mb-1">Ảnh Đại Diện (Image URL)</label>
                     <div class="flex space-x-2">
-                        <input type="text" id="post-image" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" value="/images/uploads/sample.jpg" placeholder="/images/uploads/...">
+                        <input type="text" id="post-image" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" value="https://raw.githubusercontent.com/ththie/xe-gia-re/main/public/images/uploads/sample.jpg" placeholder="https://...">
                         <button type="button" onclick="document.getElementById('thumbnail-file-input').click()" class="bg-slate-700 hover:bg-slate-600 text-white px-3 py-2.5 rounded-lg text-sm font-medium shrink-0 transition">
                             📁 Chọn Ảnh
                         </button>
@@ -111,7 +111,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-1">THƯ MỤC (FOLDER)</label>
-                    <input type="text" id="cfg-folder" value="content/posts" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500">
+                    <input type="text" id="cfg-folder" value="content" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500">
                 </div>
             </div>
             <div class="flex space-x-3 pt-2">
@@ -165,7 +165,7 @@
             document.getElementById('cfg-owner').value = localStorage.getItem('gh_owner') || 'ththie';
             document.getElementById('cfg-repo').value = localStorage.getItem('gh_repo') || 'xe-gia-re';
             document.getElementById('cfg-branch').value = localStorage.getItem('gh_branch') || 'main';
-            document.getElementById('cfg-folder').value = localStorage.getItem('gh_folder') || 'content/posts';
+            document.getElementById('cfg-folder').value = localStorage.getItem('gh_folder') || 'content';
         };
 
         function saveSettings() {
@@ -213,7 +213,7 @@
             }
         }
 
-        // Tự động upload ảnh đại diện lên GitHub khi chọn file
+        // Tự động upload ảnh đại diện và trả về link tuyệt đối https://...
         async function uploadThumbnail(input) {
             if (!input.files || !input.files[0]) return;
             let file = input.files[0];
@@ -255,7 +255,8 @@
                     });
 
                     if (res.ok) {
-                        let imagePath = `/${path.replace('public/', '')}`;
+                        // Tự động tạo link tuyệt đối https://raw.githubusercontent.com/... chuẩn xác 100%
+                        let imagePath = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${path}`;
                         document.getElementById('post-image').value = imagePath;
                         statusEl.className = "text-sm font-medium text-green-400";
                         statusEl.innerText = "🎉 Tải ảnh đại diện thành công!";
@@ -303,9 +304,9 @@
             statusEl.className = "text-sm font-medium text-yellow-400";
             statusEl.innerText = "Đang đẩy bài viết lên GitHub...";
 
-            let filename = `${slug}.md`;
-            let path = `${folder}/${filename}`;
             let dateStr = new Date().toISOString().split('T')[0];
+            let filename = `${dateStr}-${slug}.md`;
+            let path = `${folder}/${filename}`;
 
             let fileContent = `---
 title: "${title}"
