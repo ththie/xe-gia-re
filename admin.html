@@ -22,32 +22,31 @@
                 <div class="bg-blue-600 text-white font-bold px-3 py-2 rounded-lg text-lg">XW</div>
                 <h1 class="text-xl font-bold">Xenow Admin Panel</h1>
             </div>
-            <nav class="flex space-x-2">
-                <button onclick="switchTab('create')" id="tab-btn-create" class="px-4 py-2 rounded-lg font-medium bg-blue-600 text-white transition">Tạo Bài Viết</button>
-                <button onclick="switchTab('bulk')" id="tab-btn-bulk" class="px-4 py-2 rounded-lg font-medium bg-slate-700 text-slate-300 hover:bg-slate-600 transition">Cập Nhật Bài Cũ</button>
-                <button onclick="switchTab('settings')" id="tab-btn-settings" class="px-4 py-2 rounded-lg font-medium bg-slate-700 text-slate-300 hover:bg-slate-600 transition">Cấu Hình</button>
+            <nav class="flex flex-wrap gap-2">
+                <button onclick="switchTab('create')" id="tab-btn-create" class="px-3.5 py-2 rounded-lg font-medium bg-blue-600 text-white transition">Tạo Bài Mới</button>
+                <button onclick="switchTab('edit-list')" id="tab-btn-edit-list" class="px-3.5 py-2 rounded-lg font-medium bg-slate-700 text-slate-300 hover:bg-slate-600 transition">Sửa Bài Cũ</button>
+                <button onclick="switchTab('settings')" id="tab-btn-settings" class="px-3.5 py-2 rounded-lg font-medium bg-slate-700 text-slate-300 hover:bg-slate-600 transition">Cấu Hình</button>
             </nav>
         </header>
 
         <!-- Tab: Tạo Bài Viết -->
         <section id="tab-create" class="space-y-4 bg-slate-800 p-5 rounded-xl border border-slate-700 shadow-lg">
-            <h2 class="text-lg font-semibold text-blue-400">✍️ Soạn và Đăng Bài Viết Mới (Chuẩn WordPress)</h2>
+            <h2 id="form-heading" class="text-lg font-semibold text-blue-400">✍️ Soạn và Đăng Bài Viết Mới</h2>
+            <input type="hidden" id="edit-filename" value="">
             <div>
                 <label class="block text-sm font-medium mb-1">Tiêu Đề Bài Viết (Title)</label>
                 <input type="text" id="post-title" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" placeholder="Nhập tiêu đề bài viết...">
             </div>
             <div>
-                <label class="block text-sm font-medium mb-1">Đường Dẫn URL (Slug)</label>
-                <input type="text" id="post-slug" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" placeholder="duong-dan-bai-viet (tự động tạo từ tiêu đề)">
+                <label class="block text-sm font-medium mb-1">Đường Dẫn URL (Slug - Tên file)</label>
+                <input type="text" id="post-slug" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" placeholder="duong-dan-bai-viet">
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-medium mb-1">Ảnh Đại Diện (Image URL)</label>
                     <div class="flex space-x-2">
-                        <input type="text" id="post-image" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" value="https://raw.githubusercontent.com/ththie/xe-gia-re/main/public/images/uploads/sample.jpg" placeholder="https://...">
-                        <button type="button" onclick="document.getElementById('thumbnail-file-input').click()" class="bg-slate-700 hover:bg-slate-600 text-white px-3 py-2.5 rounded-lg text-sm font-medium shrink-0 transition">
-                            📁 Chọn Ảnh
-                        </button>
+                        <input type="text" id="post-image" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" placeholder="https://...">
+                        <button type="button" onclick="document.getElementById('thumbnail-file-input').click()" class="bg-slate-700 hover:bg-slate-600 text-white px-3 py-2.5 rounded-lg text-sm font-medium shrink-0 transition">📁 Chọn Ảnh</button>
                         <input type="file" id="thumbnail-file-input" accept="image/*" class="hidden" onchange="uploadThumbnail(this)">
                     </div>
                 </div>
@@ -56,7 +55,7 @@
                     <div class="flex items-center space-x-3 mt-2.5">
                         <label class="flex items-center space-x-2 cursor-pointer">
                             <input type="checkbox" id="post-featured" class="w-4 h-4 text-blue-600 bg-slate-900 border-slate-700 rounded focus:ring-blue-500">
-                            <span class="text-sm font-medium text-slate-200">📌 Ghim bài viết này (Featured/Pinned)</span>
+                            <span class="text-sm font-medium text-slate-200">📌 Ghim bài viết này (Featured)</span>
                         </label>
                     </div>
                 </div>
@@ -64,32 +63,39 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-medium mb-1">Mô Tả Ngắn (Excerpt)</label>
-                    <textarea id="post-excerpt" rows="3" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" placeholder="Tóm tắt ngắn gọn cho SEO..."></textarea>
+                    <textarea id="post-excerpt" rows="3" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" placeholder="Tóm tắt ngắn gọn..."></textarea>
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-1">Từ Khóa SEO (Keywords)</label>
-                    <input type="text" id="post-keywords" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" placeholder="thuê xe, sài gòn vũng tàu...">
+                    <input type="text" id="post-keywords" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" placeholder="thuê xe, sài gòn...">
                 </div>
             </div>
             <div>
                 <label class="block text-sm font-medium mb-1">Nội Dung Chi Tiết (Trực Quan)</label>
                 <div id="editor-container"></div>
             </div>
-            <button onclick="publishPost()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg shadow transition">🚀 Đăng Bài Lên GitHub & Vercel</button>
+            <div class="flex space-x-3">
+                <button onclick="publishPost()" id="btn-submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg shadow transition">🚀 Đăng Bài Lên GitHub</button>
+                <button onclick="resetForm()" id="btn-cancel-edit" class="hidden px-5 bg-slate-700 hover:bg-slate-600 text-white font-medium py-3 rounded-lg shadow transition">Hủy Sửa</button>
+            </div>
             <div id="create-status" class="text-sm font-medium"></div>
         </section>
 
-        <!-- Tab: Cập Nhật Bài Cũ -->
-        <section id="tab-bulk" class="hidden space-y-4 bg-slate-800 p-5 rounded-xl border border-slate-700 shadow-lg">
-            <h2 class="text-lg font-semibold text-blue-400">🔄 Tối Ưu & Cập Nhật Hàng Loạt Bài Cũ</h2>
-            <p class="text-sm text-slate-400">Tính năng này sẽ quét toàn bộ kho GitHub để tìm các bài viết cũ và tự động chuẩn hóa lại cấu trúc SEO.</p>
-            <button onclick="runBulkUpdate()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2.5 rounded-lg shadow transition">⚡ Chạy Cập Nhật Hàng Loạt</button>
-            <div id="bulk-status" class="text-sm font-medium space-y-2 pt-2"></div>
+        <!-- Tab: Danh Sách Sửa Bài Cũ -->
+        <section id="tab-edit-list" class="hidden space-y-4 bg-slate-800 p-5 rounded-xl border border-slate-700 shadow-lg">
+            <div class="flex justify-between items-center">
+                <h2 class="text-lg font-semibold text-blue-400">📝 Danh Sách Bài Viết Đã Đăng</h2>
+                <button onclick="loadArticlesList()" class="bg-slate-700 hover:bg-slate-600 text-white text-xs px-3 py-1.5 rounded-lg transition">🔄 Tải Lại Danh Sách</button>
+            </div>
+            <p class="text-sm text-slate-400">Bấm vào nút "Chỉnh Sửa" ở bài viết bất kỳ để nạp nội dung lên form và cập nhật ngay lập tức.</p>
+            <div id="articles-container" class="space-y-2.5 max-h-[500px] overflow-y-auto pr-1">
+                <p class="text-sm text-slate-500">Chưa tải danh sách. Vui lòng bấm "Tải Lại Danh Sách" hoặc chuyển qua tab này.</p>
+            </div>
         </section>
 
         <!-- Tab: Cấu Hình -->
         <section id="tab-settings" class="hidden space-y-4 bg-slate-800 p-5 rounded-xl border border-slate-700 shadow-lg">
-            <h2 class="text-lg font-semibold text-blue-400">⚙️ Cấu Hình GitHub Kết Nối Trực Tiếp</h2>
+            <h2 class="text-lg font-semibold text-blue-400">⚙️ Cấu Hình GitHub</h2>
             <div>
                 <label class="block text-sm font-medium mb-1">GITHUB PERSONAL ACCESS TOKEN (PAT)</label>
                 <input type="password" id="cfg-token" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" placeholder="ghp_...">
@@ -122,7 +128,7 @@
         </section>
     </div>
 
-    <!-- Nhúng thư viện Quill Editor -->
+    <!-- Nhúng Quill Editor -->
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
     <script>
         const quill = new Quill('#editor-container', {
@@ -139,8 +145,9 @@
             }
         });
 
-        // Tự động sinh slug từ tiêu đề
+        // Tự động sinh slug nếu đang tạo bài mới
         document.getElementById('post-title').addEventListener('input', function() {
+            if (document.getElementById('edit-filename').value) return; // Đang sửa bài thì không tự đổi slug
             let title = this.value;
             let slug = title.toLowerCase()
                 .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
@@ -152,12 +159,16 @@
         });
 
         function switchTab(tabName) {
-            ['create', 'bulk', 'settings'].forEach(t => {
+            ['create', 'edit-list', 'settings'].forEach(t => {
                 document.getElementById('tab-' + t).classList.add('hidden');
-                document.getElementById('tab-btn-' + t).className = "px-4 py-2 rounded-lg font-medium bg-slate-700 text-slate-300 hover:bg-slate-600 transition";
+                document.getElementById('tab-btn-' + t).className = "px-3.5 py-2 rounded-lg font-medium bg-slate-700 text-slate-300 hover:bg-slate-600 transition";
             });
             document.getElementById('tab-' + tabName).classList.remove('hidden');
-            document.getElementById('tab-btn-' + tabName).className = "px-4 py-2 rounded-lg font-medium bg-blue-600 text-white transition";
+            document.getElementById('tab-btn-' + tabName).className = "px-3.5 py-2 rounded-lg font-medium bg-blue-600 text-white transition";
+            
+            if (tabName === 'edit-list') {
+                loadArticlesList();
+            }
         }
 
         window.onload = function() {
@@ -174,10 +185,6 @@
             localStorage.setItem('gh_repo', document.getElementById('cfg-repo').value.trim());
             localStorage.setItem('gh_branch', document.getElementById('cfg-branch').value.trim());
             localStorage.setItem('gh_folder', document.getElementById('cfg-folder').value.trim());
-            
-            let status = document.getElementById('settings-status');
-            status.className = "text-sm font-medium text-green-400";
-            status.innerText = "Đã lưu cấu hình thành công!";
         }
 
         async function testConnection() {
@@ -205,15 +212,140 @@
                     status.innerText = "Kết nối GitHub thành công!";
                 } else {
                     status.className = "text-sm font-medium text-red-400";
-                    status.innerText = "Lỗi kết nối: Sai Token hoặc không có quyền truy cập repo!";
+                    status.innerText = "Lỗi kết nối: Sai Token hoặc sai tên kho!";
                 }
             } catch (err) {
                 status.className = "text-sm font-medium text-red-400";
-                status.innerText = "Lỗi mạng hoặc bị chặn CORS!";
+                status.innerText = "Lỗi mạng!";
             }
         }
 
-        // Tự động upload ảnh đại diện và trả về link tuyệt đối https://...
+        // Tải danh sách bài viết từ thư mục content/ trên GitHub
+        async function loadArticlesList() {
+            saveSettings();
+            let token = localStorage.getItem('gh_token');
+            let owner = localStorage.getItem('gh_owner');
+            let repo = localStorage.getItem('gh_repo');
+            let branch = localStorage.getItem('gh_branch');
+            let folder = localStorage.getItem('gh_folder') || 'content';
+            let container = document.getElementById('articles-container');
+
+            if (!token) {
+                container.innerHTML = "<p class='text-sm text-red-400'>Vui lòng nhập Token ở phần Cấu Hình trước!</p>";
+                return;
+            }
+
+            container.innerHTML = "<p class='text-sm text-yellow-400'>Đang tải danh sách bài viết...</p>";
+
+            try {
+                let res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${folder}?ref=${branch}`, {
+                    headers: { 'Authorization': `token ${token}` }
+                });
+
+                if (!res.ok) throw new Error("Không thể đọc thư mục bài viết");
+
+                let files = await res.json();
+                let mdFiles = files.filter(f => f.name.endsWith('.md')).sort().reverse();
+
+                if (mdFiles.length === 0) {
+                    container.innerHTML = "<p class='text-sm text-slate-400'>Chưa có bài viết nào trong thư mục.</p>";
+                    return;
+                }
+
+                let html = '';
+                for (let file of mdFiles) {
+                    html += `
+                        <div class="flex justify-between items-center bg-slate-900 p-3 rounded-lg border border-slate-700 hover:border-blue-500 transition">
+                            <div class="truncate mr-3">
+                                <p class="text-sm font-semibold text-slate-200 truncate">${file.name}</p>
+                            </div>
+                            <button onclick="editArticle('${file.path}', '${file.name}')" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1.5 rounded font-medium shrink-0 transition">✏️ Chỉnh Sửa</button>
+                        </div>
+                    `;
+                }
+                container.innerHTML = html;
+            } catch (err) {
+                container.innerHTML = `<p class='text-sm text-red-400'>Lỗi tải danh sách: ${err.message}</p>`;
+            }
+        }
+
+        // Đọc nội dung một bài viết cũ để đưa lên form chỉnh sửa
+        async function editArticle(path, filename) {
+            let token = localStorage.getItem('gh_token');
+            let owner = localStorage.getItem('gh_owner');
+            let repo = localStorage.getItem('gh_repo');
+            let branch = localStorage.getItem('gh_branch');
+
+            let statusEl = document.getElementById('create-status');
+            statusEl.className = "text-sm font-medium text-yellow-400";
+            statusEl.innerText = `Đang tải nội dung file ${filename}...`;
+
+            try {
+                let res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`, {
+                    headers: { 'Authorization': `token ${token}` }
+                });
+                if (!res.ok) throw new Error("Không tải được nội dung file");
+
+                let fileData = await res.json();
+                let content = decodeURIComponent(escape(atob(fileData.content)));
+
+                // Phân tích Frontmatter (YAML) và Nội dung HTML
+                let parts = content.split('---');
+                if (parts.length >= 3) {
+                    let frontmatter = parts[1];
+                    let bodyHtml = parts.slice(2).join('---').trim();
+
+                    // Parse các trường cơ bản
+                    let titleMatch = frontmatter.match(/title:\s*"([^"]*)"/);
+                    let imageMatch = frontmatter.match(/image:\s*"([^"]*)"/);
+                    let featuredMatch = frontmatter.match(/featured:\s*(true|false)/i);
+                    let descMatch = frontmatter.match(/description:\s*"([^"]*)"/);
+                    let kwMatch = frontmatter.match(/keywords:\s*"([^"]*)"/);
+
+                    document.getElementById('post-title').value = titleMatch ? titleMatch[1] : '';
+                    document.getElementById('post-slug').value = filename.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace(/\.md$/, '');
+                    document.getElementById('post-image').value = imageMatch ? imageMatch[1] : '';
+                    document.getElementById('post-featured').checked = featuredMatch ? (featuredMatch[1].toLowerCase() === 'true') : false;
+                    document.getElementById('post-excerpt').value = descMatch ? descMatch[1] : '';
+                    document.getElementById('post-keywords').value = kwMatch ? kwMatch[1] : '';
+                    quill.root.innerHTML = bodyHtml;
+
+                    // Lưu lại tên file cũ để biết là đang sửa bài hiện hữu
+                    document.getElementById('edit-filename').value = filename;
+
+                    // Đổi giao diện nút bấm
+                    document.getElementById('form-heading').innerText = "✏️ Đang Chỉnh Sửa Bài Viết: " + filename;
+                    document.getElementById('btn-submit').innerText = "💾 Lưu Lại Thay Đổi";
+                    document.getElementById('btn-cancel-edit').classList.remove('hidden');
+
+                    statusEl.innerText = "";
+                    switchTab('create');
+                } else {
+                    throw new Error("Cấu trúc file Markdown không hợp lệ");
+                }
+            } catch (err) {
+                statusEl.className = "text-sm font-medium text-red-400";
+                statusEl.innerText = "Lỗi tải bài viết: " + err.message;
+            }
+        }
+
+        function resetForm() {
+            document.getElementById('edit-filename').value = '';
+            document.getElementById('post-title').value = '';
+            document.getElementById('post-slug').value = '';
+            document.getElementById('post-image').value = '';
+            document.getElementById('post-featured').checked = false;
+            document.getElementById('post-excerpt').value = '';
+            document.getElementById('post-keywords').value = '';
+            quill.root.innerHTML = '';
+
+            document.getElementById('form-heading').innerText = "✍️ Soạn và Đăng Bài Viết Mới";
+            document.getElementById('btn-submit').innerText = "🚀 Đăng Bài Lên GitHub";
+            document.getElementById('btn-cancel-edit').classList.add('hidden');
+            document.getElementById('create-status').innerText = "";
+        }
+
+        // Tự động upload ảnh đại diện
         async function uploadThumbnail(input) {
             if (!input.files || !input.files[0]) return;
             let file = input.files[0];
@@ -226,7 +358,7 @@
 
             if (!token) {
                 switchTab('settings');
-                alert("Vui lòng vào phần Cấu Hình để nhập thông tin GitHub trước khi tải ảnh lên!");
+                alert("Vui lòng nhập Token GitHub trước!");
                 return;
             }
 
@@ -255,7 +387,6 @@
                     });
 
                     if (res.ok) {
-                        // Tự động tạo link tuyệt đối https://raw.githubusercontent.com/... chuẩn xác 100%
                         let imagePath = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${path}`;
                         document.getElementById('post-image').value = imagePath;
                         statusEl.className = "text-sm font-medium text-green-400";
@@ -263,11 +394,11 @@
                     } else {
                         let errJson = await res.json();
                         statusEl.className = "text-sm font-medium text-red-400";
-                        statusEl.innerText = "Lỗi tải ảnh: " + (errJson.message || 'Không rõ nguyên nhân');
+                        statusEl.innerText = "Lỗi tải ảnh: " + (errJson.message || '');
                     }
                 } catch (err) {
                     statusEl.className = "text-sm font-medium text-red-400";
-                    statusEl.innerText = "Lỗi kết nối mạng khi tải ảnh: " + err.message;
+                    statusEl.innerText = "Lỗi kết nối khi tải ảnh.";
                 }
             };
             reader.readAsDataURL(file);
@@ -288,24 +419,26 @@
             let excerpt = document.getElementById('post-excerpt').value.trim();
             let keywords = document.getElementById('post-keywords').value.trim();
             let htmlContent = quill.root.innerHTML;
+            let editingFile = document.getElementById('edit-filename').value;
             let statusEl = document.getElementById('create-status');
 
             if (!token) {
                 switchTab('settings');
-                alert("Vui lòng vào phần Cấu Hình để nhập thông tin GitHub trước!");
+                alert("Vui lòng nhập Token GitHub!");
                 return;
             }
             if (!title || !slug) {
                 statusEl.className = "text-sm font-medium text-red-400";
-                statusEl.innerText = "Vui lòng điền tiêu đề và đường dẫn (slug)!";
+                statusEl.innerText = "Vui lòng điền tiêu đề và slug!";
                 return;
             }
 
             statusEl.className = "text-sm font-medium text-yellow-400";
-            statusEl.innerText = "Đang đẩy bài viết lên GitHub...";
+            statusEl.innerText = "Đang lưu bài viết lên GitHub...";
 
+            // Nếu đang sửa bài cũ, giữ nguyên ngày tháng cũ hoặc lấy ngày hiện tại nếu tạo mới
             let dateStr = new Date().toISOString().split('T')[0];
-            let filename = `${dateStr}-${slug}.md`;
+            let filename = editingFile ? editingFile : `${dateStr}-${slug}.md`;
             let path = `${folder}/${filename}`;
 
             let fileContent = `---
@@ -332,7 +465,7 @@ ${htmlContent}`;
                 }
 
                 let bodyData = {
-                    message: `Admin: Create/Update post ${filename}`,
+                    message: `Admin: Update/Create post ${filename}`,
                     content: contentEncoded,
                     branch: branch
                 };
@@ -349,21 +482,17 @@ ${htmlContent}`;
 
                 if (res.ok) {
                     statusEl.className = "text-sm font-medium text-green-400";
-                    statusEl.innerText = "🎉 Đăng bài thành công! Vercel đang tự động cập nhật website...";
+                    statusEl.innerText = "🎉 Cập nhật bài viết thành công! Website sẽ tự động đồng bộ sau ít phút.";
+                    if (!editingFile) resetForm();
                 } else {
                     let errJson = await res.json();
                     statusEl.className = "text-sm font-medium text-red-400";
-                    statusEl.innerText = "Lỗi từ GitHub: " + (errJson.message || 'Không rõ nguyên nhân');
+                    statusEl.innerText = "Lỗi từ GitHub: " + (errJson.message || '');
                 }
             } catch (err) {
                 statusEl.className = "text-sm font-medium text-red-400";
                 statusEl.innerText = "Lỗi kết nối mạng: " + err.message;
             }
-        }
-
-        async function runBulkUpdate() {
-            let status = document.getElementById('bulk-status');
-            status.innerHTML = "<span class='text-green-400 font-bold'>🎉 Hệ thống quản lý bài viết đã sẵn sàng!</span>";
         }
     </script>
 </body>
