@@ -49,7 +49,6 @@
                         <button type="button" onclick="document.getElementById('thumbnail-file-input').click()" class="bg-slate-700 hover:bg-slate-600 text-white px-3 py-2.5 rounded-lg text-sm font-medium shrink-0 transition">📁 Chọn Ảnh</button>
                         <input type="file" id="thumbnail-file-input" accept="image/*" class="hidden" onchange="uploadThumbnail(this)">
                     </div>
-                    <p class="text-xs text-slate-400 mt-1">💡 Hỗ trợ dán link trực tiếp (tự động lọc thẻ rác) hoặc chọn ảnh dự phòng từ thiết bị.</p>
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-1">Trạng Thái Bài Viết</label>
@@ -72,9 +71,16 @@
                 </div>
             </div>
             <div>
-                <label class="block text-sm font-medium mb-1">Nội Dung Chi Tiết (Trực Quan)</label>
+                <div class="flex justify-between items-center mb-1">
+                    <label class="block text-sm font-medium">Nội Dung Chi Tiết (Trực Quan)</label>
+                    <!-- Nút hỗ trợ chèn nhanh ảnh vào nội dung (Dán link hoặc chọn file trực tiếp) -->
+                    <div class="flex space-x-2">
+                        <button type="button" onclick="insertImageByLink()" class="bg-slate-700 hover:bg-slate-600 text-blue-400 text-xs px-2.5 py-1 rounded-lg transition font-medium">🔗 Dán Link Ảnh Vào Nội Dung</button>
+                        <button type="button" onclick="document.getElementById('content-file-input').click()" class="bg-slate-700 hover:bg-slate-600 text-emerald-400 text-xs px-2.5 py-1 rounded-lg transition font-medium">📁 Tải Ảnh Trực Tiếp</button>
+                        <input type="file" id="content-file-input" accept="image/*" class="hidden" onchange="uploadContentImage(this)">
+                    </div>
+                </div>
                 <div id="editor-container"></div>
-                <p class="text-xs text-slate-400 mt-1">💡 Dùng nút biểu tượng ảnh trên thanh công cụ để chèn ảnh nội dung, hoặc dùng nút mắt xích để gắn link URL vào văn bản.</p>
             </div>
             <div class="flex space-x-3">
                 <button onclick="publishPost()" id="btn-submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg shadow transition">🚀 Đăng Bài Lên GitHub</button>
@@ -147,25 +153,99 @@
             }
         });
 
-        // Hàm thông minh tự động lọc và làm sạch link ảnh đại diện nếu lỡ dán nhầm mã HTML
+        // Hàm chèn link ảnh trực tiếp vào vị trí con trỏ trong nội dung
+        function insertImageByLink() {
+            let url = prompt("Dán đường dẫn URL của ảnh vào đây:");
+            if (!url) return;
+            // Làm sạch link nếu lỡ dán nhầm mã HTML
+            if (url.includes('<img') || url.includes('src=')) {
+                let match = url.match(/src=["']([^"']+)["']/);
+                if (match && match[1]) url = match[1];
+            } else {
+                let matchHttp = url.match(/https?:\/\/[^\s"'<>]+/);
+                if (matchHttp) url = matchHttp[0];
+            }
+            
+            let range = quill.getSelection(true);
+            let index = range ? range.index : quill.getLength();
+            quill.insertEmbed(index, 'image', url.trim());
+            quill.setSelection(index + 1);
+        }
+
+        // Hàm tải ảnh trực tiếp từ thiết bị đưa thẳng vào nội dung bài viết
+        async function uploadContentImage(input) {
+            if (!input.files || !input.files[0]) return;
+            let file = input.files[0];
+            let token = localStorage.getItem('gh_token');
+            let owner = localStorage.getItem('gh_owner');
+            let repo = localStorage.getItem('gh_repo');
+            let branch = localStorage.getItem('gh_branch');
+            let statusEl = document.getElementById('create-status');
+
+            if (!token) {
+                switchTab('settings');
+                alert("Vui lòng nhập Token GitHub trước!");
+                return;
+            }
+
+            statusEl.className = "text-sm font-medium text-yellow-400";
+            statusEl.innerText = "Đang tải ảnh vào nội dung lên GitHub...";
+
+            let reader = new FileReader();
+            reader.onload = async function(e) {
+                let base64Content = e.target.result.split(',')[1];
+                let timestamp = Date.now();
+                let cleanFileName = file.name.toLowerCase().replace(/[^a-z0-9.]/g, '-');
+                let path = `public/images/uploads/${timestamp}-${cleanFileName}`;
+
+                try {
+                    let res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `token ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            message: `Admin: Upload content image ${cleanFileName}`,
+                            content: base64Content,
+                            branch: branch
+                        })
+                    });
+
+                    if (res.ok) {
+                        let imagePath = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${path}`;
+                        let range = quill.getSelection(true);
+                        let index = range ? range.index : quill.getLength();
+                        quill.insertEmbed(index, 'image', imagePath);
+                        quill.setSelection(index + 1);
+
+                        statusEl.className = "text-sm font-medium text-green-400";
+                        statusEl.innerText = "🎉 Chèn ảnh vào nội dung thành công!";
+                    } else {
+                        let errJson = await res.json();
+                        statusEl.className = "text-sm font-medium text-red-400";
+                        statusEl.innerText = "Lỗi tải ảnh: " + (errJson.message || '');
+                    }
+                } catch (err) {
+                    statusEl.className = "text-sm font-medium text-red-400";
+                    statusEl.innerText = "Lỗi kết nối khi tải ảnh.";
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Hàm lọc link ảnh đại diện
         function cleanImageUrl(input) {
             let val = input.value;
-            // Nếu phát hiện dán cả thẻ <img src="..."> thì trích xuất lấy đúng link bên trong
             if (val.includes('<img') || val.includes('src=')) {
                 let match = val.match(/src=["']([^"']+)["']/);
-                if (match && match[1]) {
-                    input.value = match[1];
-                }
+                if (match && match[1]) input.value = match[1];
             } else if (val.includes('http')) {
-                // Lấy đoạn chứa URL http bắt đầu từ http:// hoặc https://
                 let matchHttp = val.match(/https?:\/\/[^\s"'<>]+/);
-                if (matchHttp) {
-                    input.value = matchHttp[0];
-                }
+                if (matchHttp) input.value = matchHttp[0];
             }
         }
 
-        // Tự động sinh slug nếu đang tạo bài mới
         document.getElementById('post-title').addEventListener('input', function() {
             if (document.getElementById('edit-filename').value) return; 
             let title = this.value;
@@ -186,9 +266,7 @@
             document.getElementById('tab-' + tabName).classList.remove('hidden');
             document.getElementById('tab-btn-' + tabName).className = "px-3.5 py-2 rounded-lg font-medium bg-blue-600 text-white transition";
             
-            if (tabName === 'edit-list') {
-                loadArticlesList();
-            }
+            if (tabName === 'edit-list') loadArticlesList();
         }
 
         window.onload = function() {
@@ -322,7 +400,6 @@
                     document.getElementById('post-slug').value = filename.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace(/\.md$/, '');
                     let imgVal = imageMatch ? imageMatch[1] : '';
                     document.getElementById('post-image').value = imgVal;
-                    // Làm sạch ngay khi load bài cũ lên form
                     cleanImageUrl(document.getElementById('post-image'));
                     
                     document.getElementById('post-featured').checked = featuredMatch ? (featuredMatch[1].toLowerCase() === 'true') : false;
@@ -363,11 +440,9 @@
             document.getElementById('create-status').innerText = "";
         }
 
-        // Tải ảnh trực tiếp từ thiết bị lên GitHub (phương án dự phòng)
         async function uploadThumbnail(input) {
             if (!input.files || !input.files[0]) return;
             let file = input.files[0];
-            
             let token = localStorage.getItem('gh_token');
             let owner = localStorage.getItem('gh_owner');
             let repo = localStorage.getItem('gh_repo');
@@ -434,11 +509,10 @@
             let slug = document.getElementById('post-slug').value.trim();
             let imageField = document.getElementById('post-image');
             
-            // Đảm bảo trước khi đăng, link ảnh đã được làm sạch một lần nữa
             cleanImageUrl(imageField);
             let image = imageField.value.trim();
 
-            let featured = document.getElementById('post-featured').checked;
+            let featured = document.getElementById('post-featured-checked') ? document.getElementById('post-featured-checked').checked : document.getElementById('post-featured').checked;
             let excerpt = document.getElementById('post-excerpt').value.trim();
             let keywords = document.getElementById('post-keywords').value.trim();
             let htmlContent = quill.root.innerHTML;
