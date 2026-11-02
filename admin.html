@@ -12,6 +12,8 @@
         .ql-snow .ql-stroke { stroke: #cbd5e1; }
         .ql-snow .ql-fill { fill: #cbd5e1; }
         .ql-snow .ql-picker { color: #cbd5e1; }
+        /* Tối ưu hiển thị ảnh trong editor và khóa popup thô trên di động */
+        .ql-editor img { max-width: 100%; border-radius: 0.5rem; margin: 0.5rem 0; pointer-events: none; }
     </style>
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen">
@@ -153,7 +155,6 @@
             }
         });
 
-        // Hàm thông minh quét và làm sạch link ảnh triệt để
         function cleanImageUrl(input) {
             let val = input.value;
             if (!val) return;
@@ -172,7 +173,6 @@
             }
         }
 
-        // Hỗ trợ chèn link ảnh vào nội dung qua nút chuyên biệt
         function insertImageByLink() {
             let url = prompt("Dán đường dẫn URL của ảnh vào đây:");
             if (!url) return;
