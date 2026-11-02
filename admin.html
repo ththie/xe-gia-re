@@ -37,9 +37,15 @@
                 <label class="block text-sm font-medium mb-1">Tiêu Đề Bài Viết (Title)</label>
                 <input type="text" id="post-title" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" placeholder="Nhập tiêu đề bài viết...">
             </div>
-            <div>
-                <label class="block text-sm font-medium mb-1">Đường Dẫn URL (Slug - Tên file)</label>
-                <input type="text" id="post-slug" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" placeholder="duong-dan-bai-viet">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Đường Dẫn URL (Slug - Tên file)</label>
+                    <input type="text" id="post-slug" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" placeholder="duong-dan-bai-viet">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Ngày Đăng Bài (Date)</label>
+                    <input type="date" id="post-date" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500">
+                </div>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
@@ -177,6 +183,8 @@
             document.getElementById('cfg-repo').value = localStorage.getItem('gh_repo') || 'xe-gia-re';
             document.getElementById('cfg-branch').value = localStorage.getItem('gh_branch') || 'main';
             document.getElementById('cfg-folder').value = localStorage.getItem('gh_folder') || 'content';
+            
+            document.getElementById('post-date').value = new Date().toISOString().slice(0, 10);
         };
 
         function saveSettings() {
@@ -268,7 +276,7 @@
             }
         }
 
-        // Tối ưu hàm xử lý chọn file ảnh trực tiếp và chống xung đột ô input
+        // Xử lý upload ảnh độc lập, không bị kẹt hay dính ô input
         async function uploadThumbnail(input) {
             if (!input.files || !input.files[0]) return;
             let file = input.files[0];
@@ -290,7 +298,7 @@
             reader.onload = async function(e) {
                 let base64Content = e.target.result.split(',')[1];
                 let fileExt = file.name.split('.').pop();
-                let fileName = 'public/images/uploads/' + Date.now() + '-' + Math.random().toString(36.substring(2, 7)) + '.' + fileExt;
+                let fileName = 'public/images/uploads/' + Date.now() + '-' + Math.random().toString(36).substring(2, 7) + '.' + fileExt;
 
                 try {
                     let res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${fileName}`, {
@@ -307,14 +315,11 @@
                     });
 
                     if (!res.ok) throw new Error("Lỗi tải ảnh lên GitHub");
-                    let data = await res.json();
                     
                     let rawUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${fileName}`;
-                    
-                    // Gán trực tiếp giá trị chuẩn vào ô input, không bị xung đột gộp mảng
                     let imageInput = document.getElementById('post-image');
                     imageInput.value = rawUrl;
-                    imageInput.disabled = false; // Đảm bảo ô input luôn mở khóa tương tác
+                    imageInput.disabled = false;
 
                     statusEl.className = "text-sm font-medium text-green-400";
                     statusEl.innerText = "Tải ảnh thành công!";
@@ -326,7 +331,6 @@
             reader.readAsDataURL(file);
         }
 
-        // Đọc nội dung bài viết cũ để đưa lên form chỉnh sửa an toàn, chống kẹt ô input
         async function editArticle(path, filename) {
             let token = localStorage.getItem('gh_token');
             let owner = localStorage.getItem('gh_owner');
@@ -352,18 +356,19 @@
                     let bodyHtml = parts.slice(2).join('---').trim();
 
                     let titleMatch = frontmatter.match(/title:\s*"([^"]*)"/);
+                    let dateMatch = frontmatter.match(/date:\s*"([^"]*)"/);
                     let imageMatch = frontmatter.match(/image:\s*"([^"]*)"/);
                     let featuredMatch = frontmatter.match(/featured:\s*(true|false)/i);
                     let descMatch = frontmatter.match(/description:\s*"([^"]*)"/);
                     let kwMatch = frontmatter.match(/keywords:\s*"([^"]*)"/);
 
-                    // Chuẩn hóa gán giá trị từng trường rõ ràng, mở khóa tương tác ô input ảnh
                     let imageInput = document.getElementById('post-image');
                     imageInput.value = imageMatch ? imageMatch[1] : '';
                     imageInput.disabled = false;
 
                     document.getElementById('post-title').value = titleMatch ? titleMatch[1] : '';
                     document.getElementById('post-slug').value = filename.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace(/\.md$/, '');
+                    document.getElementById('post-date').value = dateMatch ? dateMatch[1] : new Date().toISOString().slice(0, 10);
                     document.getElementById('post-featured').checked = featuredMatch ? (featuredMatch[1].toLowerCase() === 'true') : false;
                     document.getElementById('post-excerpt').value = descMatch ? descMatch[1] : '';
                     document.getElementById('post-keywords').value = kwMatch ? kwMatch[1] : '';
@@ -390,6 +395,7 @@
             document.getElementById('edit-filename').value = '';
             document.getElementById('post-title').value = '';
             document.getElementById('post-slug').value = '';
+            document.getElementById('post-date').value = new Date().toISOString().slice(0, 10);
             let imageInput = document.getElementById('post-image');
             imageInput.value = '';
             imageInput.disabled = false;
@@ -415,6 +421,7 @@
 
             let title = document.getElementById('post-title').value.trim();
             let slug = document.getElementById('post-slug').value.trim();
+            let postDate = document.getElementById('post-date').value.trim() || new Date().toISOString().slice(0, 10);
             let image = document.getElementById('post-image').value.trim();
             let featured = document.getElementById('post-featured').checked;
             let description = document.getElementById('post-excerpt').value.trim();
@@ -434,13 +441,12 @@
                 return;
             }
 
-            let today = new Date().toISOString().slice(0, 10);
-            let filename = oldFilename ? oldFilename : `${today}-${slug}.md`;
+            let filename = oldFilename ? oldFilename : `${postDate}-${slug}.md`;
             let path = `${folder}/${filename}`;
 
             let fileContent = `---
 title: "${title}"
-date: "${today}"
+date: "${postDate}"
 image: "${image}"
 featured: ${featured}
 description: "${description}"
@@ -479,13 +485,13 @@ ${content}`;
                 };
                 if (sha) putBody.sha = sha;
 
-                let putRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+                let finalPutRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
                     method: 'PUT',
                     headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
                     body: JSON.stringify(putBody)
                 });
 
-                if (!putRes.ok) throw new Error("Không thể lưu bài viết lên GitHub");
+                if (!finalPutRes.ok) throw new Error("Không thể lưu bài viết lên GitHub");
 
                 statusEl.className = "text-sm font-medium text-green-400";
                 statusEl.innerText = "Đăng bài thành công tuyệt đối!";
