@@ -45,10 +45,11 @@
                 <div>
                     <label class="block text-sm font-medium mb-1">Ảnh Đại Diện (Image URL)</label>
                     <div class="flex space-x-2">
-                        <input type="text" id="post-image" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" placeholder="https://..." oninput="cleanImageUrl(this)">
+                        <input type="text" id="post-image" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" placeholder="https://..." oninput="cleanImageUrl(this)" onblur="cleanImageUrl(this)">
                         <button type="button" onclick="document.getElementById('thumbnail-file-input').click()" class="bg-slate-700 hover:bg-slate-600 text-white px-3 py-2.5 rounded-lg text-sm font-medium shrink-0 transition">📁 Chọn Ảnh</button>
                         <input type="file" id="thumbnail-file-input" accept="image/*" class="hidden" onchange="uploadThumbnail(this)">
                     </div>
+                    <p class="text-xs text-slate-400 mt-1">💡 Dán link trực tiếp (tự động lọc thẻ rác HTML) hoặc chọn ảnh từ thiết bị.</p>
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-1">Trạng Thái Bài Viết</label>
@@ -73,7 +74,6 @@
             <div>
                 <div class="flex justify-between items-center mb-1">
                     <label class="block text-sm font-medium">Nội Dung Chi Tiết (Trực Quan)</label>
-                    <!-- Nút hỗ trợ chèn nhanh ảnh vào nội dung (Dán link hoặc chọn file trực tiếp) -->
                     <div class="flex space-x-2">
                         <button type="button" onclick="insertImageByLink()" class="bg-slate-700 hover:bg-slate-600 text-blue-400 text-xs px-2.5 py-1 rounded-lg transition font-medium">🔗 Dán Link Ảnh Vào Nội Dung</button>
                         <button type="button" onclick="document.getElementById('content-file-input').click()" class="bg-slate-700 hover:bg-slate-600 text-emerald-400 text-xs px-2.5 py-1 rounded-lg transition font-medium">📁 Tải Ảnh Trực Tiếp</button>
@@ -153,11 +153,29 @@
             }
         });
 
-        // Hàm chèn link ảnh trực tiếp vào vị trí con trỏ trong nội dung
+        // Hàm thông minh quét và làm sạch link ảnh triệt để
+        function cleanImageUrl(input) {
+            let val = input.value;
+            if (!val) return;
+            if (val.includes('<img') || val.includes('src=')) {
+                let match = val.match(/src=["']([^"']+)["']/);
+                if (match && match[1]) {
+                    input.value = match[1];
+                } else {
+                    input.value = '';
+                }
+            } else if (val.includes('http')) {
+                let matchHttp = val.match(/https?:\/\/[^\s"'<>]+/);
+                if (matchHttp) {
+                    input.value = matchHttp[0];
+                }
+            }
+        }
+
+        // Hỗ trợ chèn link ảnh vào nội dung qua nút chuyên biệt
         function insertImageByLink() {
             let url = prompt("Dán đường dẫn URL của ảnh vào đây:");
             if (!url) return;
-            // Làm sạch link nếu lỡ dán nhầm mã HTML
             if (url.includes('<img') || url.includes('src=')) {
                 let match = url.match(/src=["']([^"']+)["']/);
                 if (match && match[1]) url = match[1];
@@ -172,7 +190,6 @@
             quill.setSelection(index + 1);
         }
 
-        // Hàm tải ảnh trực tiếp từ thiết bị đưa thẳng vào nội dung bài viết
         async function uploadContentImage(input) {
             if (!input.files || !input.files[0]) return;
             let file = input.files[0];
@@ -232,18 +249,6 @@
                 }
             };
             reader.readAsDataURL(file);
-        }
-
-        // Hàm lọc link ảnh đại diện
-        function cleanImageUrl(input) {
-            let val = input.value;
-            if (val.includes('<img') || val.includes('src=')) {
-                let match = val.match(/src=["']([^"']+)["']/);
-                if (match && match[1]) input.value = match[1];
-            } else if (val.includes('http')) {
-                let matchHttp = val.match(/https?:\/\/[^\s"'<>]+/);
-                if (matchHttp) input.value = matchHttp[0];
-            }
         }
 
         document.getElementById('post-title').addEventListener('input', function() {
@@ -398,9 +403,10 @@
 
                     document.getElementById('post-title').value = titleMatch ? titleMatch[1] : '';
                     document.getElementById('post-slug').value = filename.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace(/\.md$/, '');
-                    let imgVal = imageMatch ? imageMatch[1] : '';
-                    document.getElementById('post-image').value = imgVal;
-                    cleanImageUrl(document.getElementById('post-image'));
+                    
+                    let imgField = document.getElementById('post-image');
+                    imgField.value = imageMatch ? imageMatch[1] : '';
+                    cleanImageUrl(imgField);
                     
                     document.getElementById('post-featured').checked = featuredMatch ? (featuredMatch[1].toLowerCase() === 'true') : false;
                     document.getElementById('post-excerpt').value = descMatch ? descMatch[1] : '';
@@ -512,7 +518,7 @@
             cleanImageUrl(imageField);
             let image = imageField.value.trim();
 
-            let featured = document.getElementById('post-featured-checked') ? document.getElementById('post-featured-checked').checked : document.getElementById('post-featured').checked;
+            let featured = document.getElementById('post-featured').checked;
             let excerpt = document.getElementById('post-excerpt').value.trim();
             let keywords = document.getElementById('post-keywords').value.trim();
             let htmlContent = quill.root.innerHTML;
