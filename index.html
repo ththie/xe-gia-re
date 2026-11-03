@@ -52,7 +52,7 @@
         "addressLocality": "TP. Hồ Chí Minh",
         "countryAddress": "VN"
       },
-      "areaServed": ["Ho Chi Minh City", "Vung Tau", "Can Tho", "Dong Thap", "An Giang", "Phan Thiet", "Tay Ninh", "Binh Duong"],
+      "areaServed": ["Ho Chi Minh City", "Vung Tau", "Can Tho", "Dong Thap", "An Giang", "Phan Thiết", "Tay Ninh", "Binh Duong"],
       "description": "Dịch vụ đưa đón khách liên tỉnh bằng xe 7 chỗ Suzuki XL7 Hybrid đời mới, an toàn, tiết kiệm 30%."
     }
     </script>
@@ -160,7 +160,7 @@
             border-radius: 8px;
             margin-bottom: 10px;
             max-height: 480px;
-            overflow-y.auto;
+            overflow-y: auto;
         }
         .admin-panel h4 { margin: 0 0 6px 0; font-size: 12px; color: #856404; }
         .admin-panel input, .admin-panel select, .admin-panel textarea {
@@ -360,29 +360,40 @@
         .single-post-view { display: none; }
         .back-to-list-btn { background: #6c757d; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; margin-bottom: 15px; font-weight: bold; }
 
-        /* 🎯 TỐI ƯU HÌNH ẢNH TRONG BÀI VIẾT & CHÚ THÍCH THƯƠNG HIỆU HIỂN THỊ RÕ TRÊN ZALO / FB */
-        .img-caption-wrapper {
-            margin: 15px 0;
-            text-align: center;
-        }
-        .img-caption-wrapper img, #detailContent img {
+        /* 🎯 ẢNH TRONG BÀI VIẾT SẠCH SẼ NGUYÊN BẢN */
+        #detailContent img {
             width: 100% !important;
             max-width: 100% !important;
             max-height: 420px !important;
             object-fit: cover;
             border-radius: 8px;
-            margin: 5px 0 0 0 !important;
+            margin: 15px 0 !important;
             display: block !important;
             box-shadow: 0 3px 10px rgba(0,0,0,0.12);
             box-sizing: border-box;
         }
-        .img-brand-caption {
-            font-size: 11.5px;
-            color: #0066cc;
+
+        /* 🌟 KHUNG CHÂN TRANG BÀI VIẾT (ARTICLE FOOTER) CHUYÊN NGHIỆP TỰ ĐỘNG */
+        .article-brand-footer {
+            margin-top: 25px;
+            padding: 15px;
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-left: 4px solid #0066cc;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .article-brand-footer .abf-title {
             font-weight: bold;
-            margin-top: 4px;
-            display: block;
-            text-align: center;
+            color: #0066cc;
+            font-size: 14px;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+        .article-brand-footer p {
+            margin: 4px 0;
         }
 
         .site-footer {
@@ -702,7 +713,16 @@
             <button type="button" class="back-to-list-btn" onclick="backToList()">← Quay lại danh sách</button>
             <h2 id="detailTitle" style="color: #0066cc; font-size: 16px; margin-top: 5px; text-align: center;"></h2>
             <p id="detailDate" style="font-size: 11px; color: #888; font-style: italic; margin-bottom: 12px; text-align: center;"></p>
+            
+            <!-- 📄 NỘI DUNG BÀI VIẾT NGUYÊN BẢN -->
             <div id="detailContent" style="font-size: 14px; line-height: 1.7;"></div>
+
+            <!-- 🌟 KHUNG CHÂN TRANG THƯƠNG HIỆU TỰ ĐỘNG GẮN CỐ ĐỊNH MỌI BÀI VIẾT -->
+            <div class="article-brand-footer">
+                <div class="abf-title">DỊCH VỤ DI CHUYỂN TIẾT KIỆM - XENOW.VN</div>
+                <p>📍 Địa chỉ: 8/1A5 Đường Số 9, P. Hiệp Bình, TP. HCM</p>
+                <p>📞 Hotline/Zalo tư vấn nhanh: <b>0917918586</b></p>
+            </div>
         </div>
     </div>
 </div>
@@ -797,7 +817,6 @@
         });
     };
 
-    // 🚀 SỬA LỖI TẢI BÀI VIẾT: XỬ LÝ AN TOÀN CHO BÀI VIẾT TỪ GITHUB
     async function loadDecapArticles() {
         try {
             const repoOwner = "ththie";
@@ -915,7 +934,7 @@
         pageItems.forEach((post) => {
             let pinnedBadge = post.isFeatured ? `<span class="pinned-badge" title="Bài viết ghim nổi bật">📌</span>` : "";
 
-            // 🎯 GÁN ALT & TITLE THƯƠNG HIỆU CHO ẢNH THUMBNAIL NGOÀI DANH SÁCH
+            // 🎯 GÁN ALT & TITLE THƯƠNG HIỆU CHO THUMBNAIL NGOÀI DANH SÁCH
             html += `
                 <div class="post-card" onclick="viewSinglePost('${post.slug}')">
                     ${pinnedBadge}
@@ -991,11 +1010,8 @@
         document.getElementById('detailTitle').innerText = post.title;
         document.getElementById('detailDate').innerText = "📅 Ngày đăng: " + post.date;
         
-        // 🎯 TỰ ĐỘNG BỌC ẢNH VÀ HIỂN THỊ CHÚ THÍCH THƯƠNG HIỆU NGAY BÊN DƯỚI DÀNH CHO TRÌNH DUYỆT ZALO & FB
-        let processedBody = post.body.replace(/<img ([^>]+)>/g, function(match, p1) {
-            return `<div class="img-caption-wrapper"><img ${p1} alt="Dịch vụ đặt xe 4 - 7 chỗ XENOW.VN" title="Dịch vụ đặt xe 4 - 7 chỗ XENOW.VN"><span class="img-brand-caption">📷 Dịch vụ đặt xe 4 - 7 chỗ XENOW.VN</span></div>`;
-        });
-        document.getElementById('detailContent').innerHTML = processedBody;
+        // 🎯 GIỮ NGUYÊN NỘI DUNG ẢNH SẠCH SẼ, KHUNG CHÂN TRANG ĐÃ TỰ ĐỘNG CÓ SẴN BÊN DƯỚI
+        document.getElementById('detailContent').innerHTML = post.body;
 
         updateCornerButtonUI('post');
     }
