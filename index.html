@@ -439,7 +439,7 @@
 
     <!-- 📸 BANNER HÌNH ẢNH XE CHÍNH CHỦ -->
     <div class="hero-image-box" id="heroImageBox">
-        <img id="mainHeroImg" src="https://xenow.vn/og-image.jpg" alt="">
+        <img id="mainHeroImg" src="https://xenow.vn/og-image.jpg" alt="Dịch vụ đặt xe 4 - 7 chỗ XENOW.VN" title="Dịch vụ đặt xe 4 - 7 chỗ XENOW.VN">
     </div>
 
     <h2 ondblclick="toggleAdmin()">🚗 DỊCH VỤ DI CHUYỂN TIẾT KIỆM</h2>
@@ -827,6 +827,14 @@
                 return new Date(b.date || 0) - new Date(a.date || 0);
             });
 
+            let featuredCount = 0;
+            allPosts.forEach((post) => {
+                if (post.isFeatured) {
+                    featuredCount++;
+                    if (featuredCount > 1) post.isFeatured = false;
+                }
+            });
+
             renderPostsPage(1);
             checkUrlAndOpenPost();
 
@@ -895,10 +903,11 @@
         pageItems.forEach((post) => {
             let pinnedBadge = post.isFeatured ? `<span class="pinned-badge" title="Bài viết ghim nổi bật">📌</span>` : "";
 
+            // 🎯 GÁN ALT & TITLE THƯƠNG HIỆU CHO ẢNH THUMBNAIL NGOÀI DANH SÁCH
             html += `
                 <div class="post-card" onclick="viewSinglePost('${post.slug}')">
                     ${pinnedBadge}
-                    <img src="${post.image || 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=100'}" alt="Thumb">
+                    <img src="${post.image || 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=100'}" alt="Dịch vụ đặt xe 4 - 7 chỗ XENOW.VN" title="Dịch vụ đặt xe 4 - 7 chỗ XENOW.VN">
                     <div class="post-info">
                         <h4>${post.title || 'Bài viết'}</h4>
                         <p>${post.description || 'Xem chi tiết...'}</p>
@@ -969,7 +978,10 @@
         
         document.getElementById('detailTitle').innerText = post.title;
         document.getElementById('detailDate').innerText = "📅 Ngày đăng: " + post.date;
-        document.getElementById('detailContent').innerHTML = post.body;
+        
+        // 🎯 TỰ ĐỘNG GẮN THƯƠNG HIỆU VÀO MỌI THẺ ẢNH BÊN TRONG NỘI DUNG CHI TIẾT
+        let processedBody = post.body.replace(/<img /g, '<img alt="Dịch vụ đặt xe 4 - 7 chỗ XENOW.VN" title="Dịch vụ đặt xe 4 - 7 chỗ XENOW.VN" ');
+        document.getElementById('detailContent').innerHTML = processedBody;
 
         updateCornerButtonUI('post');
     }
@@ -1212,7 +1224,10 @@
             document.getElementById('adminHeroImgInput').value = heroImg;
         }
         if (heroImg && heroImg.trim() !== "") {
-            document.getElementById('mainHeroImg').src = heroImg;
+            let heroImgEl = document.getElementById('mainHeroImg');
+            heroImgEl.src = heroImg;
+            heroImgEl.alt = "Dịch vụ đặt xe 4 - 7 chỗ XENOW.VN";
+            heroImgEl.title = "Dịch vụ đặt xe 4 - 7 chỗ XENOW.VN";
             document.getElementById('heroImageBox').style.display = 'block';
         } else {
             document.getElementById('heroImageBox').style.display = 'none';
