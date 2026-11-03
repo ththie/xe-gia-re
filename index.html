@@ -369,12 +369,12 @@
         }
         .article-video-box iframe {
             width: 100%;
-            height: 250px;
+            height: 380px;
             border: none;
             display: block;
         }
         @media(min-width: 500px) {
-            .article-video-box iframe { height: 340px; }
+            .article-video-box iframe { height: 420px; }
         }
 
         .article-brand-footer {
@@ -703,7 +703,7 @@
             
             <div id="detailContent" style="font-size: 14px; line-height: 1.7;"></div>
 
-            <!-- 🎬 KHUNG HIỂN THỊ VIDEO TỰ ĐỘNG THEO TỪNG BÀI (NẾU CÓ LINK) -->
+            <!-- 🎬 KHUNG HIỂN THỊ VIDEO TỰ ĐỘNG THEO TỪNG BÀI -->
             <div id="detailVideoContainer"></div>
 
             <div class="article-brand-footer">
@@ -947,11 +947,14 @@
         }
     }
 
-    // 🎬 HÀM CHUYỂN ĐỔI LINK YOUTUBE THÀNH MÃ EMBED CHUẨN
+    // 🎬 HÀM TỰ ĐỘNG BẮT MỌI ĐỊNH DẠNG LINK YOUTUBE (KỂ CẢ SHORTS)
     function getYouTubeEmbedUrl(url) {
         if (!url) return "";
         let videoId = "";
-        if (url.includes('youtu.be/')) {
+        if (url.includes('/shorts/')) {
+            let parts = url.split('/shorts/');
+            if (parts[1]) videoId = parts[1].split('?')[0].split('/')[0];
+        } else if (url.includes('youtu.be/')) {
             videoId = url.split('youtu.be/')[1].split('?')[0];
         } else if (url.includes('watch?v=')) {
             videoId = url.split('watch?v=')[1].split('&')[0];
@@ -990,7 +993,7 @@
         document.getElementById('detailDate').innerText = "📅 Ngày đăng: " + post.date;
         document.getElementById('detailContent').innerHTML = post.body;
 
-        // 🎬 TỰ ĐỘNG HIỆN HOẶC ẨN KHUNG VIDEO DƯỚI CHÂN BÀI
+        // 🎬 XỬ LÝ HIỂN THỊ HOẶC ẨN KHUNG VIDEO
         let videoContainer = document.getElementById('detailVideoContainer');
         let embedUrl = getYouTubeEmbedUrl(post.video);
         if (embedUrl) {
