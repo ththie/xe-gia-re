@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="dynamicTitle">XENOW.VN - Di Chuyển Tiết Kiệm</title>
     
+    <!-- 🖼️ THẺ OPEN GRAPH: ĐÃ CỐ ĐỊNH ẢNH LOGO / XE MẶC ĐỊNH CHO TẤT CẢ CÁC LINK -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" id="ogUrl" content="https://xenow.vn/">
+    <meta property="og:title" id="ogTitle" content="XENOW.VN | Dịch Vụ Di Chuyển Tiết Kiệm">
+    <meta property="og:description" id="ogDesc" content="Thông tin tuyến đường & dịch vụ đưa đón liên tỉnh tiết kiệm. Hotline tư vấn nhanh: 0917 918 586.">
+    <!-- Anh có thể thay đổi link ảnh bên dưới thành link ảnh logo hoặc xe thực tế của anh -->
+    <meta property="og:image" id="ogImage" content="https://raw.githubusercontent.com/ththie/xe-gia-re/main/public/images/uploads/xe-suzuki-xl7.jpg">
+
     <style id="instant-theme-style">
         body { background: linear-gradient(135deg, #0f4c81 0%, #1b262c 100%) !important; }
     </style>
@@ -25,19 +33,13 @@
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://xenow.vn/">
 
-    <meta property="og:type" content="article">
-    <meta property="og:url" id="ogUrl" content="https://xenow.vn/">
-    <meta property="og:title" id="ogTitle" content="XENOW.VN | Dịch Vụ Di Chuyển Tiết Kiệm">
-    <meta property="og:description" id="ogDesc" content="Thông tin tuyến đường & dịch vụ đưa đón liên tỉnh tiết kiệm. Hotline tư vấn nhanh: 0917 918 586.">
-    <meta property="og:image" id="ogImage" content="https://xenow.vn/og-image.jpg">
-
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "TaxiService",
       "name": "Dịch Vụ Di Chuyển Tiết Kiệm XENOW.VN",
       "url": "https://xenow.vn/",
-      "logo": "https://xenow.vn/og-image.jpg",
+      "logo": "https://raw.githubusercontent.com/ththie/xe-gia-re/main/public/images/uploads/xe-suzuki-xl7.jpg",
       "telephone": "+84917918586",
       "priceRange": "12000VND - 15000VND",
       "address": {
@@ -357,7 +359,6 @@
             box-sizing: border-box;
         }
 
-        /* 🎬 KHUNG HIỂN THỊ VIDEO YOUTUBE DƯỚI CHÂN BÀI */
         .article-video-box {
             margin-top: 20px;
             margin-bottom: 15px;
@@ -456,7 +457,7 @@
     </div>
 
     <div class="hero-image-box" id="heroImageBox">
-        <img id="mainHeroImg" src="https://xenow.vn/og-image.jpg" alt="Dịch vụ đặt xe 4 - 7 chỗ XENOW.VN" title="Dịch vụ đặt xe 4 - 7 chỗ XENOW.VN">
+        <img id="mainHeroImg" src="https://raw.githubusercontent.com/ththie/xe-gia-re/main/public/images/uploads/xe-suzuki-xl7.jpg" alt="Dịch vụ đặt xe 4 - 7 chỗ XENOW.VN" title="Dịch vụ đặt xe 4 - 7 chỗ XENOW.VN">
     </div>
 
     <h2 ondblclick="toggleAdmin()">🚗 DỊCH VỤ DI CHUYỂN TIẾT KIỆM</h2>
@@ -480,7 +481,7 @@
         <div class="divider"></div>
         <h4>🖼️ Cấu hình Ảnh Banner & Chữ Chạy</h4>
         <div style="font-size: 11px; margin-bottom: 2px;">Link ảnh Banner (URL):</div>
-        <input type="text" id="adminHeroImgInput" placeholder="Dán link ảnh tại đây" value="https://xenow.vn/og-image.jpg">
+        <input type="text" id="adminHeroImgInput" placeholder="Dán link ảnh tại đây" value="https://raw.githubusercontent.com/ththie/xe-gia-re/main/public/images/uploads/xe-suzuki-xl7.jpg">
 
         <div style="font-size: 11px; margin-bottom: 2px;">Nội dung chữ chạy thông báo:</div>
         <input type="text" id="adminMarqueeText" value="🛡️ An toàn &nbsp;|&nbsp; ✨ Xe thơm sạch &nbsp;|&nbsp; 💰 Tiết kiệm 30% &nbsp;|&nbsp; ⏰ Đúng giờ 24/7">
@@ -703,7 +704,6 @@
             
             <div id="detailContent" style="font-size: 14px; line-height: 1.7;"></div>
 
-            <!-- 🎬 KHUNG HIỂN THỊ VIDEO TỰ ĐỘNG THEO TỪNG BÀI -->
             <div id="detailVideoContainer"></div>
 
             <div class="article-brand-footer">
@@ -947,7 +947,6 @@
         }
     }
 
-    // 🎬 HÀM TỰ ĐỘNG BẮT MỌI ĐỊNH DẠNG LINK YOUTUBE (KỂ CẢ SHORTS)
     function getYouTubeEmbedUrl(url) {
         if (!url) return "";
         let videoId = "";
@@ -977,11 +976,14 @@
 
         document.title = post.title + " - XENOW.VN";
         document.getElementById('ogTitle').setAttribute('content', post.title);
+        
         if (post.description) {
             document.getElementById('ogDesc').setAttribute('content', post.description);
             document.getElementById('metaDesc').setAttribute('content', post.description);
         }
-        if (post.image) document.getElementById('ogImage').setAttribute('content', post.image);
+        
+        // Luôn luôn dùng ảnh xe Suzuki XL7 hoặc ảnh mặc định thương hiệu để Zalo/Facebook hiển thị chuyên nghiệp tuyệt đối
+        document.getElementById('ogImage').setAttribute('content', 'https://raw.githubusercontent.com/ththie/xe-gia-re/main/public/images/uploads/xe-suzuki-xl7.jpg');
         document.getElementById('ogUrl').setAttribute('content', newUrl);
 
         document.getElementById('introArticleView').style.display = 'none';
@@ -993,7 +995,6 @@
         document.getElementById('detailDate').innerText = "📅 Ngày đăng: " + post.date;
         document.getElementById('detailContent').innerHTML = post.body;
 
-        // 🎬 XỬ LÝ HIỂN THỊ HOẶC ẨN KHUNG VIDEO
         let videoContainer = document.getElementById('detailVideoContainer');
         let embedUrl = getYouTubeEmbedUrl(post.video);
         if (embedUrl) {
@@ -1016,6 +1017,9 @@
         const newUrl = cleanBase + "?p=gioi-thieu";
         window.history.pushState({slug: "gioi-thieu"}, "", newUrl);
         document.title = "Giới Thiệu Dịch Vụ - XENOW.VN";
+        document.getElementById('ogTitle').setAttribute('content', "XENOW.VN | Dịch Vụ Di Chuyển Tiết Kiệm");
+        document.getElementById('ogImage').setAttribute('content', "https://raw.githubusercontent.com/ththie/xe-gia-re/main/public/images/uploads/xe-suzuki-xl7.jpg");
+        document.getElementById('ogUrl').setAttribute('content', newUrl);
         document.getElementById('seoInfoModal').style.display = 'flex';
         switchToIntro();
     }
@@ -1173,7 +1177,7 @@
         if (activeEl.id !== 'adminMarqueeText') document.getElementById('adminMarqueeText').value = marquee;
         document.getElementById('marqueeText').innerHTML = marquee;
 
-        let heroImg = data.heroImgUrl || "https://xenow.vn/og-image.jpg";
+        let heroImg = data.heroImgUrl || "https://raw.githubusercontent.com/ththie/xe-gia-re/main/public/images/uploads/xe-suzuki-xl7.jpg";
         if (activeEl.id !== 'adminHeroImgInput') document.getElementById('adminHeroImgInput').value = heroImg;
         if (heroImg && heroImg.trim() !== "") {
             document.getElementById('mainHeroImg').src = heroImg;
