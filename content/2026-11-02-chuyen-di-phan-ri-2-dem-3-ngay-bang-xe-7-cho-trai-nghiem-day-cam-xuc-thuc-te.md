@@ -2,6 +2,7 @@
 title: "Chuyến Đi Phan Rí 2 đêm 3 ngày Bằng Xe 7 Chỗ – Trải Nghiệm Đầy Cảm Xúc Thực Tế"
 date: "2026-11-03"
 image: "https://i.ibb.co/RGYMGw5K/IMG-20261029-122841-169.jpg"
+video: "https://youtube.com/shorts/BK25ghh-SdI?si=rHifdpz7hBGyswNY"
 featured: false
 description: "Nhật ký hành trình đưa đón khách chuyến đi Phan Rí 2 đêm 3 ngày bằng xe 7 chỗ. Chia sẻ trải nghiệm thực tế từ các cung đường ven biển tuyệt đẹp đến sự an tâm, thoải mái suốt chuyến đi."
 keywords: "Thuê xe 7 chỗ đi phan rí, xe 7 chỗ sài gòn phan rí, thuê xe đi phan rí 2 ngày 3 đêm, xe hợp đồng phan rí giá tốt"
