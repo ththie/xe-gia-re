@@ -249,7 +249,7 @@
             height: 92vh !important;
             max-height: 92vh !important;
             overflow-y: auto; 
-            padding: 40px 18px 75px 18px; 
+            padding: 40px 18px 25px 18px; 
             border-radius: 12px; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             position: relative; 
@@ -266,61 +266,24 @@
             display: flex; align-items: center; justify-content: center;
         }
         
-        /* 🚀 NÚT ĐẶT XE ĐƯỢC TỐI ƯU CỰC KỲ MẠNH MẼ, SÁNG CHÓI & HIỆU ỨNG NHẤP NHÁY */
+        /* 🚀 NÚT ĐẶT XE MÀU CAM GỐC - CÓ HIỆU ỨNG ĐỘNG NHẸ (PULSE) THU HÚT */
         .close-modal-btn.book-now-mode {
-            background: linear-gradient(135deg, #ff5722, #e64a19) !important;
+            background: linear-gradient(135deg, #ff9800, #f57c00) !important;
             width: auto !important;
             height: auto !important;
-            padding: 8px 16px !important;
-            border-radius: 20px !important;
-            font-size: 13px !important;
-            font-weight: 900 !important;
-            box-shadow: 0 4px 15px rgba(255, 87, 34, 0.5) !important;
+            padding: 7px 14px !important;
+            border-radius: 18px !important;
+            font-size: 12px !important;
+            font-weight: bold !important;
+            box-shadow: 0 3px 10px rgba(255, 152, 0, 0.4) !important;
             text-transform: uppercase;
-            letter-spacing: 0.8px;
-            animation: pulse-booking 1.5s infinite;
+            letter-spacing: 0.5px;
+            animation: soft-pulse 2s infinite;
         }
-        @keyframes pulse-booking {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 87, 34, 0.7); }
-            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 87, 34, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 87, 34, 0); }
-        }
-
-        /* 🚗 THANH ĐẶT XE CỐ ĐỊNH DƯỚI ĐÁY KHI ĐỌC BÀI VIẾT */
-        .article-bottom-action-bar {
-            display: none;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: linear-gradient(135deg, #0f4c81, #1b262c);
-            padding: 10px 15px;
-            box-sizing: border-box;
-            border-bottom-left-radius: 12px;
-            border-bottom-right-radius: 12px;
-            box-shadow: 0 -4px 15px rgba(0,0,0,0.15);
-            display: none;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1000;
-        }
-        .article-bottom-action-bar span {
-            color: #fff;
-            font-size: 12px;
-            font-weight: bold;
-        }
-        .btn-quick-book-footer {
-            background: linear-gradient(135deg, #ff9800, #f57c00);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 12px;
-            cursor: pointer;
-            box-shadow: 0 3px 10px rgba(255, 152, 0, 0.4);
-            text-transform: uppercase;
-            text-decoration: none;
+        @keyframes soft-pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.06); }
+            100% { transform: scale(1); }
         }
 
         .intro-article-box {
@@ -402,7 +365,7 @@
 
         .article-brand-footer {
             margin-top: 20px;
-            margin-bottom: 15px;
+            margin-bottom: 5px;
             padding: 15px;
             background: #f8f9fa;
             border: 1px solid #e0e0e0;
@@ -736,12 +699,6 @@
                 <p>☎️ Hotline: <b>0917 918 586</b></p>
             </div>
         </div>
-
-        <!-- 🚗 THANH CÔNG CỤ CỐ ĐỊNH DƯỚI ĐÁY: KÊU GỌI ĐẶT XE CỰC KỲ MẠNH MẼ -->
-        <div id="articleBottomBar" class="article-bottom-action-bar">
-            <span>🚗 Cần xe đi ngay, xe đẹp giá tốt?</span>
-            <button type="button" class="btn-quick-book-footer" onclick="scrollToBookingFromModal()">⚡ ĐẶT XE NGAY</button>
-        </div>
     </div>
 </div>
 
@@ -956,17 +913,14 @@
     function updateCornerButtonUI(mode) {
         currentModalMode = mode;
         const btn = document.getElementById('topCornerBtn');
-        const bottomBar = document.getElementById('articleBottomBar');
         if (!btn) return;
         
         if (mode === 'post') {
             btn.className = "close-modal-btn book-now-mode";
             btn.innerHTML = "⚡ ĐẶT XE NGAY";
-            if (bottomBar) bottomBar.style.display = 'flex';
         } else {
             btn.className = "close-modal-btn";
             btn.innerHTML = "✕";
-            if (bottomBar) bottomBar.style.display = 'none';
         }
     }
 
@@ -978,12 +932,6 @@
         } else {
             closeSeoModal();
         }
-    }
-
-    function scrollToBookingFromModal() {
-        closeSeoModal();
-        const bookingForm = document.getElementById('bookingForm');
-        if (bookingForm) bookingForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     function getYouTubeEmbedUrl(url) {
