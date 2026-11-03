@@ -32,8 +32,3 @@ Sân bay Tân Sơn Nhất ⇄ Bình Dương, Tây Ninh, Phan Thiết...
 
 Quý khách cần đặt xe đưa đón sân bay hoặc di chuyển liên tỉnh, hãy liên hệ ngay với chúng tôi để được phục vụ nhanh chóng và chu đáo nhất!
 
-DỊCH VỤ DI CHUYỂN TIẾT KIỆM - XENOW.VN
-
-📍 Địa chỉ: 8/1A5 Đường Số 9, P. Hiệp Bình, TP. HCM
-
-📞 Hotline/Zalo tư vấn nhanh: 0917918586
