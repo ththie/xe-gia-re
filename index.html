@@ -1345,75 +1345,8 @@
         document.getElementById('successCallLink').href = `tel:${currentPhone}`;
         document.getElementById('bookingForm').style.display = 'none';
         document.getElementById('successBox').style.display = 'block';
-    }    
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    const pickupInput = document.getElementById('pickupLocation');
-    const dropoffInput = document.getElementById('dropoffLocation');
-    const distanceInput = document.getElementById('distance');
-
-    let typingTimer;
-    const doneTypingInterval = 1000; // Đợi khách gõ xong 1 giây mới bắt đầu đo để đỡ lag web
-
-    function triggerAutoDistance() {
-        let pickup = pickupInput.value.trim();
-        let dropoff = dropoffInput.value.trim();
-
-        // Chỉ khi khách nhập cả 2 ô điểm đi và điểm đến thì mới tiến hành đo
-        if (pickup.length > 3 && dropoff.length > 3) {
-            // Gọi hàm API bản đồ mở miễn phí (Nominatim OpenStreetMap) để tìm tọa độ
-            Promise.all([
-                fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(pickup + ", Vietnam")}`).then(res => res.json()),
-                fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(dropoff + ", Vietnam")}`).then(res => res.json())
-            ]).then(([dataA, dataB]) => {
-                if (dataA && dataA.length > 0 && dataB && dataB.length > 0) {
-                    let lat1 = parseFloat(dataA[0].lat);
-                    let lon1 = parseFloat(dataA[0].lon);
-                    let lat2 = parseFloat(dataB[0].lat);
-                    let lon2 = parseFloat(dataB[0].lon);
-
-                    // Tính khoảng cách đường chim bay theo tọa độ
-                    let km = calculateHaversineDistance(lat1, lon1, lat2, lon2);
-                    
-                    // Nhân thêm hệ số đường bộ thực tế (thường đường đi thực tế dài hơn đường chim bay khoảng 20-25%)
-                    let actualKm = Math.round((km * 1.25) * 10) / 10;
-
-                    // Điền tự động vào ô Km và gọi hàm tính tiền có sẵn của web
-                    if (distanceInput) {
-                        distanceInput.value = actualKm;
-                        if (typeof calculatePrice === 'function') {
-                            calculatePrice();
-                        }
-                    }
-                }
-            }).catch(err => console.log("Lỗi đo khoảng cách tự động:", err));
-        }
-    }
-
-    // Hàm toán học tính khoảng cách giữa 2 điểm tọa độ GPS
-    function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
-        const R = 6371; // Bán kính trái đất tính bằng km
-        const dLat = (lat2 - lat1) * Math.PI / 180;
-        const dLon = (lon2 - lon1) * Math.PI / 180;
-        const a = 
-            Math.sin(dLat/2) * Math.sin(dLat/2) +
-            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
-            Math.sin(dLon/2) * Math.sin(dLon/2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        return R * c;
-    }
-
-    if (pickupInput && dropoffInput) {
-        pickupInput.addEventListener('input', function() {
-            clearTimeout(typingTimer);
-            typingTimer = setTimeout(triggerAutoDistance, doneTypingInterval);
-        });
-        dropoffInput.addEventListener('input', function() {
-            clearTimeout(typingTimer);
-            typingTimer = setTimeout(triggerAutoDistance, doneTypingInterval);
-        });
-    }
-});
+    } 
+    
 </script>
 </body>
 </html>
