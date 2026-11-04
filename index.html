@@ -708,7 +708,48 @@
     <p>🌐 Website: <a href="https://xenow.vn" target="_blank" style="color: #0066cc; text-decoration: none;">https://xenow.vn</a></p>
     <p>☎️ Hotline tư vấn nhanh: <b id="mainHotlineText">0917 918 586</b></p>
 </footer>
+<!-- Dãy biểu tượng mạng xã hội Facebook, YouTube, TikTok -->
+    <style>
+        .social-icons-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-top: 10px;
+            margin-bottom: 6px;
+        }
+        .social-icon-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: bold;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .social-icon-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .btn-fb { background: #1877f2; color: white; }
+        .btn-yt { background: #ff0000; color: white; font-size: 13px; }
+        .btn-tt { background: #010101; color: white; font-size: 13px; }
+    </style>
 
+    <div class="social-icons-row">
+        <!-- Facebook -->
+        <a href="https://facebook.com" target="_blank" class="social-icon-btn btn-fb" title="Facebook XENOW.VN">f</a>
+        
+        <!-- YouTube -->
+        <a href="https://youtube.com" target="_blank" class="social-icon-btn btn-yt" title="YouTube XENOW.VN">▶</a>
+        
+        <!-- TikTok -->
+        <a href="https://tiktok.com" target="_blank" class="social-icon-btn btn-tt" title="TikTok XENOW.VN">♪</a>
+    </div>
 <div id="floatingButtonsContainer" class="floating-container">
     <div class="sub-buttons-group">
         <button type="button" class="float-btn float-info" onclick="openSeoModal(); autoCloseMenu();" title="Mở danh mục bài viết">📖</button>
