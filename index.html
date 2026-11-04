@@ -1346,46 +1346,7 @@
         document.getElementById('bookingForm').style.display = 'none';
         document.getElementById('successBox').style.display = 'block';
     }
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    // Đơn giá mặc định cho xe Suzuki XL7 (Ví dụ: 14.000 VNĐ / km hoặc anh có thể thay đổi số này theo ý muốn)
-    const DON_GIA_KM = 14000; 
 
-    const selectTuyenNhanh = document.querySelector("#tuyen-nhanh"); // ID hoặc Class ô chọn tuyến nhanh
-    const inputKm = document.querySelector("#quang-duong"); // Ô hiển thị hoặc nhập số Km
-    const inputTien = document.querySelector("#du-kien-cuoc"); // Ô hiển thị số tiền dự kiến
-    const inputDiemDi = document.querySelector("#diem-di");
-    const inputDiemDen = document.querySelector("#diem-den");
-
-    // 1. Khi khách chọn tuyến đường nhanh có sẵn
-    if (selectTuyenNhanh) {
-        selectTuyenNhanh.addEventListener("change", function() {
-            let kmChuan = parseFloat(this.value) || 0; // Giả định giá trị option là số Km của tuyến
-            if (inputKm) inputKm.value = kmChuan;
-            tinhTienCuoc(kmChuan);
-        });
-    }
-
-    // 2. Khi khách tự nhập số Km hoặc hệ thống tự điền số Km đo được từ địa chỉ
-    if (inputKm) {
-        inputKm.addEventListener("input", function() {
-            let kmNhap = parseFloat(this.value) || 0;
-            tinhTienCuoc(kmNhap);
-        });
-    }
-
-    // 3. Hàm tính tiền tự động dựa trên số Km
-    function tinhTienCuoc(km) {
-        let tongTien = km * DON_GIA_KM;
-        // Làm tròn số tiền cho đẹp (ví dụ tròn đến hàng nghìn)
-        tongTien = Math.round(tongTien / 1000) * 1000;
-        
-        if (inputTien) {
-            // Định dạng hiển thị tiền Việt Nam (VNĐ)
-            inputTien.value = tongTien.toLocaleString('vi-VN') + " VNĐ";
-        }
-    }
-});
 </script>    
 
 </body>
