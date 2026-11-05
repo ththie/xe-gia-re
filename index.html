@@ -161,23 +161,9 @@
         .form-group { margin-bottom: 8px; }
         label { display: block; font-weight: bold; margin-bottom: 2px; font-size: 12px; color: #333; }
         
-        .route-group-container {
-            position: relative;
-            margin-bottom: 8px;
-            padding-left: 26px;
-        }
-        .route-line-dashed {
-            position: absolute;
-            left: 8px;
-            top: 22px;
-            bottom: 30px;
-            width: 0;
-            border-left: 2px dashed #a0aec0;
-            z-index: 1;
-        }
         .map-icon-svg {
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             flex-shrink: 0;
         }
 
@@ -591,31 +577,26 @@
             <input type="tel" id="customerPhone" placeholder="Nhập số điện thoại" required>
         </div>
 
-        <!-- Khung lộ trình Điểm đón & Điểm đến có đường nối nét đứt chuẩn ứng dụng đặt xe -->
-        <div class="route-group-container">
-            <div class="route-line-dashed"></div>
+        <!-- Điểm đón (Icon Map Xanh Lá nằm trước nhãn) -->
+        <div class="form-group">
+            <label for="pickupLocation" style="display: flex; align-items: center; gap: 6px;">
+                <svg class="map-icon-svg" viewBox="0 0 24 24" fill="#28a745">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                </svg>
+                <span>Điểm đón (Xuất phát)</span>
+            </label>
+            <input type="text" id="pickupLocation" placeholder="Nhập địa chỉ đón" required>
+        </div>
 
-            <!-- Điểm đón (Ghim Xanh Lá Vector) -->
-            <div class="form-group" style="position: relative; z-index: 2;">
-                <label for="pickupLocation" style="display: flex; align-items: center; gap: 6px;">
-                    <svg class="map-icon-svg" viewBox="0 0 24 24" fill="#28a745">
-                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                    </svg>
-                    <span>Điểm đón (Xuất phát)</span>
-                </label>
-                <input type="text" id="pickupLocation" placeholder="Nhập địa chỉ đón cụ thể tại Sài Gòn / Tỉnh" required>
-            </div>
-
-            <!-- Điểm đến (Ghim Đỏ Tươi Vector) -->
-            <div class="form-group" style="position: relative; z-index: 2; margin-top: 10px;">
-                <label for="dropoffLocation" style="display: flex; align-items: center; gap: 6px;">
-                    <svg class="map-icon-svg" viewBox="0 0 24 24" fill="#dc3545">
-                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                    </svg>
-                    <span>Điểm đến (Nơi cần tới)</span>
-                </label>
-                <input type="text" id="dropoffLocation" placeholder="Nhập địa chỉ điểm đến" required>
-            </div>
+        <!-- Điểm đến (Icon Map Đỏ Tươi nằm trước nhãn) -->
+        <div class="form-group">
+            <label for="dropoffLocation" style="display: flex; align-items: center; gap: 6px;">
+                <svg class="map-icon-svg" viewBox="0 0 24 24" fill="#dc3545">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                </svg>
+                <span>Điểm đến (Nơi cần tới)</span>
+            </label>
+            <input type="text" id="dropoffLocation" placeholder="Nhập địa chỉ đến" required>
         </div>
 
         <div class="datetime-row">
