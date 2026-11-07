@@ -471,6 +471,45 @@
         .float-call { background-color: #e53935; }
         .float-zalo { background-color: #0068ff; }
         .float-info { background-color: #009688; font-size: 17px; }
+
+        /* HIỆU ỨNG NGÔI SAO 4 CÁNH AI LẤP LÁNH */
+        @keyframes starPulse {
+            0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.6)); }
+            50% { transform: scale(1.15); filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.95)); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.6)); }
+        }
+        .ai-star-icon {
+            width: 26px;
+            height: 26px;
+            fill: #ffffff;
+            animation: starPulse 2.2s infinite ease-in-out;
+        }
+
+        /* HIỆU ỨNG TUYẾT RƠI MÙA ĐÔNG */
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            color: #ffffff;
+            font-size: 1em;
+            font-family: Arial, sans-serif;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+            user-select: none;
+            z-index: 9999;
+            pointer-events: none;
+            animation-name: snowflakes-fall, snowflakes-shake;
+            animation-duration: 10s, 3s;
+            animation-timing-function: linear, ease-in-out;
+            animation-iteration-count: infinite, infinite;
+            animation-play-state: running, running;
+        }
+        @keyframes snowflakes-fall {
+            0% { top: -10px; }
+            100% { top: 100vh; }
+        }
+        @keyframes snowflakes-shake {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(30px); }
+        }
     </style>
 </head>
 <body>
@@ -501,6 +540,15 @@
             <button type="button" class="theme-btn btn-gray" id="btnThemeGray" onclick="selectTheme('modern-gray')">Xám Khói</button>
         </div>
         <input type="hidden" id="selectedThemeValue" value="tech-blue">
+
+        <div class="divider"></div>
+        <h4>❄️ Hiệu ứng Tuyết Rơi Mùa Đông</h4>
+        <div class="form-group" style="margin-bottom: 6px;">
+            <select id="adminSnowEffect" style="font-weight: bold; color: #0066cc;">
+                <option value="off">Tắt hiệu ứng tuyết rơi</option>
+                <option value="on">Bật hiệu ứng tuyết rơi ❄️</option>
+            </select>
+        </div>
 
         <div class="divider"></div>
         <h4>🖼️ Cấu hình Ảnh Banner & Chữ Chạy</h4>
@@ -778,13 +826,18 @@
     </div>
 </footer>
 
+<!-- NÚT BẤM NỔI GÓC MÀN HÌNH (TRỢ LÝ AI NGÔI SAO 4 CÁNH) -->
 <div id="floatingButtonsContainer" class="floating-container">
     <div class="sub-buttons-group">
         <button type="button" class="float-btn float-info" onclick="openSeoModal(); autoCloseMenu();" title="Mở danh mục bài viết">📖</button>
         <a href="https://zalo.me/0917918586" id="floatingZaloLink" target="_blank" class="float-btn float-zalo" onclick="autoCloseMenu()" title="Chat Zalo">💬</a>
         <a href="tel:0917918586" id="floatingCallLink" class="float-btn float-call" onclick="autoCloseMenu()" title="Gọi điện">📞</a>
     </div>
-    <button type="button" class="main-trigger-btn" onclick="toggleFloatingMenu(event)">🎧</button>
+    <button type="button" class="main-trigger-btn ai-star-btn" onclick="toggleFloatingMenu(event)" title="Trợ lý AI / Menu">
+        <svg class="ai-star-icon" viewBox="0 0 24 24">
+            <path d="M12 2C12 7.5 16.5 12 22 12C16.5 12 12 16.5 12 22C12 16.5 7.5 12 2 12C7.5 12 12 7.5 12 2Z"/>
+        </svg>
+    </button>
 </div>
 
 <script>
@@ -1208,12 +1261,48 @@
         }
     }
 
+    // Xử lý hiệu ứng tuyết rơi động
+    function toggleSnowEffect(status) {
+        let existingFlakes = document.querySelectorAll('.snowflake');
+        if (status === 'on') {
+            if (existingFlakes.length === 0) {
+                const flakeIcons = ['❄', '❅', '❆', '•'];
+                const totalFlakes = 15;
+                for (let i = 0; i < totalFlakes; i++) {
+                    let flake = document.createElement('div');
+                    flake.className = 'snowflake';
+                    flake.innerHTML = flakeIcons[Math.floor(Math.random() * flakeIcons.length)];
+                    let randomLeft = Math.random() * 100;
+                    let randomDelay = Math.random() * 10;
+                    let randomDuration = 7 + Math.random() * 8;
+                    let randomSize = 10 + Math.random() * 14;
+
+                    flake.style.left = `${randomLeft}vw`;
+                    flake.style.animationDelay = `${randomDelay}s, ${randomDelay / 2}s`;
+                    flake.style.animationDuration = `${randomDuration}s, 3s`;
+                    flake.style.fontSize = `${randomSize}px`;
+                    flake.style.opacity = Math.random() * 0.7 + 0.3;
+
+                    document.body.appendChild(flake);
+                }
+            }
+        } else {
+            existingFlakes.forEach(f => f.remove());
+        }
+    }
+
     function updateUIFromData(data) {
         if (data.theme) {
             applyThemeInstant(data.theme);
             document.getElementById('selectedThemeValue').value = data.theme;
             localStorage.setItem('cfg_theme', data.theme);
         }
+        
+        let snowStatus = data.snowEffect || localStorage.getItem('cfg_snow') || 'off';
+        document.getElementById('adminSnowEffect').value = snowStatus;
+        toggleSnowEffect(snowStatus);
+        localStorage.setItem('cfg_snow', snowStatus);
+
         const activeEl = document.activeElement;
         if (data.baseFare !== undefined && activeEl.id !== 'adminBaseFare') document.getElementById('adminBaseFare').value = data.baseFare;
         if (data.rate7 !== undefined && activeEl.id !== 'adminRate7') document.getElementById('adminRate7').value = data.rate7;
@@ -1304,8 +1393,11 @@
 
     function saveAdminConfig() {
         let currentTheme = document.getElementById('selectedThemeValue').value;
+        let snowStatus = document.getElementById('adminSnowEffect').value;
+
         let configData = {
             theme: currentTheme,
+            snowEffect: snowStatus,
             baseFare: parseFloat(document.getElementById('adminBaseFare').value) || 0,
             rate7: parseFloat(document.getElementById('adminRate7').value) || 0,
             rate4: parseFloat(document.getElementById('adminRate4').value) || 0,
@@ -1325,6 +1417,10 @@
 
         applyThemeInstant(currentTheme);
         localStorage.setItem('cfg_theme', currentTheme);
+        
+        toggleSnowEffect(snowStatus);
+        localStorage.setItem('cfg_snow', snowStatus);
+
         calculatePrice();
 
         if (db) {
@@ -1340,6 +1436,11 @@
         let theme = localStorage.getItem('cfg_theme') || 'tech-blue';
         applyThemeInstant(theme);
         document.getElementById('selectedThemeValue').value = theme;
+
+        let snowStatus = localStorage.getItem('cfg_snow') || 'off';
+        document.getElementById('adminSnowEffect').value = snowStatus;
+        toggleSnowEffect(snowStatus);
+
         let phone = "0917918586";
         document.getElementById('adminPhoneInput').value = phone;
         document.getElementById('mainHotlineText').innerText = phone;
