@@ -75,7 +75,7 @@
             border: 1px dashed #ffeeba;
         }
 
-        /* SLIDER BANNER CSS CHUẨN MƯỢT MÀ */
+        /* SLIDER BANNER CSS NỀN TRONG SUỐT TINH TẾ & CHẤM ĐOTS GIỮA ĐÁY */
         .hero-image-box {
             width: 100%;
             border-radius: 8px;
@@ -113,26 +113,44 @@
             object-fit: cover;
             display: block;
         }
+        /* Thanh nhãn chữ với nền gradient trong suốt cao cấp */
+        .slide-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 60%, transparent 100%);
+            color: #ffffff;
+            text-align: center;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 16px 8px 18px 8px;
+            box-sizing: border-box;
+            z-index: 5;
+            letter-spacing: 0.3px;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+        }
+        /* 5 dấu chấm nằm giữa ở phần dưới hình ảnh */
         .slider-dots {
             position: absolute;
-            bottom: 8px;
+            bottom: 6px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 6px;
+            gap: 5px;
             z-index: 10;
         }
         .dot {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.5);
             cursor: pointer;
-            transition: background 0.3s;
+            transition: background 0.3s, width 0.3s;
         }
         .dot.active {
             background: #ff9800;
-            width: 20px;
+            width: 18px;
             border-radius: 4px;
         }
 
@@ -505,7 +523,6 @@
         .float-zalo { background-color: #0068ff; }
         .float-info { background-color: #009688; font-size: 17px; }
 
-        /* HIỆU ỨNG NGÔI SAO 4 CÁNH AI LẤP LÁNH */
         @keyframes starPulse {
             0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.6)); }
             50% { transform: scale(1.15); filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.95)); }
@@ -518,7 +535,6 @@
             animation: starPulse 2.2s infinite ease-in-out;
         }
 
-        /* HIỆU ỨNG TUYẾT RƠI MÙA ĐÔNG */
         .snowflake {
             position: fixed;
             top: -10px;
@@ -552,23 +568,28 @@
         🌟 Xin kính chào Quý khách! Rất hân hạnh được phục vụ.
     </div>
 
-    <!-- KHUNG SLIDER BANNER 5 ẢNH TỰ ĐỘNG CHẠY MƯỢT MÀ -->
+    <!-- KHUNG SLIDER BANNER 5 ẢNH VỚI NHÃN TRONG SUỐT & 5 CHẤM GIỮA ĐÁY -->
     <div class="hero-image-box">
         <div class="slider-container" id="heroSlider">
             <div class="slide-item active">
-                <img id="slideImg1" src="https://i.ibb.co/Y4VSV1W9/ezgif-resized.jpg" alt="XENOW.VN Ảnh 1" title="XENOW.VN Ảnh 1">
+                <img id="slideImg1" src="https://i.ibb.co/Y4VSV1W9/ezgif-resized.jpg" alt="Xe 7 Chỗ Suzuki XL7 Hybrid Sang Trọng & Êm Ái" title="Xe 7 Chỗ Suzuki XL7 Hybrid Sang Trọng & Êm Ái">
+                <div class="slide-caption" id="caption1">✨ Xe 7 Chỗ Suzuki XL7 Hybrid Sang Trọng & Êm Ái</div>
             </div>
             <div class="slide-item">
-                <img id="slideImg2" src="https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=800&q=80" alt="XENOW.VN Ảnh 2" title="XENOW.VN Ảnh 2">
+                <img id="slideImg2" src="https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=800&q=80" alt="Không Gian Nội Thất Rộng Rãi, Sạch Sớm & Thải Mái Cho Gia Đình" title="Không Gian Nội Thất Rộng Rãi, Sạch Sớm & Thải Mái Cho Gia Đình">
+                <div class="slide-caption" id="caption2">🌿 Không Gian Nội Thất Rộng Rãi, Sạch Sớm & Thải Mái Cho Gia Đình</div>
             </div>
             <div class="slide-item">
-                <img id="slideImg3" src="https://images.unsplash.com/photo-1506015391300-4802dc74de2e?auto=format&fit=crop&w=800&q=80" alt="XENOW.VN Ảnh 3" title="XENOW.VN Ảnh 3">
+                <img id="slideImg3" src="https://images.unsplash.com/photo-1506015391300-4802dc74de2e?auto=format&fit=crop&w=800&q=80" alt="Đưa Đón Sân Bay & Đi Tỉnh Trọn Gói - Không Lo Hủy Chuyến" title="Đưa Đón Sân Bay & Đi Tỉnh Trọn Gói - Không Lo Hủy Chuyến">
+                <div class="slide-caption" id="caption3">🛡️ Đưa Đón Sân Bay & Đi Tỉnh Trọn Gói - Không Lo Hủy Chuyến</div>
             </div>
             <div class="slide-item">
-                <img id="slideImg4" src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80" alt="XENOW.VN Ảnh 4" title="XENOW.VN Ảnh 4">
+                <img id="slideImg4" src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80" alt="Ưu Đãi Gói Du Lịch 2 Ngày 1 Đêm Siêu Tiết Kiệm" title="Ưu Đãi Gói Du Lịch 2 Ngày 1 Đêm Siêu Tiết Kiệm">
+                <div class="slide-caption" id="caption4">💰 Ưu Đãi Gói Du Lịch 2 Ngày 1 Đêm Siêu Tiết Kiệm</div>
             </div>
             <div class="slide-item">
-                <img id="slideImg5" src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=800&q=80" alt="XENOW.VN Ảnh 5" title="XENOW.VN Ảnh 5">
+                <img id="slideImg5" src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=800&q=80" alt="Đặt Xe Nhanh Trực Tiếp Cùng Bác Tài: 0917 918 586" title="Đặt Xe Nhanh Trực Tiếp Cùng Bác Tài: 0917 918 586">
+                <div class="slide-caption" id="caption5">📞 Đặt Xe Nhanh Trực Tiếp Cùng Bác Tài: 0917 918 586</div>
             </div>
             <div class="slider-dots" id="sliderDots">
                 <span class="dot active" onclick="currentSlide(0)"></span>
@@ -608,20 +629,30 @@
         </div>
 
         <div class="divider"></div>
-        <h4>🖼️ Cấu hình 5 Ảnh Slider Trang Chủ</h4>
-        <div style="font-size: 11px; margin-bottom: 2px;">Link Ảnh Slider 1:</div>
-        <input type="text" id="adminImg1" value="https://i.ibb.co/Y4VSV1W9/ezgif-resized.jpg">
-        <div style="font-size: 11px; margin-bottom: 2px;">Link Ảnh Slider 2:</div>
-        <input type="text" id="adminImg2" value="https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=800&q=80">
-        <div style="font-size: 11px; margin-bottom: 2px;">Link Ảnh Slider 3:</div>
-        <input type="text" id="adminImg3" value="https://images.unsplash.com/photo-1506015391300-4802dc74de2e?auto=format&fit=crop&w=800&q=80">
-        <div style="font-size: 11px; margin-bottom: 2px;">Link Ảnh Slider 4:</div>
-        <input type="text" id="adminImg4" value="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80">
-        <div style="font-size: 11px; margin-bottom: 2px;">Link Ảnh Slider 5:</div>
-        <input type="text" id="adminImg5" value="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=800&q=80">
+        <h4>🖼️ Cấu hình Link Ảnh & Thông Điệp 5 Slide</h4>
+        
+        <div style="font-size: 11px; font-weight: bold; color: #0066cc;">Slide 1:</div>
+        <input type="text" id="adminImg1" value="https://i.ibb.co/Y4VSV1W9/ezgif-resized.jpg" placeholder="Link ảnh 1">
+        <input type="text" id="adminCap1" value="✨ Xe 7 Chỗ Suzuki XL7 Hybrid Sang Trọng & Êm Ái" placeholder="Thông điệp 1">
+
+        <div style="font-size: 11px; font-weight: bold; color: #0066cc; margin-top: 4px;">Slide 2:</div>
+        <input type="text" id="adminImg2" value="https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=800&q=80" placeholder="Link ảnh 2">
+        <input type="text" id="adminCap2" value="🌿 Không Gian Nội Thất Rộng Rãi, Sạch Sớm & Thải Mái Cho Gia Đình" placeholder="Thông điệp 2">
+
+        <div style="font-size: 11px; font-weight: bold; color: #0066cc; margin-top: 4px;">Slide 3:</div>
+        <input type="text" id="adminImg3" value="https://images.unsplash.com/photo-1506015391300-4802dc74de2e?auto=format&fit=crop&w=800&q=80" placeholder="Link ảnh 3">
+        <input type="text" id="adminCap3" value="🛡️ Đưa Đón Sân Bay & Đi Tỉnh Trọn Gói - Không Lo Hủy Chuyến" placeholder="Thông điệp 3">
+
+        <div style="font-size: 11px; font-weight: bold; color: #0066cc; margin-top: 4px;">Slide 4:</div>
+        <input type="text" id="adminImg4" value="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80" placeholder="Link ảnh 4">
+        <input type="text" id="adminCap4" value="💰 Ưu Đãi Gói Du Lịch 2 Ngày 1 Đêm Siêu Tiết Kiệm" placeholder="Thông điệp 4">
+
+        <div style="font-size: 11px; font-weight: bold; color: #0066cc; margin-top: 4px;">Slide 5:</div>
+        <input type="text" id="adminImg5" value="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=800&q=80" placeholder="Link ảnh 5">
+        <input type="text" id="adminCap5" value="📞 Đặt Xe Nhanh Trực Tiếp Cùng Bác Tài: 0917 918 586" placeholder="Thông điệp 5">
 
         <div class="divider"></div>
-        <h4>📢 Cấu hình Chữ Chạy Thông Báo</h4>
+        <h4>📢 Cấu hình Chữ Chạy Phụ</h4>
         <input type="text" id="adminMarqueeText" value="🛡️ An toàn &nbsp;|&nbsp; ✨ Xe thơm sạch &nbsp;|&nbsp; 💰 Tiết kiệm 30% &nbsp;|&nbsp; ⏰ Đúng giờ 24/7">
 
         <div class="divider"></div>
@@ -1434,12 +1465,16 @@
         if (activeEl.id !== 'adminMarqueeText') document.getElementById('adminMarqueeText').value = marquee;
         document.getElementById('marqueeText').innerHTML = marquee;
 
-        // Cập nhật 5 ảnh slider từ dữ liệu đám mây
-        if (data.img1 && activeEl.id !== 'adminImg1') { document.getElementById('adminImg1').value = data.img1; document.getElementById('slideImg1').src = data.img1; }
-        if (data.img2 && activeEl.id !== 'adminImg2') { document.getElementById('adminImg2').value = data.img2; document.getElementById('slideImg2').src = data.img2; }
-        if (data.img3 && activeEl.id !== 'adminImg3') { document.getElementById('adminImg3').value = data.img3; document.getElementById('slideImg3').src = data.img3; }
-        if (data.img4 && activeEl.id !== 'adminImg4') { document.getElementById('adminImg4').value = data.img4; document.getElementById('slideImg4').src = data.img4; }
-        if (data.img5 && activeEl.id !== 'adminImg5') { document.getElementById('adminImg5').value = data.img5; document.getElementById('slideImg5').src = data.img5; }
+        for(let i=1; i<=5; i++) {
+            if (data['img' + i] && activeEl.id !== 'adminImg' + i) { 
+                document.getElementById('adminImg' + i).value = data['img' + i]; 
+                document.getElementById('slideImg' + i).src = data['img' + i]; 
+            }
+            if (data['cap' + i] && activeEl.id !== 'adminCap' + i) { 
+                document.getElementById('adminCap' + i).value = data['cap' + i]; 
+                document.getElementById('caption' + i).innerText = data['cap' + i]; 
+            }
+        }
 
         if (data.admin_password) localStorage.setItem('admin_password', data.admin_password);
         calculatePrice();
@@ -1508,28 +1543,9 @@
         let currentTheme = document.getElementById('selectedThemeValue').value;
         let snowStatus = document.getElementById('adminSnowEffect').value;
 
-        // Lấy link 5 ảnh từ ô input admin
-        let img1 = document.getElementById('adminImg1').value.trim();
-        let img2 = document.getElementById('adminImg2').value.trim();
-        let img3 = document.getElementById('adminImg3').value.trim();
-        let img4 = document.getElementById('adminImg4').value.trim();
-        let img5 = document.getElementById('adminImg5').value.trim();
-
-        // Cập nhật giao diện ngay lập tức
-        if(img1) document.getElementById('slideImg1').src = img1;
-        if(img2) document.getElementById('slideImg2').src = img2;
-        if(img3) document.getElementById('slideImg3').src = img3;
-        if(img4) document.getElementById('slideImg4').src = img4;
-        if(img5) document.getElementById('slideImg5').src = img5;
-
         let configData = {
             theme: currentTheme,
             snowEffect: snowStatus,
-            img1: img1,
-            img2: img2,
-            img3: img3,
-            img4: img4,
-            img5: img5,
             baseFare: parseFloat(document.getElementById('adminBaseFare').value) || 0,
             rate7: parseFloat(document.getElementById('adminRate7').value) || 0,
             rate4: parseFloat(document.getElementById('adminRate4').value) || 0,
@@ -1540,6 +1556,15 @@
             marquee: document.getElementById('adminMarqueeText').value.trim(),
             updatedAt: new Date().toISOString()
         };
+
+        for(let i=1; i<=5; i++) {
+            let imgVal = document.getElementById('adminImg' + i).value.trim();
+            let capVal = document.getElementById('adminCap' + i).value.trim();
+            configData['img' + i] = imgVal;
+            configData['cap' + i] = capVal;
+            if(imgVal) document.getElementById('slideImg' + i).src = imgVal;
+            if(capVal) document.getElementById('caption' + i).innerText = capVal;
+        }
 
         let newPass = document.getElementById('adminNewPassword').value.trim();
         configData.admin_password = newPass ? newPass : (localStorage.getItem('admin_password') || "123456");
