@@ -9,7 +9,7 @@
     <meta property="og:url" id="ogUrl" content="https://xenow.vn/">
     <meta property="og:title" id="ogTitle" content="XENOW.VN | Dịch Vụ Di Chuyển Tiết Kiệm">
     <meta property="og:description" id="ogDesc" content="Thông tin tuyến đường & dịch vụ đưa đón liên tỉnh tiết kiệm. Hotline tư vấn nhanh: 0917 918 586.">
-    <meta property="og:image" id="ogImage" content="https://raw.githubusercontent.com/ththie/xe-gia-re/main/public/images/uploads/xe-suzuki-xl7.jpg">
+    <meta property="og:image" id="ogImage" content="https://i.ibb.co/Y4VSV1W9/ezgif-resized.jpg">
 
     <style id="instant-theme-style">
         body { background: linear-gradient(135deg, #0f4c81 0%, #1b262c 100%) !important; }
@@ -75,6 +75,7 @@
             border: 1px dashed #ffeeba;
         }
 
+        /* SLIDER BANNER CSS CHUẨN MƯỢT MÀ */
         .hero-image-box {
             width: 100%;
             border-radius: 8px;
@@ -83,13 +84,56 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             border: 1px solid #e0e0e0;
             position: relative;
+            background: #000;
         }
-        .hero-image-box img {
+        .slider-container {
+            position: relative;
             width: 100%;
-            height: auto;
-            max-height: 230px;
+            height: 220px;
+        }
+        .slide-item {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .slide-item.active {
+            opacity: 1;
+            z-index: 2;
+        }
+        .slide-item img {
+            width: 100%;
+            height: 100%;
             object-fit: cover;
             display: block;
+        }
+        .slider-dots {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+            z-index: 10;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .dot.active {
+            background: #ff9800;
+            width: 20px;
+            border-radius: 4px;
         }
 
         h2 {
@@ -233,17 +277,6 @@
             display: flex; gap: 6px; font-size: 20px; cursor: pointer; justify-content: center; margin-bottom: 8px; color: #ccc;
         }
         .star-rating-select span.selected { color: #f39c12; }
-
-        .success-box {
-            display: none; background: #e6ffed; border: 1px solid #b7eb8f;
-            padding: 12px; border-radius: 6px; text-align: center; margin-top: 10px;
-        }
-        .success-box p { color: #2b8a3e; font-weight: bold; margin: 0 0 8px 0; font-size: 13px; line-height: 1.4; }
-        .btn-action {
-            display: block; background-color: #00aa00; color: white; border: none;
-            width: 100%; padding: 10px; font-size: 13px; font-weight: bold; border-radius: 6px;
-            text-align: center; text-decoration: none; margin-top: 6px; box-sizing: border-box;
-        }
 
         .seo-info-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -519,8 +552,32 @@
         🌟 Xin kính chào Quý khách! Rất hân hạnh được phục vụ.
     </div>
 
-    <div class="hero-image-box" id="heroImageBox">
-        <img id="mainHeroImg" src="https://raw.githubusercontent.com/ththie/xe-gia-re/main/public/images/uploads/xe-suzuki-xl7.jpg" alt="Dịch vụ đặt xe 4 - 7 chỗ XENOW.VN" title="Dịch vụ đặt xe 4 - 7 chỗ XENOW.VN">
+    <!-- KHUNG SLIDER BANNER 5 ẢNH TỰ ĐỘNG CHẠY MƯỢT MÀ -->
+    <div class="hero-image-box">
+        <div class="slider-container" id="heroSlider">
+            <div class="slide-item active">
+                <img id="slideImg1" src="https://i.ibb.co/Y4VSV1W9/ezgif-resized.jpg" alt="XENOW.VN Ảnh 1" title="XENOW.VN Ảnh 1">
+            </div>
+            <div class="slide-item">
+                <img id="slideImg2" src="https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=800&q=80" alt="XENOW.VN Ảnh 2" title="XENOW.VN Ảnh 2">
+            </div>
+            <div class="slide-item">
+                <img id="slideImg3" src="https://images.unsplash.com/photo-1506015391300-4802dc74de2e?auto=format&fit=crop&w=800&q=80" alt="XENOW.VN Ảnh 3" title="XENOW.VN Ảnh 3">
+            </div>
+            <div class="slide-item">
+                <img id="slideImg4" src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80" alt="XENOW.VN Ảnh 4" title="XENOW.VN Ảnh 4">
+            </div>
+            <div class="slide-item">
+                <img id="slideImg5" src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=800&q=80" alt="XENOW.VN Ảnh 5" title="XENOW.VN Ảnh 5">
+            </div>
+            <div class="slider-dots" id="sliderDots">
+                <span class="dot active" onclick="currentSlide(0)"></span>
+                <span class="dot" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
+                <span class="dot" onclick="currentSlide(3)"></span>
+                <span class="dot" onclick="currentSlide(4)"></span>
+            </div>
+        </div>
     </div>
 
     <h2 ondblclick="toggleAdmin()">🚗 DỊCH VỤ DI CHUYỂN TIẾT KIỆM</h2>
@@ -551,19 +608,21 @@
         </div>
 
         <div class="divider"></div>
-        <h4>🖼️ Cấu hình Ảnh Banner & Chữ Chạy</h4>
-        <div style="font-size: 11px; margin-bottom: 2px;">Link ảnh Banner (URL):</div>
-        <input type="text" id="adminHeroImgInput" placeholder="Dán link ảnh tại đây" value="https://raw.githubusercontent.com/ththie/xe-gia-re/main/public/images/uploads/xe-suzuki-xl7.jpg">
-
-        <div style="font-size: 11px; margin-bottom: 2px;">Nội dung chữ chạy thông báo:</div>
-        <input type="text" id="adminMarqueeText" value="🛡️ An toàn &nbsp;|&nbsp; ✨ Xe thơm sạch &nbsp;|&nbsp; 💰 Tiết kiệm 30% &nbsp;|&nbsp; ⏰ Đúng giờ 24/7">
+        <h4>🖼️ Cấu hình 5 Ảnh Slider Trang Chủ</h4>
+        <div style="font-size: 11px; margin-bottom: 2px;">Link Ảnh Slider 1:</div>
+        <input type="text" id="adminImg1" value="https://i.ibb.co/Y4VSV1W9/ezgif-resized.jpg">
+        <div style="font-size: 11px; margin-bottom: 2px;">Link Ảnh Slider 2:</div>
+        <input type="text" id="adminImg2" value="https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=800&q=80">
+        <div style="font-size: 11px; margin-bottom: 2px;">Link Ảnh Slider 3:</div>
+        <input type="text" id="adminImg3" value="https://images.unsplash.com/photo-1506015391300-4802dc74de2e?auto=format&fit=crop&w=800&q=80">
+        <div style="font-size: 11px; margin-bottom: 2px;">Link Ảnh Slider 4:</div>
+        <input type="text" id="adminImg4" value="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80">
+        <div style="font-size: 11px; margin-bottom: 2px;">Link Ảnh Slider 5:</div>
+        <input type="text" id="adminImg5" value="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=800&q=80">
 
         <div class="divider"></div>
-        <h4>⭐ Cấu hình Đánh Giá Mẫu</h4>
-        <div style="font-size: 11px; margin-bottom: 2px;">Lời nhận xét của khách:</div>
-        <textarea id="adminTestimonialText" rows="2" style="width:100%; font-size:12px; padding:6px; border:1px solid #ccc; border-radius:4px;">Xe XL7 Hybrid chạy êm ru, anh tài xế nhiệt tình hỗ trợ vali tận nhà. Giá tốt hơn taxi công nghệ nhiều!</textarea>
-        <div style="font-size: 11px; margin-bottom: 2px;">Tên khách hàng / Tuyến đi:</div>
-        <input type="text" id="adminTestimonialAuthor" value="– Anh Minh (Khách đi Vũng Tàu)">
+        <h4>📢 Cấu hình Chữ Chạy Thông Báo</h4>
+        <input type="text" id="adminMarqueeText" value="🛡️ An toàn &nbsp;|&nbsp; ✨ Xe thơm sạch &nbsp;|&nbsp; 💰 Tiết kiệm 30% &nbsp;|&nbsp; ⏰ Đúng giờ 24/7">
 
         <div class="divider"></div>
         <h4>📞 Cấu hình Hotline & Giá cước</h4>
@@ -625,7 +684,6 @@
             <input type="tel" id="customerPhone" placeholder="Nhập số điện thoại" required>
         </div>
 
-        <!-- Điểm đón (Icon Map Xanh Lá nằm trước nhãn) -->
         <div class="form-group">
             <label for="pickupLocation" style="display: flex; align-items: center; gap: 6px;">
                 <svg class="map-icon-svg" viewBox="0 0 24 24" fill="#28a745">
@@ -636,7 +694,6 @@
             <input type="text" id="pickupLocation" placeholder="Nhập địa chỉ đón" required>
         </div>
 
-        <!-- Điểm đến (Icon Map Đỏ Tươi nằm trước nhãn) -->
         <div class="form-group">
             <label for="dropoffLocation" style="display: flex; align-items: center; gap: 6px;">
                 <svg class="map-icon-svg" viewBox="0 0 24 24" fill="#dc3545">
@@ -693,10 +750,7 @@
         </div>
     </form>
 
-    <!-- KHUNG TÌM KIẾM BẢN ĐỒ (ĐÃ ĐƯA LÊN TRÊN PHẦN ĐÁNH GIÁ & CÓ THÊM TÊN XENOW.VN) -->
     <div style="max-width: 100%; margin: 14px 0 10px 0; padding: 12px 14px; background: #f8f9fa; border-radius: 10px; border: 1px solid #e0e0e0; box-shadow: 0 2px 6px rgba(0,0,0,0.03); font-family: Arial, sans-serif; box-sizing: border-box;">
-      
-      <!-- Ô KHUNG TÌM KIẾM MẪU (CHỨA TÊN THƯƠNG HIỆU XENOW.VN) -->
       <div style="display: flex; align-items: center; background: #ffffff; border: 1px solid #dcdcdc; border-radius: 20px; padding: 8px 12px; margin-bottom: 8px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);">
         <svg style="width: 16px; height: 16px; fill: #0066cc; margin-right: 8px; flex-shrink: 0;" viewBox="0 0 24 24">
           <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
@@ -710,7 +764,6 @@
         Tra cứu quãng đường (Km) trực tiếp trên bản đồ ghim tại xenow.vn
       </p>
 
-      <!-- KHUNG BẢN ĐỒ GOOGLE MAPS GHIM ĐỊA CHỈ -->
       <div style="width: 100%; height: 180px; border-radius: 8px; overflow: hidden; border: 1px solid #cccccc;">
         <iframe 
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.4435777858694!2d106.721469!3d10.853922!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3175276c12345678%3A0xabcdef123456789!2zOC8xQTE1IMSQxrDhu51uZyBT4buRIDksIEhp4buHcCBCw6xuaCwgVGjhu6cgxJBjYywgSOG7kyBDaMOtIE1pbmgsIFZpZXRuYW0!5e0!3m2!1svi!2s!4v1700000000000!5m2!1svi!2s" 
@@ -724,7 +777,6 @@
       </div>
     </div>
 
-    <!-- KHUNG ĐÁNH GIÁ TỪ KHÁCH HÀNG (ĐÃ NẰM DƯỚI BẢN ĐỒ) -->
     <div class="testimonials-section">
         <div class="section-title">
             <span>⭐ Đánh giá từ khách hàng</span>
@@ -821,7 +873,6 @@
             <p id="detailDate" style="font-size: 11px; color: #888; font-style: italic; margin-bottom: 12px; text-align: center;"></p>
             
             <div id="detailContent" style="font-size: 14px; line-height: 1.7;"></div>
-
             <div id="detailVideoContainer"></div>
 
             <div class="article-brand-footer">
@@ -853,7 +904,6 @@
     </div>
 </footer>
 
-<!-- NÚT BẤM NỔI GÓC MÀN HÌNH (TRỢ LÝ AI NGÔI SAO 4 CÁNH) -->
 <div id="floatingButtonsContainer" class="floating-container">
     <div class="sub-buttons-group">
         <button type="button" class="float-btn float-info" onclick="openSeoModal(); autoCloseMenu();" title="Mở danh mục bài viết">📖</button>
@@ -874,6 +924,42 @@
     let currentPage = 1;
     let currentModalMode = 'intro';
     const postsPerPage = 5;
+
+    let currentSlideIndex = 0;
+    let slideInterval = null;
+
+    function initSlider() {
+        const slides = document.querySelectorAll('.slide-item');
+        const dots = document.querySelectorAll('.dot');
+        if (slides.length === 0) return;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (dots[i]) dots[i].classList.remove('active');
+            });
+            slides[index].classList.add('active');
+            if (dots[index]) dots[index].classList.add('active');
+        }
+
+        function nextSlide() {
+            currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+            showSlide(currentSlideIndex);
+        }
+
+        window.currentSlide = function(index) {
+            currentSlideIndex = index;
+            showSlide(currentSlideIndex);
+            resetInterval();
+        }
+
+        function resetInterval() {
+            clearInterval(slideInterval);
+            slideInterval = setInterval(nextSlide, 3500);
+        }
+
+        resetInterval();
+    }
 
     const firebaseConfig = {
       apiKey: "AIzaSyDRaU7w47zX87-N13NFtsCinvz2CNSRD88",
@@ -917,6 +1003,7 @@
     window.onload = function() {
         loadSavedConfig();
         loadDecapArticles();
+        initSlider();
         
         let now = new Date();
         document.getElementById('pickupTime').value = String(now.getHours()).padStart(2, '0') + 'h' + String(now.getMinutes()).padStart(2, '0');
@@ -1118,7 +1205,7 @@
             document.getElementById('metaDesc').setAttribute('content', post.description);
         }
         
-        document.getElementById('ogImage').setAttribute('content', 'https://raw.githubusercontent.com/ththie/xe-gia-re/main/public/images/uploads/xe-suzuki-xl7.jpg');
+        document.getElementById('ogImage').setAttribute('content', document.getElementById('adminImg1').value);
         document.getElementById('ogUrl').setAttribute('content', newUrl);
 
         document.getElementById('introArticleView').style.display = 'none';
@@ -1153,7 +1240,7 @@
         window.history.pushState({slug: "gioi-thieu"}, "", newUrl);
         document.title = "Giới Thiệu Dịch Vụ - XENOW.VN";
         document.getElementById('ogTitle').setAttribute('content', "XENOW.VN | Dịch Vụ Di Chuyển Tiết Kiệm");
-        document.getElementById('ogImage').setAttribute('content', "https://raw.githubusercontent.com/ththie/xe-gia-re/main/public/images/uploads/xe-suzuki-xl7.jpg");
+        document.getElementById('ogImage').setAttribute('content', document.getElementById('adminImg1').value);
         document.getElementById('ogUrl').setAttribute('content', newUrl);
         document.getElementById('seoInfoModal').style.display = 'flex';
         switchToIntro();
@@ -1288,7 +1375,6 @@
         }
     }
 
-    // Xử lý hiệu ứng tuyết rơi động
     function toggleSnowEffect(status) {
         let existingFlakes = document.querySelectorAll('.snowflake');
         if (status === 'on') {
@@ -1348,12 +1434,12 @@
         if (activeEl.id !== 'adminMarqueeText') document.getElementById('adminMarqueeText').value = marquee;
         document.getElementById('marqueeText').innerHTML = marquee;
 
-        let heroImg = data.heroImgUrl || "https://raw.githubusercontent.com/ththie/xe-gia-re/main/public/images/uploads/xe-suzuki-xl7.jpg";
-        if (activeEl.id !== 'adminHeroImgInput') document.getElementById('adminHeroImgInput').value = heroImg;
-        if (heroImg && heroImg.trim() !== "") {
-            document.getElementById('mainHeroImg').src = heroImg;
-            document.getElementById('heroImageBox').style.display = 'block';
-        } else { document.getElementById('heroImageBox').style.display = 'none'; }
+        // Cập nhật 5 ảnh slider từ dữ liệu đám mây
+        if (data.img1 && activeEl.id !== 'adminImg1') { document.getElementById('adminImg1').value = data.img1; document.getElementById('slideImg1').src = data.img1; }
+        if (data.img2 && activeEl.id !== 'adminImg2') { document.getElementById('adminImg2').value = data.img2; document.getElementById('slideImg2').src = data.img2; }
+        if (data.img3 && activeEl.id !== 'adminImg3') { document.getElementById('adminImg3').value = data.img3; document.getElementById('slideImg3').src = data.img3; }
+        if (data.img4 && activeEl.id !== 'adminImg4') { document.getElementById('adminImg4').value = data.img4; document.getElementById('slideImg4').src = data.img4; }
+        if (data.img5 && activeEl.id !== 'adminImg5') { document.getElementById('adminImg5').value = data.img5; document.getElementById('slideImg5').src = data.img5; }
 
         if (data.admin_password) localStorage.setItem('admin_password', data.admin_password);
         calculatePrice();
@@ -1422,9 +1508,28 @@
         let currentTheme = document.getElementById('selectedThemeValue').value;
         let snowStatus = document.getElementById('adminSnowEffect').value;
 
+        // Lấy link 5 ảnh từ ô input admin
+        let img1 = document.getElementById('adminImg1').value.trim();
+        let img2 = document.getElementById('adminImg2').value.trim();
+        let img3 = document.getElementById('adminImg3').value.trim();
+        let img4 = document.getElementById('adminImg4').value.trim();
+        let img5 = document.getElementById('adminImg5').value.trim();
+
+        // Cập nhật giao diện ngay lập tức
+        if(img1) document.getElementById('slideImg1').src = img1;
+        if(img2) document.getElementById('slideImg2').src = img2;
+        if(img3) document.getElementById('slideImg3').src = img3;
+        if(img4) document.getElementById('slideImg4').src = img4;
+        if(img5) document.getElementById('slideImg5').src = img5;
+
         let configData = {
             theme: currentTheme,
             snowEffect: snowStatus,
+            img1: img1,
+            img2: img2,
+            img3: img3,
+            img4: img4,
+            img5: img5,
             baseFare: parseFloat(document.getElementById('adminBaseFare').value) || 0,
             rate7: parseFloat(document.getElementById('adminRate7').value) || 0,
             rate4: parseFloat(document.getElementById('adminRate4').value) || 0,
@@ -1433,9 +1538,6 @@
             package2: parseFloat(document.getElementById('adminPackage2').value) || 0,
             phone: document.getElementById('adminPhoneInput').value.trim(),
             marquee: document.getElementById('adminMarqueeText').value.trim(),
-            heroImgUrl: document.getElementById('adminHeroImgInput').value.trim(),
-            testimonialText: document.getElementById('adminTestimonialText').value.trim(),
-            testimonialAuthor: document.getElementById('adminTestimonialAuthor').value.trim(),
             updatedAt: new Date().toISOString()
         };
 
