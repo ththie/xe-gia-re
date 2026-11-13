@@ -113,7 +113,6 @@
             object-fit: cover;
             display: block;
         }
-        /* Thanh nhãn chữ với nền gradient trong suốt cao cấp */
         .slide-caption {
             position: absolute;
             bottom: 0;
@@ -130,7 +129,6 @@
             letter-spacing: 0.3px;
             text-shadow: 0 1px 3px rgba(0,0,0,0.8);
         }
-        /* 5 dấu chấm nằm giữa ở phần dưới hình ảnh */
         .slider-dots {
             position: absolute;
             bottom: 6px;
@@ -255,6 +253,54 @@
             transition: transform 0.2s;
         }
         .btn-zalo:hover { transform: translateY(-1px); }
+
+        /* KHUNG THÔNG BÁO ĐẶT XE THÀNH CÔNG */
+        .success-box {
+            display: none;
+            background: #f0fdf4;
+            border: 2px solid #22c55e;
+            border-radius: 10px;
+            padding: 16px 14px;
+            text-align: center;
+            margin: 10px 0;
+        }
+        .success-box h3 {
+            color: #15803d;
+            font-size: 16px;
+            margin: 0 0 6px 0;
+        }
+        .success-box p {
+            font-size: 12.5px;
+            color: #374151;
+            margin: 0 0 12px 0;
+            line-height: 1.45;
+        }
+        .success-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .btn-call-direct {
+            display: block;
+            background: #e53935;
+            color: white;
+            padding: 10px;
+            font-size: 13.5px;
+            font-weight: bold;
+            border-radius: 8px;
+            text-decoration: none;
+            box-shadow: 0 3px 8px rgba(229, 57, 53, 0.3);
+        }
+        .btn-rebook {
+            background: transparent;
+            border: 1px solid #9ca3af;
+            color: #4b5563;
+            padding: 7px;
+            font-size: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 4px;
+        }
 
         .testimonials-section {
             margin-top: 14px;
@@ -780,6 +826,17 @@
             <span>Thông tin quý khách được <strong>bảo mật tuyệt đối</strong>.</span>
         </div>
     </form>
+
+    <!-- KHUNG XÁC NHẬN & MỞ ZALO TRỰC TIẾP 1 CHẠM -->
+    <div id="successBox" class="success-box">
+        <h3>✅ Đã ghi nhận thông tin chuyến đi!</h3>
+        <p>Hệ thống đang tự động mở <b>Zalo</b> kèm sẵn nội dung đặt xe. Nếu Zalo chưa tự bật lên, Quý khách bấm nút bên dưới nhé:</p>
+        <div class="success-actions">
+            <a id="successZaloLink" href="#" target="_blank" class="btn-zalo">💬 MỞ ZALO GỬI TIN NHẮN NGAY</a>
+            <a id="successCallLink" href="#" class="btn-call-direct">📞 GỌI TRỰC TIẾP BÁC TÀI</a>
+            <button type="button" class="btn-rebook" onclick="resetBookingForm()">← Đặt thêm chuyến khác</button>
+        </div>
+    </div>
 
     <div style="max-width: 100%; margin: 14px 0 10px 0; padding: 12px 14px; background: #f8f9fa; border-radius: 10px; border: 1px solid #e0e0e0; box-shadow: 0 2px 6px rgba(0,0,0,0.03); font-family: Arial, sans-serif; box-sizing: border-box;">
       <div style="display: flex; align-items: center; background: #ffffff; border: 1px solid #dcdcdc; border-radius: 20px; padding: 8px 12px; margin-bottom: 8px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);">
@@ -1631,7 +1688,7 @@
         let time = document.getElementById('pickupTime').value.trim();
         let date = document.getElementById('pickupDate').value.trim();
         let distance = document.getElementById('distance').value.trim();
-        let currentPhone = document.getElementById('adminPhoneInput').value.trim() || "0917918586";
+        let currentPhone = (document.getElementById('adminPhoneInput').value.trim() || "0917918586").replace(/\s+/g, '');
 
         if (!name || !phone || !pickup || !dropoff || !distance) {
             alert("Vui lòng điền đủ thông tin!");
@@ -1643,7 +1700,7 @@
         let tripTypeText = tripTypeSelect.options[tripTypeSelect.selectedIndex].text;
         let priceText = document.getElementById('totalPrice').innerText;
 
-        let message = `🚗*YÊU CẦU ĐẶT XE XENOW.VN*\n\n` +
+        let message = `🚗 YÊU CẦU ĐẶT XE XENOW.VN\n\n` +
                     `• Loại xe: ${carTypeText}\n` +
                     `• Hình thức: ${tripTypeText}\n` +
                     `• Khách hàng: ${name}\n` +
@@ -1651,25 +1708,49 @@
                     `• Đón: ${pickup}\n` +
                     `• Đến: ${dropoff}\n` +
                     `• Thời gian: ${time} - Ngày ${date}\n` +
-                    `• Quãng đường: ${distance} Km \n` +
+                    `• Quãng đường: ${distance} Km\n` +
                     `• Dự kiến: ${priceText}\n\n` +
                     `Nhờ nhà xe xác nhận giúp nhé!`;
 
+        // 1. Gửi ngầm dữ liệu về Google Sheets
         if (WEB_APP_URL) {
-            let params = new URLSearchParams({ carType: carTypeText, tripType: tripTypeText, customerName: name, customerPhone: phone, pickupLocation: pickup, dropoffLocation: dropoff, pickupTime: time, pickupDate: date, distance: distance, totalPrice: priceText });
+            let params = new URLSearchParams({
+                carType: carTypeText,
+                tripType: tripTypeText,
+                customerName: name,
+                customerPhone: phone,
+                pickupLocation: pickup,
+                dropoffLocation: dropoff,
+                pickupTime: time,
+                pickupDate: date,
+                distance: distance,
+                totalPrice: priceText
+            });
             let sendBeacon = new Image();
             sendBeacon.src = WEB_APP_URL + "?" + params.toString();
         }
 
+        // 2. Copy dự phòng vào bộ nhớ tạm
         if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(message);
+            navigator.clipboard.writeText(message).catch(() => {});
         }
 
-        document.getElementById('successZaloLink').href = `https://zalo.me/${currentPhone}`;
+        // 3. Tạo đường link Zalo kèm sẵn nội dung tin nhắn (1 chạm ăn ngay)
+        let zaloDirectUrl = `https://zalo.me/${currentPhone}?text=${encodeURIComponent(message)}`;
+
+        document.getElementById('successZaloLink').href = zaloDirectUrl;
         document.getElementById('successCallLink').href = `tel:${currentPhone}`;
         document.getElementById('bookingForm').style.display = 'none';
         document.getElementById('successBox').style.display = 'block';
-    } 
+
+        // 4. Tự động chuyển thẳng sang Zalo ngay lập tức
+        window.location.href = zaloDirectUrl;
+    }
+
+    function resetBookingForm() {
+        document.getElementById('successBox').style.display = 'none';
+        document.getElementById('bookingForm').style.display = 'block';
+    }
 </script>
 </body>
 </html>
