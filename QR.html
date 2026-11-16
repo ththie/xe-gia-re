@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mã QR Thanh Toán - XENOW.VN</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background: #eef2f7; 
+            margin: 0; 
+            padding: 15px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+        }
+        .container { 
+            background: #fff; 
+            width: 100%; 
+            max-width: 380px; 
+            padding: 20px; 
+            border-radius: 16px; 
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12); 
+            box-sizing: border-box;
+        }
+        .brand-header {
+            text-align: center;
+            border-bottom: 2px dashed #0066cc;
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+        }
+        .brand-header h1 {
+            margin: 0;
+            color: #0066cc;
+            font-size: 22px;
+            letter-spacing: 0.5px;
+        }
+        .brand-header p {
+            margin: 4px 0 0 0;
+            color: #555;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        .form-group {
+            margin-bottom: 12px;
+            text-align: left;
+        }
+        label {
+            font-size: 13px;
+            font-weight: bold;
+            color: #333;
+            display: block;
+            margin-bottom: 4px;
+        }
+        input { 
+            width: 100%; 
+            padding: 10px; 
+            font-size: 15px; 
+            border: 1px solid #ccc; 
+            border-radius: 8px; 
+            box-sizing: border-box; 
+        }
+        button { 
+            width: 100%; 
+            padding: 12px; 
+            margin-top: 5px; 
+            font-size: 16px; 
+            background: #0066cc; 
+            color: white; 
+            font-weight: bold; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+        }
+        button:hover { background: #0052a3; }
+        
+        /* Khung Template QR Thương Hiệu */
+        .qr-card {
+            margin-top: 20px;
+            background: #f9fbff;
+            border: 2px solid #0066cc;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+        }
+        .qr-card h3 {
+            margin: 0 0 8px 0;
+            color: #333;
+            font-size: 16px;
+        }
+        .qr-card img { 
+            width: 220px; 
+            height: 220px; 
+            border-radius: 8px; 
+            background: #fff;
+            padding: 5px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .trip-info {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #222;
+            background: #fff;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #e1e8ed;
+            text-align: left;
+        }
+        .trip-info p {
+            margin: 4px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="brand-header">
+        <h1>XENOW.VN</h1>
+        <p>XE GIA ĐÌNH 7 CHỖ - AN TOÀN, TIỆT KIỆM</p>
+    </div>
+
+    <div class="form-group">
+        <label>Số tiền (VNĐ):</label>
+        <input type="number" id="amount" placeholder="VD: 491000" value="491000">
+    </div>
+
+    <div class="form-group">
+        <label>Tên khách hàng / Nội dung:</label>
+        <input type="text" id="note" placeholder="VD: Gui anh Luu" value="Gui anh Luu">
+    </div>
+
+    <button onclick="taoTemplateQR()">Tạo Khung QR Thương Hiệu</button>
+    
+    <div id="qrResult"></div>
+</div>
+
+<script>
+    function taoTemplateQR() {
+        var amount = document.getElementById('amount').value;
+        var noteVal = document.getElementById('note').value;
+        var encodedNote = encodeURIComponent(noteVal);
+        
+        // Thông tin tài khoản BIDV của anh Thiên
+        var bankID = "BIDV";
+        var accountNo = "8823708680";
+        var accountName = "TRAN HUNG THIEN";
+        
+        if(!amount) {
+            alert("Vui lòng nhập số tiền!");
+            return;
+        }
+
+        var formattedAmount = Number(amount).toLocaleString('vi-VN') + " VNĐ";
+
+        // Link VietQR chuẩn
+        var qrUrl = `https://img.vietqr.io/image/${bankID}-${accountNo}-compact2.png?amount=${amount}&addInfo=${encodedNote}&accountName=${accountName}`;
+        
+        // Hiển thị khung template thương hiệu
+        document.getElementById('qrResult').innerHTML = `
+            <div class="qr-card">
+                <h3>THANH TOÁN / ĐẶT CỌC</h3>
+                <img src="${qrUrl}" alt="Mã QR Xenow">
+                <div class="trip-info">
+                    <p><b>Chủ TK:</b> TRAN HUNG THIEN (BIDV)</p>
+                    <p><b>Số tiền:</b> <span style="color: #d9534f; font-weight: bold;">${formattedAmount}</span></p>
+                    <p><b>Nội dung:</b> ${noteVal}</p>
+                </div>
+                <p style="font-size: 12px; color: #666; margin: 8px 0 0 0;">✨ Cảm ơn quý khách đã đồng hành cùng XENOW.VN!</p>
+            </div>
+        `;
+    }
+    
+    // Tự động chạy khi vừa mở trang
+    window.onload = taoTemplateQR;
+</script>
+
+</body>
+</html>
