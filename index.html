@@ -569,6 +569,51 @@
         .float-zalo { background-color: #0068ff; }
         .float-info { background-color: #009688; font-size: 17px; }
 
+        /* KHUNG MENU PHỤ BUNG RA TỪ NÚT SÁCH (📖) */
+        .book-menu-wrapper {
+            position: relative;
+        }
+        .book-sub-menu {
+            position: absolute;
+            right: 56px;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(10px) scale(0.9);
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 10000;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        .book-menu-wrapper.active .book-sub-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0) scale(1);
+            pointer-events: auto;
+        }
+        .book-sub-item {
+            background: #ffffff;
+            color: #0066cc;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 8px 14px;
+            border-radius: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            text-decoration: none;
+            border: 1px solid #bce8f1;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .book-sub-item:hover {
+            background: #f0f7ff;
+            transform: translateX(-2px);
+        }
+
         @keyframes starPulse {
             0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.6)); }
             50% { transform: scale(1.15); filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.95)); }
@@ -854,7 +899,7 @@
 
       <div style="width: 100%; height: 180px; border-radius: 8px; overflow: hidden; border: 1px solid #cccccc;">
         <iframe 
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.4435777858694!2d106.721469!3d10.853922!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3175276c12345678%3A0xabcdef123456789!2zOC8xQTE1IMSQxrDhu51uZyBT4buRIDksIEhp4buHcCBCw6xuaCwgVGjhu6cgxJBjYywgSOG7kyBDaMOtIE1pbmgsIFZpZXRuYW0!5e0!3m2!1svi!2s!4v1700000000000!5m2!1svi!2s" 
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.4435777858694!2d106.721469!3d10.853922!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3175276c12345678%3A0xabcdef123456789!2sOC8xQTE1IMSQxrDhu51uZyBT4buRIDksIEhp4buHcCBCw6xuaCwgVGjhu6cgxJBjYywgSOG7kyBDaMOtIE1pbmgsIFZpZXRuYW0!5e0!3m2!1svi!2s!4v1700000000000!5m2!1svi!2s" 
           width="100%" 
           height="100%" 
           style="border:0;" 
@@ -1035,7 +1080,14 @@
 
 <div id="floatingButtonsContainer" class="floating-container">
     <div class="sub-buttons-group">
-        <button type="button" class="float-btn float-info" onclick="openSeoModal(); autoCloseMenu();" title="Mở danh mục bài viết">📖</button>
+        <!-- NÚT SÁCH (📖) ĐƯỢC TÍCH HỢP BUNG RA 2 NÚT PHỤ -->
+        <div class="book-menu-wrapper" id="bookMenuWrapper">
+            <div class="book-sub-menu">
+                <a href="#" class="book-sub-item" onclick="openIntroUrl(); autoCloseMenu(); event.preventDefault();">📖 Giới thiệu / Về chúng tôi</a>
+                <a href="#" class="book-sub-item" onclick="openSeoModalAndList(); autoCloseMenu(); event.preventDefault();">📰 Bài viết / Tin tức</a>
+            </div>
+            <button type="button" class="float-btn float-info" onclick="toggleBookMenu(event)" title="Danh mục thông tin">📖</button>
+        </div>
         <a href="https://zalo.me/0917918586" id="floatingZaloLink" target="_blank" class="float-btn float-zalo" onclick="autoCloseMenu()" title="Chat Zalo">💬</a>
         <a href="tel:0917918586" id="floatingCallLink" class="float-btn float-call" onclick="autoCloseMenu()" title="Gọi điện">📞</a>
     </div>
@@ -1049,6 +1101,7 @@
 <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbznrDDbfbSpRBQYu5-y5NpOJ7u6AaPcmJJdRUeSLIVy-BYwf6DkGJK6c6IVlUxmvmgf/exec";
     let autoCloseTimer = null;
+    let bookCloseTimer = null;
     let allPosts = [];
     let currentPage = 1;
     let currentModalMode = 'intro';
@@ -1147,6 +1200,11 @@
             input.addEventListener('focus', function() {
                 setTimeout(() => { this.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 300);
             });
+        });
+
+        // Lắng nghe sự kiện click bên ngoài để đóng menu phụ
+        document.addEventListener('click', function() {
+            closeBookMenu();
         });
     };
 
@@ -1375,11 +1433,24 @@
         switchToIntro();
     }
 
+    function openSeoModalAndList() {
+        const cleanBase = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        const newUrl = cleanBase + "?p=bai-viet";
+        window.history.pushState({slug: "bai-viet"}, "", newUrl);
+        document.title = "Danh Sách Bài Viết - XENOW.VN";
+        document.getElementById('ogTitle').setAttribute('content', "Bài Viết & Tin Tức | XENOW.VN");
+        document.getElementById('ogImage').setAttribute('content', document.getElementById('adminImg1').value);
+        document.getElementById('ogUrl').setAttribute('content', newUrl);
+        document.getElementById('seoInfoModal').style.display = 'flex';
+        switchToListPosts();
+    }
+
     function checkUrlAndOpenPost() {
         const urlParams = new URLSearchParams(window.location.search);
         let slug = urlParams.get('p');
         if (slug && slug.includes('?p=')) slug = slug.split('?p=')[0];
         if (slug === 'gioi-thieu') { openIntroUrl(); return; }
+        if (slug === 'bai-viet') { openSeoModalAndList(); return; }
         if (slug && allPosts.length > 0) {
             const matchedPost = allPosts.find(p => p.slug === slug || p.rawSlug === slug || encodeURIComponent(p.rawSlug) === slug);
             if (matchedPost) viewSinglePost(matchedPost.slug);
@@ -1708,6 +1779,7 @@
 
     function toggleFloatingMenu(event) {
         event.stopPropagation();
+        closeBookMenu();
         let container = document.getElementById('floatingButtonsContainer');
         container.classList.toggle('active');
         if (autoCloseTimer) clearTimeout(autoCloseTimer);
@@ -1716,9 +1788,31 @@
         }
     }
 
+    // ĐIỀU KHIỂN NÚT SÁCH BUNG RA 2 NÚT PHỤ VỚI BỘ ĐẾM THỜI GIAN TỰ ẨN Y HỆT
+    function toggleBookMenu(event) {
+        event.stopPropagation();
+        // Đóng cụm nút tổng nếu đang mở
+        document.getElementById('floatingButtonsContainer').classList.remove('active');
+        
+        let wrapper = document.getElementById('bookMenuWrapper');
+        wrapper.classList.toggle('active');
+        
+        if (bookCloseTimer) clearTimeout(bookCloseTimer);
+        if (wrapper.classList.contains('active')) {
+            bookCloseTimer = setTimeout(() => { wrapper.classList.remove('active'); }, 5000);
+        }
+    }
+
+    function closeBookMenu() {
+        if (bookCloseTimer) clearTimeout(bookCloseTimer);
+        let wrapper = document.getElementById('bookMenuWrapper');
+        if (wrapper) wrapper.classList.remove('active');
+    }
+
     function autoCloseMenu() {
         if (autoCloseTimer) clearTimeout(autoCloseTimer);
         document.getElementById('floatingButtonsContainer').classList.remove('active');
+        closeBookMenu();
     }
 
     function submitBooking() {
