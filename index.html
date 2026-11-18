@@ -319,8 +319,6 @@
         }
 
         .intro-article-box { margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px dashed #ccc; }
-        .intro-article-box h1 { font-size: 16px; color: #0066cc; margin: 0 0 10px 0; text-align: center; text-transform: uppercase; }
-        .intro-article-box h2 { font-size: 14px; color: #2e7d32; margin: 12px 0 6px 0; text-align: left; }
         
         .see-more-row { display: flex; justify-content: flex-end; margin-top: 15px; }
         .see-more-btn {
@@ -393,7 +391,6 @@
         .btn-yt { background: #ff0000; }
         .btn-tt { background: #000000; }
 
-        /* CỤM NÚT NỔI: 1 NÚT CHÍNH (NGÔI SAO) BUNG RA 4 NÚT CON ĐỘC LẬP RÕ RÀNG (GIỚI THIỆU, BÀI VIẾT, ZALO, GỌI ĐIỆN) */
         .floating-container {
             position: fixed; bottom: 20px; right: 20px; z-index: 9999;
             display: flex; flex-direction: column; align-items: flex-end;
@@ -431,8 +428,8 @@
         }
         .float-call { background-color: #e53935; }
         .float-zalo { background-color: #0068ff; }
-        .float-intro { background-color: #007bff; font-size: 18px; } /* Nút 1: Giới thiệu */
-        .float-posts { background-color: #28a745; font-size: 17px; } /* Nút 2: Danh sách bài viết */
+        .float-intro { background-color: #007bff; font-size: 18px; }
+        .float-posts { background-color: #28a745; font-size: 17px; }
 
         @keyframes starPulse {
             0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.6)); }
@@ -695,25 +692,40 @@
         <button type="button" id="topCornerBtn" class="close-modal-btn" onclick="handleTopCornerClick()">✕</button>
         
         <div id="introArticleView" class="intro-article-box" style="font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.75; color: #2c3e50; padding: 10px 5px;">
-            <h3 style="color: #0056b3; text-align: center; font-size: 20px; margin-bottom: 6px; text-transform: uppercase;">Chào mừng bạn đến với XENOW.VN</h3>
+            <h3 style="color: #0056b3; text-align: center; font-size: 20px; margin-bottom: 6px; text-transform: uppercase;">CHÀO MỪNG BẠN ĐẾN VỚI XENOW.VN</h3>
             <p style="text-align: center; color: #64748b; font-size: 13.5px; font-style: italic; margin-top: 0; margin-bottom: 22px; padding-bottom: 12px; border-bottom: 1px solid #e2e8f0;">Đôi lời tâm tình từ người cầm lái – Đặt xe gia đình trực tuyến, minh bạch và tận tâm</p>
+            
             <p style="margin-bottom: 14px;"><b>Kính gửi Quý khách hàng và Quý gia đình,</b></p>
+            
             <p style="margin-bottom: 14px;">Giữa nhịp sống hối hả và dòng xe tấp nập ngoài kia, đôi khi điều chúng ta cần cho một chuyến đi không phải là sự phô trương, mà là sự yên tâm tuyệt đối trọn vẹn trên từng cây số.</p>
+            
             <p style="margin-bottom: 14px;">Tôi là <b>Trần Hưng Thiên</b>, người trực tiếp cầm lái chiếc xe gia đình <b>XENOW.VN</b>. Khi viết những dòng này, tôi không nghĩ mình đang giới thiệu một dịch vụ, mà chỉ đơn giản là trải lòng với những người anh, người chị, cô bác đang tìm kiếm một người bạn đồng hành tin cậy cho những chuyến đi xa của gia đình.</p>
-            <p style="margin-bottom: 14px; padding: 12px 15px; background-color: #f8fafc; border-left: 3px solid #0056b3; border-radius: 0 6px 6px 0;">Đến với <b>XENOW.VN</b>, mọi thứ đều mộc mạc và chân thật: xe nhà chính chủ 7 chỗ rộng rãi, luôn sạch sẽ, thơm tho trước mỗi chuyến đi. Chúng tôi phục vụ chuyên biệt theo hình thức đặt xe trực tiếp trên website hoặc hợp đồng trọn gói đưa đón tận nơi.</p>
+            
+            <p style="margin-bottom: 14px;">Tôi hiểu rằng, đằng sau mỗi chuyến xe là một câu chuyện riêng: là chuyến về quê thăm lại đấng sinh thành sau nhiều tháng xa cách, là kỳ nghỉ cuối tuần sum vầy của vợ chồng con cái, hay chuyến đưa đón người thân ra sân bay trong những khung giờ sớm khuya. Người lớn tuổi cần sự êm ái, trẻ nhỏ cần không gian thoáng sạch để ngủ một giấc ngon lành, và hơn hết, ai cũng mong muốn có một người tài xế điềm đạm, đặt sự an toàn lên trên mọi sự vội vã.</p>
+            
+            <p style="margin-bottom: 14px;">Đó chính là lý do <b>XENOW.VN</b> được hình thành và giữ gìn bằng tất cả sự tử tế.</p>
+            
+            <p style="margin-bottom: 14px; padding: 12px 15px; background-color: #f8fafc; border-left: 3px solid #0056b3; border-radius: 0 6px 6px 0;">Đến với <b>XENOW.VN</b>, mọi thứ đều mộc mạc và chân thật: xe nhà chính chủ 7 chỗ rộng rãi, luôn sạch sẽ, thơm tho trước mỗi chuyến đi. Chúng tôi phục vụ chuyên biệt theo hình thức đặt xe trực tiếp trên website hoặc hợp đồng trọn gói đưa đón tận nơi — giúp gia đình mình hoàn toàn chủ động lộ trình và tận hưởng không gian riêng tư tuyệt đối. Đặc biệt, anh chị chỉ cần thao tác đặt xe là biết ngay giá trọn gói, minh bạch từ đầu, không lo phát sinh chi phí để thoải mái tận hưởng suốt hành trình.</p>
+            
+            <p style="margin-bottom: 14px;">Mỗi hành trình đi qua không chỉ là việc đưa anh chị đến nơi về đến chốn, mà còn là cơ hội để tôi được sẻ chia sự tận tâm và đổi lấy sự hài lòng từ nụ cười của Quý khách.</p>
+            
+            <p style="margin-bottom: 14px;">Nếu sắp tới gia đình mình có dịp cần xe đưa đón tận nơi, anh chị có thể đặt lịch trực tiếp trên website hoặc liên hệ trực tiếp bất cứ khi nào. Chúng tôi luôn ở đây, sẵn sàng hỗ trợ và đồng hành phục vụ gia đình mình trên mọi nẻo đường.</p>
+            
             <div style="margin-top: 20px; margin-bottom: 22px; text-align: right;">
                 <p style="margin: 0 0 4px 0; font-style: italic; color: #475569;">Trân trọng,</p>
                 <p style="margin: 0; font-weight: bold; color: #0056b3; font-size: 16px;">Trần Hưng Thiên – XENOW.VN</p>
                 <p style="margin: 2px 0 0 0; font-size: 13px; font-style: italic; color: #64748b;">Đặt xe an toàn – Đi lại như người nhà.</p>
             </div>
+
             <div style="background-color: #f4f6f9; border-left: 4px solid #0066cc; border-radius: 8px; padding: 15px 18px; margin-top: 15px;">
                 <p style="margin: 0 0 10px 0; font-weight: bold; color: #0066cc; font-size: 15px; text-transform: uppercase;">🚙 DỊCH VỤ DI CHUYỂN TIẾT KIỆM</p>
                 <p style="margin: 6px 0; font-size: 14px; color: #333333;">📍 <b>Địa chỉ:</b> 8/1A5 Đ Số 9, P. Hiệp Bình, TP. HCM</p>
                 <p style="margin: 6px 0; font-size: 14px; color: #333333;">🌐 <b>Website:</b> <a href="https://xenow.vn" style="color: #0066cc; font-weight: 600; text-decoration: none;">https://xenow.vn</a></p>
                 <p style="margin: 6px 0 0 0; font-size: 14px; color: #333333;">☎️ <b>Hotline:</b> <a href="tel:0917918586" style="color: #1e293b; font-weight: bold; text-decoration: none;">0917 918 586</a></p>
             </div>
+            
             <div class="see-more-row" style="margin-top: 20px;">
-                <button type="button" class="see-more-btn" onclick="switchToListPosts()">Xem thêm bài viết »</button>
+                <button type="button" class="see-more-btn" onclick="switchToListPosts()">Xem thêm danh sách bài viết »</button>
             </div>
         </div>
 
@@ -752,11 +764,10 @@
     </div>
 </footer>
 
-<!-- CỤM NÚT NỔI: TÁCH RIÊNG ĐỦ 5 NÚT ĐỘC LẬP (MENU, GIỚI THIỆU, BÀI VIẾT, ZALO, GỌI ĐIỆN) KÈM HẸN GIỜ TỰ ĐỘNG ẨN -->
 <div id="floatingButtonsContainer" class="floating-container">
     <div class="sub-buttons-group">
-        <button type="button" class="float-btn float-info" onclick="openIntroUrl(); autoCloseMenu();" title="Giới thiệu dịch vụ">📖</button>
-        <button type="button" class="float-btn" style="background-color: #28a745;" onclick="openSeoModalAndList(); autoCloseMenu();" title="Danh sách bài viết">📚</button>
+        <button type="button" class="float-btn float-intro" onclick="openIntroUrl(); autoCloseMenu();" title="Giới thiệu dịch vụ">📖</button>
+        <button type="button" class="float-btn float-posts" onclick="openSeoModalAndList(); autoCloseMenu();" title="Danh sách bài viết">📚</button>
         <a href="https://zalo.me/0917918586" id="floatingZaloLink" target="_blank" class="float-btn float-zalo" onclick="autoCloseMenu()" title="Chat Zalo">💬</a>
         <a href="tel:0917918586" id="floatingCallLink" class="float-btn float-call" onclick="autoCloseMenu()" title="Gọi điện">📞</a>
     </div>
