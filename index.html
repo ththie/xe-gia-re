@@ -1080,8 +1080,8 @@
 
 <div id="floatingButtonsContainer" class="floating-container">
     <div class="sub-buttons-group">
-        <!-- NÚT SÁCH (📖) ĐƯỢC TÍCH HỢP BUNG RA 2 NÚT PHỤ -->
-        <div class="book-menu-wrapper" id="bookMenuWrapper">
+        <!-- NÚT SÁCH (📖) ĐÃ THÊM ONCLICK STOP PROPAGATION ĐỂ CHỐNG TỰ ẨN LỖI -->
+        <div class="book-menu-wrapper" id="bookMenuWrapper" onclick="event.stopPropagation()">
             <div class="book-sub-menu">
                 <a href="#" class="book-sub-item" onclick="openIntroUrl(); autoCloseMenu(); event.preventDefault();">📖 Giới thiệu / Về chúng tôi</a>
                 <a href="#" class="book-sub-item" onclick="openSeoModalAndList(); autoCloseMenu(); event.preventDefault();">📰 Bài viết / Tin tức</a>
@@ -1202,9 +1202,10 @@
             });
         });
 
-        // Lắng nghe sự kiện click bên ngoài để đóng menu phụ
+        // Lắng nghe click toàn trang để tự đóng menu khi bấm ra ngoài
         document.addEventListener('click', function() {
             closeBookMenu();
+            document.getElementById('floatingButtonsContainer').classList.remove('active');
         });
     };
 
@@ -1788,7 +1789,7 @@
         }
     }
 
-    // ĐIỀU KHIỂN NÚT SÁCH BUNG RA 2 NÚT PHỤ VỚI BỘ ĐẾM THỜI GIAN TỰ ẨN Y HỆT
+    // ĐIỀU KHIỂN NÚT SÁCH BUNG RA 2 NÚT PHỤ VỚI CHẶN LAN TRUYỀN SỰ KIỆN CHUẨN XÁC
     function toggleBookMenu(event) {
         event.stopPropagation();
         // Đóng cụm nút tổng nếu đang mở
