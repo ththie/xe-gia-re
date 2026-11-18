@@ -569,7 +569,7 @@
         .float-zalo { background-color: #0068ff; }
         .float-info { background-color: #009688; font-size: 17px; }
 
-        /* KHUNG MENU PHỤ BUNG RA TỪ NÚT SÁCH (📖) */
+        /* KHUNG MENU PHỤ BUNG RA TỪ NÚT SÁCH (📖) - CỐ ĐỊNH ỔN ĐỊNH */
         .book-menu-wrapper {
             position: relative;
         }
@@ -1080,11 +1080,11 @@
 
 <div id="floatingButtonsContainer" class="floating-container">
     <div class="sub-buttons-group">
-        <!-- NÚT SÁCH (📖) ĐÃ THÊM ONCLICK STOP PROPAGATION ĐỂ CHỐNG TỰ ẨN LỖI -->
+        <!-- NÚT SÁCH (📖) CỐ ĐỊNH CHUẨN XÁC -->
         <div class="book-menu-wrapper" id="bookMenuWrapper" onclick="event.stopPropagation()">
             <div class="book-sub-menu">
-                <a href="#" class="book-sub-item" onclick="openIntroUrl(); autoCloseMenu(); event.preventDefault();">📖 Giới thiệu / Về chúng tôi</a>
-                <a href="#" class="book-sub-item" onclick="openSeoModalAndList(); autoCloseMenu(); event.preventDefault();">📰 Bài viết / Tin tức</a>
+                <a href="#" class="book-sub-item" onclick="openIntroUrl(); closeBookMenu(); event.preventDefault();">📖 Giới thiệu / Về chúng tôi</a>
+                <a href="#" class="book-sub-item" onclick="openSeoModalAndList(); closeBookMenu(); event.preventDefault();">📰 Bài viết / Tin tức</a>
             </div>
             <button type="button" class="float-btn float-info" onclick="toggleBookMenu(event)" title="Danh mục thông tin">📖</button>
         </div>
@@ -1101,7 +1101,6 @@
 <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbznrDDbfbSpRBQYu5-y5NpOJ7u6AaPcmJJdRUeSLIVy-BYwf6DkGJK6c6IVlUxmvmgf/exec";
     let autoCloseTimer = null;
-    let bookCloseTimer = null;
     let allPosts = [];
     let currentPage = 1;
     let currentModalMode = 'intro';
@@ -1202,7 +1201,7 @@
             });
         });
 
-        // Lắng nghe click toàn trang để tự đóng menu khi bấm ra ngoài
+        // Click ra ngoài để tự động đóng menu
         document.addEventListener('click', function() {
             closeBookMenu();
             document.getElementById('floatingButtonsContainer').classList.remove('active');
@@ -1789,29 +1788,25 @@
         }
     }
 
-    // ĐIỀU KHIỂN NÚT SÁCH BUNG RA 2 NÚT PHỤ VỚI CHẶN LAN TRUYỀN SỰ KIỆN CHUẨN XÁC
+    // ĐIỀU KHIỂN NÚT SÁCH: BẤM LÀ MỞ CỐ ĐỊNH, BẤM LẠI HOẶC CHỌN MỚI ĐÓNG
     function toggleBookMenu(event) {
         event.stopPropagation();
-        // Đóng cụm nút tổng nếu đang mở
         document.getElementById('floatingButtonsContainer').classList.remove('active');
         
         let wrapper = document.getElementById('bookMenuWrapper');
-        wrapper.classList.toggle('active');
-        
-        if (bookCloseTimer) clearTimeout(bookCloseTimer);
         if (wrapper.classList.contains('active')) {
-            bookCloseTimer = setTimeout(() => { wrapper.classList.remove('active'); }, 5000);
+            wrapper.classList.remove('active');
+        } else {
+            wrapper.classList.add('active');
         }
     }
 
     function closeBookMenu() {
-        if (bookCloseTimer) clearTimeout(bookCloseTimer);
         let wrapper = document.getElementById('bookMenuWrapper');
         if (wrapper) wrapper.classList.remove('active');
     }
 
     function autoCloseMenu() {
-        if (autoCloseTimer) clearTimeout(autoCloseTimer);
         document.getElementById('floatingButtonsContainer').classList.remove('active');
         closeBookMenu();
     }
