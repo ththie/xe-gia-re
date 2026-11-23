@@ -1394,5 +1394,64 @@
         document.getElementById('bookingForm').style.display = 'block';
     }
 </script>
+
+<!-- Nút mũi tên cuộn lên đầu trang -->
+<button id="scrollTopBtn" type="button" title="Lên đầu trang" aria-label="Lên đầu trang" style="
+    display: none;
+    position: fixed;
+    bottom: 22px;
+    left: 16px;
+    z-index: 10002;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background-color: #0066cc;
+    color: #ffffff;
+    box-shadow: 0 3px 10px rgba(0, 102, 204, 0.35);
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.25s, transform 0.2s;
+">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+</button>
+
+<script>
+(function() {
+    const scrollBtn = document.getElementById("scrollTopBtn");
+    const seoModalContent = document.querySelector(".seo-modal-content");
+    if (!scrollBtn) return;
+
+    function getCurrentScrollTop() {
+        const winScroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        const modalScroll = seoModalContent ? seoModalContent.scrollTop : 0;
+        return Math.max(winScroll, modalScroll);
+    }
+
+    function toggleScrollBtn() {
+        if (getCurrentScrollTop() > 250) {
+            scrollBtn.style.display = "flex";
+        } else {
+            scrollBtn.style.display = "none";
+        }
+    }
+
+    window.addEventListener("scroll", toggleScrollBtn, { passive: true });
+    if (seoModalContent) {
+        seoModalContent.addEventListener("scroll", toggleScrollBtn, { passive: true });
+    }
+
+    scrollBtn.addEventListener("click", function(e) {
+        e.stopPropagation();
+        if (seoModalContent && seoModalContent.scrollTop > 0) {
+            seoModalContent.scrollTo({ top: 0, behavior: "smooth" });
+        }
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+})();
+</script>
 </body>
 </html>
