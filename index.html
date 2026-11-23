@@ -1395,7 +1395,24 @@
     }
 </script>
 
-<!-- Nút mũi tên xanh cuộn lên đầu trang (không nền tròn) -->
+<!-- Nút mũi tên xanh động lên xuống cuộn lên đầu trang -->
+<style>
+@keyframes xenowArrowFloat {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-6px);
+    }
+}
+#scrollTopBtn {
+    animation: xenowArrowFloat 1.6s ease-in-out infinite;
+}
+#scrollTopBtn:active {
+    transform: scale(0.92);
+}
+</style>
+
 <button id="scrollTopBtn" type="button" title="Lên đầu trang" aria-label="Lên đầu trang" style="
     display: none;
     position: fixed;
@@ -1412,7 +1429,7 @@
     cursor: pointer;
     align-items: center;
     justify-content: center;
-    transition: transform 0.2s ease, opacity 0.25s ease;
+    transition: opacity 0.25s ease;
 ">
     <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="18 15 12 9 6 15"></polyline>
