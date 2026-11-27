@@ -642,10 +642,10 @@
             <input type="number" id="distance" placeholder="Nhập số Km dự kiến" min="0" step="0.1" required oninput="calculatePrice()">
         </div>
 
-        <div class="price-box">
+        <div class="price-box" id="priceBox">
             <p>DỰ KIẾN CƯỚC TRỌN GÓI:</p>
-            <h3 id="totalPrice">Nhập Km để tính</h3>
-            <div class="price-note" id="priceNote">* Vui lòng nhập hoặc chọn tuyến để xem dự kiến cước. Chưa bao gồm phí BOT.</div>
+            <h3 id="totalPrice">0 VNĐ</h3>
+            <div class="price-note" id="priceNote">* Giá cước áp dụng chiều đi/về tiêu chuẩn. Chưa bao gồm phí BOT.</div>
         </div>
 
         <button type="button" class="btn-zalo" onclick="submitBooking()">💬 GỬI YÊU CẦU ĐẶT XE QUA ZALO</button>
@@ -888,6 +888,7 @@
         let now = new Date();
         document.getElementById('pickupTime').value = String(now.getHours()).padStart(2, '0') + 'h' + String(now.getMinutes()).padStart(2, '0');
         document.getElementById('pickupDate').value = String(now.getDate()).padStart(2, '0') + '/' + String(now.getMonth() + 1).padStart(2, '0') + '/' + now.getFullYear();
+        document.getElementById('quickRouteSelect').value = "";
         document.getElementById('distance').value = "";
         document.getElementById('adminBaseFare').value = "0";
         calculatePrice();
@@ -1289,21 +1290,12 @@
             distanceLabel.innerText = "Quãng đường dự kiến (Km)";
         }
 
-        let priceEl = document.getElementById('totalPrice');
+        // Mặc định khi chưa có Km: hiển thị 0 VNĐ và ghi chú tiêu chuẩn gọn gàng
         if (rawDistance === "" || isNaN(distance) || distance <= 0) {
-            priceEl.style.fontSize = "15px";
-            priceEl.innerText = "Nhập Km để tính";
-            if (tripType === 3) {
-                document.getElementById('priceNote').innerHTML = `* Vui lòng nhập quãng đường 1 chiều để tính cước gói 1 đêm 2 ngày (giảm ${discount1N2D}% chiều về + phí gói +${pkg1Fee.toLocaleString('vi-VN')} VNĐ).`;
-            } else if (tripType === 4) {
-                document.getElementById('priceNote').innerHTML = `* Vui lòng nhập quãng đường 1 chiều để tính cước gói 2 đêm 3 ngày (giảm ${discount2N3D}% chiều về + phí gói +${pkg2Fee.toLocaleString('vi-VN')} VNĐ).`;
-            } else {
-                document.getElementById('priceNote').innerHTML = "* Vui lòng nhập hoặc chọn tuyến để xem dự kiến cước. Chưa bao gồm phí BOT.";
-            }
+            document.getElementById('totalPrice').innerText = (baseFare > 0 ? baseFare.toLocaleString('vi-VN') : "0") + " VNĐ";
+            document.getElementById('priceNote').innerHTML = "* Giá cước áp dụng chiều đi/về tiêu chuẩn. Chưa bao gồm phí BOT.";
             return;
         }
-
-        priceEl.style.fontSize = "20px";
 
         let ratePerKm = (carType === 7) ? rate7 : rate4;
         let calculatedPrice = distance * ratePerKm;
@@ -1326,7 +1318,7 @@
             noteHTML = `* Đã tính 2 chiều (giảm ${discount2N3D}% chiều về) + gói 2 đêm 3 ngày (+${pkg2Fee.toLocaleString('vi-VN')} VNĐ).`;
         }
 
-        priceEl.innerText = finalPrice.toLocaleString('vi-VN') + " VNĐ";
+        document.getElementById('totalPrice').innerText = finalPrice.toLocaleString('vi-VN') + " VNĐ";
         document.getElementById('priceNote').innerHTML = noteHTML;
     }
 
