@@ -189,10 +189,17 @@
             padding: 10px;
             border-radius: 8px;
             margin-bottom: 10px;
-            max-height: 480px;
+            max-height: 520px;
             overflow-y: auto;
         }
         .admin-panel h4 { margin: 0 0 6px 0; font-size: 12px; color: #856404; }
+        .admin-panel label.admin-field-label {
+            display: block;
+            font-size: 11px;
+            font-weight: bold;
+            color: #5c4503;
+            margin-bottom: 2px;
+        }
         .admin-panel input, .admin-panel select, .admin-panel textarea {
             padding: 6px; font-size: 12px; margin-bottom: 6px; width: 100%;
             box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; background: #fff;
@@ -533,12 +540,31 @@
 
         <div class="divider"></div>
         <h4>📞 Cấu hình Hotline & Giá cước</h4>
+        <label class="admin-field-label">Số Hotline / Zalo</label>
         <input type="text" id="adminPhoneInput" value="0917918586">
+
+        <label class="admin-field-label">Phí mở cửa / cước tối thiểu (VNĐ)</label>
         <input type="number" id="adminBaseFare" value="0" oninput="calculatePrice()">
+
+        <label class="admin-field-label">Đơn giá 1 Km xe 7 chỗ (VNĐ)</label>
         <input type="number" id="adminRate7" value="15000" oninput="calculatePrice()">
+
+        <label class="admin-field-label">Đơn giá 1 Km xe 4 chỗ (VNĐ)</label>
         <input type="number" id="adminRate4" value="12000" oninput="calculatePrice()">
-        <input type="number" id="adminDiscount" value="30" oninput="calculatePrice()">
+
+        <label class="admin-field-label">Giảm giá lượt về - 2 chiều trong ngày (%)</label>
+        <input type="number" id="adminDiscount" value="30" min="0" max="100" oninput="calculatePrice()">
+
+        <label class="admin-field-label">Giảm giá lượt về - 1 đêm 2 ngày (%) [Mặc định 30]</label>
+        <input type="number" id="adminDiscount1N2D" value="30" min="0" max="100" oninput="calculatePrice()">
+
+        <label class="admin-field-label">Phí gói qua đêm - 1 đêm 2 ngày (VNĐ)</label>
         <input type="number" id="adminPackage1" value="1500000" oninput="calculatePrice()">
+
+        <label class="admin-field-label">Giảm giá lượt về - 2 đêm 3 ngày (%) [Mặc định 30]</label>
+        <input type="number" id="adminDiscount2N3D" value="30" min="0" max="100" oninput="calculatePrice()">
+
+        <label class="admin-field-label">Phí gói qua đêm - 2 đêm 3 ngày (VNĐ)</label>
         <input type="number" id="adminPackage2" value="2700000" oninput="calculatePrice()">
         
         <div class="divider"></div>
@@ -695,7 +721,7 @@
             <h3 style="color: #0056b3; text-align: center; font-size: 20px; margin-bottom: 6px; text-transform: uppercase;">CHÀO MỪNG BẠN ĐẾN VỚI XENOW.VN</h3>
             <p style="text-align: center; color: #64748b; font-size: 13.5px; font-style: italic; margin-top: 0; margin-bottom: 22px; padding-bottom: 12px; border-bottom: 1px solid #e2e8f0;">Đôi lời tâm tình từ người cầm lái – Đặt xe gia đình trực tuyến, minh bạch và tận tâm</p>
             
-            <p style="margin-bottom: 14px;"><b>Kính gửi Quý khách hàng và Quý gia đình.!</b></p>
+            <p style="margin-bottom: 14px;"><b>Kính gửi Quý khách hàng và Quý gia đình,</b></p>
             
             <p style="margin-bottom: 14px;">Giữa nhịp sống hối hả và dòng xe tấp nập ngoài kia, đôi khi điều chúng ta cần cho một chuyến đi không phải là sự phô trương, mà là sự yên tâm tuyệt đối trọn vẹn trên từng cây số.</p>
             
@@ -712,7 +738,7 @@
             <p style="margin-bottom: 14px;">Nếu sắp tới gia đình mình có dịp cần xe đưa đón tận nơi, anh chị có thể đặt lịch trực tiếp trên website hoặc liên hệ trực tiếp bất cứ khi nào. Chúng tôi luôn ở đây, sẵn sàng hỗ trợ và đồng hành phục vụ gia đình mình trên mọi nẻo đường.</p>
             
             <div style="margin-top: 20px; margin-bottom: 22px; text-align: right;">
-                <p style="margin: 0 0 4px 0; font-style: italic; color: #475569;">Trân trọng.!</p>
+                <p style="margin: 0 0 4px 0; font-style: italic; color: #475569;">Trân trọng,</p>
                 <p style="margin: 0; font-weight: bold; color: #0056b3; font-size: 16px;">Trần Hưng Thiên – XENOW.VN</p>
                 <p style="margin: 2px 0 0 0; font-size: 13px; font-style: italic; color: #64748b;">Đặt xe an toàn – Đi lại như người nhà.</p>
             </div>
@@ -1103,6 +1129,18 @@
 
     function initRealtimeDatabase() {
         if (!db) return;
+        const badge = document.getElementById('dbStatusBadge');
+        db.ref('.info/connected').on('value', (snap) => {
+            if (badge) {
+                if (snap.val() === true) {
+                    badge.className = "db-status online";
+                    badge.innerText = "🟢 Trạng thái: Đã kết nối Realtime Database";
+                } else {
+                    badge.className = "db-status offline";
+                    badge.innerText = "⚡ Trạng thái: Đang dùng cấu hình cục bộ";
+                }
+            }
+        });
         db.ref('xenow_config').on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) updateUIFromData(data);
@@ -1187,10 +1225,17 @@
         toggleSnowEffect(snowStatus);
 
         const activeEl = document.activeElement;
+        const defaultDisc = data.discount !== undefined ? data.discount : 30;
         if (data.baseFare !== undefined && activeEl.id !== 'adminBaseFare') document.getElementById('adminBaseFare').value = data.baseFare;
         if (data.rate7 !== undefined && activeEl.id !== 'adminRate7') document.getElementById('adminRate7').value = data.rate7;
         if (data.rate4 !== undefined && activeEl.id !== 'adminRate4') document.getElementById('adminRate4').value = data.rate4;
         if (data.discount !== undefined && activeEl.id !== 'adminDiscount') document.getElementById('adminDiscount').value = data.discount;
+        if (activeEl.id !== 'adminDiscount1N2D') {
+            document.getElementById('adminDiscount1N2D').value = (data.discount1N2D !== undefined) ? data.discount1N2D : defaultDisc;
+        }
+        if (activeEl.id !== 'adminDiscount2N3D') {
+            document.getElementById('adminDiscount2N3D').value = (data.discount2N3D !== undefined) ? data.discount2N3D : defaultDisc;
+        }
         if (data.package1 !== undefined && activeEl.id !== 'adminPackage1') document.getElementById('adminPackage1').value = data.package1;
         if (data.package2 !== undefined && activeEl.id !== 'adminPackage2') document.getElementById('adminPackage2').value = data.package2;
         
@@ -1229,6 +1274,10 @@
         let rate7 = parseFloat(document.getElementById('adminRate7').value) || 0;
         let rate4 = parseFloat(document.getElementById('adminRate4').value) || 0;
         let discountPercent = parseFloat(document.getElementById('adminDiscount').value) || 0;
+        let discount1N2D = parseFloat(document.getElementById('adminDiscount1N2D').value);
+        if (isNaN(discount1N2D)) discount1N2D = discountPercent;
+        let discount2N3D = parseFloat(document.getElementById('adminDiscount2N3D').value);
+        if (isNaN(discount2N3D)) discount2N3D = discountPercent;
         let pkg1Fee = parseFloat(document.getElementById('adminPackage1').value) || 0;
         let pkg2Fee = parseFloat(document.getElementById('adminPackage2').value) || 0;
 
@@ -1244,16 +1293,18 @@
         if (tripType === 2) {
             distanceLabel.innerText = "Quãng đường 1 chiều (Km)";
             let returnDiscount = basePrice * (discountPercent / 100);
-            finalPrice = basePrice + (basePrice - returnDiscount);
+            finalPrice = Math.round(basePrice + (basePrice - returnDiscount));
             noteHTML = `* Đã tính 2 chiều, giảm ${discountPercent}% chiều về.`;
         } else if (tripType === 3) {
             distanceLabel.innerText = "Quãng đường 1 chiều (Km)";
-            finalPrice = basePrice + pkg1Fee;
-            noteHTML = `* Đã bao gồm gói 1 đêm 2 ngày (+${pkg1Fee.toLocaleString('vi-VN')} VNĐ).`;
+            let returnDiscount1N2D = basePrice * (discount1N2D / 100);
+            finalPrice = Math.round(basePrice + (basePrice - returnDiscount1N2D) + pkg1Fee);
+            noteHTML = `* Đã tính 2 chiều (giảm ${discount1N2D}% chiều về) + gói 1 đêm 2 ngày (+${pkg1Fee.toLocaleString('vi-VN')} VNĐ).`;
         } else if (tripType === 4) {
             distanceLabel.innerText = "Quãng đường 1 chiều (Km)";
-            finalPrice = basePrice + pkg2Fee;
-            noteHTML = `* Đã bao gồm gói 2 đêm 3 ngày (+${pkg2Fee.toLocaleString('vi-VN')} VNĐ).`;
+            let returnDiscount2N3D = basePrice * (discount2N3D / 100);
+            finalPrice = Math.round(basePrice + (basePrice - returnDiscount2N3D) + pkg2Fee);
+            noteHTML = `* Đã tính 2 chiều (giảm ${discount2N3D}% chiều về) + gói 2 đêm 3 ngày (+${pkg2Fee.toLocaleString('vi-VN')} VNĐ).`;
         } else {
             distanceLabel.innerText = "Quãng đường dự kiến (Km)";
         }
@@ -1273,6 +1324,11 @@
     function saveAdminConfig() {
         let currentTheme = document.getElementById('selectedThemeValue').value;
         let snowStatus = document.getElementById('adminSnowEffect').value;
+        let discVal = parseFloat(document.getElementById('adminDiscount').value) || 0;
+        let disc1N2DVal = parseFloat(document.getElementById('adminDiscount1N2D').value);
+        if (isNaN(disc1N2DVal)) disc1N2DVal = discVal;
+        let disc2N3DVal = parseFloat(document.getElementById('adminDiscount2N3D').value);
+        if (isNaN(disc2N3DVal)) disc2N3DVal = discVal;
 
         let configData = {
             theme: currentTheme,
@@ -1280,7 +1336,9 @@
             baseFare: parseFloat(document.getElementById('adminBaseFare').value) || 0,
             rate7: parseFloat(document.getElementById('adminRate7').value) || 0,
             rate4: parseFloat(document.getElementById('adminRate4').value) || 0,
-            discount: parseFloat(document.getElementById('adminDiscount').value) || 0,
+            discount: discVal,
+            discount1N2D: disc1N2DVal,
+            discount2N3D: disc2N3DVal,
             package1: parseFloat(document.getElementById('adminPackage1').value) || 0,
             package2: parseFloat(document.getElementById('adminPackage2').value) || 0,
             phone: document.getElementById('adminPhoneInput').value.trim(),
@@ -1393,41 +1451,6 @@
         document.getElementById('successBox').style.display = 'none';
         document.getElementById('bookingForm').style.display = 'block';
     }
-</script>
-
-<script>
-(function() {
-    const scrollBtn = document.getElementById("scrollTopBtn");
-    const seoModalContent = document.querySelector(".seo-modal-content");
-    if (!scrollBtn) return;
-
-    function getCurrentScrollTop() {
-        const winScroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-        const modalScroll = seoModalContent ? seoModalContent.scrollTop : 0;
-        return Math.max(winScroll, modalScroll);
-    }
-
-    function toggleScrollBtn() {
-        if (getCurrentScrollTop() > 250) {
-            scrollBtn.style.display = "flex";
-        } else {
-            scrollBtn.style.display = "none";
-        }
-    }
-
-    window.addEventListener("scroll", toggleScrollBtn, { passive: true });
-    if (seoModalContent) {
-        seoModalContent.addEventListener("scroll", toggleScrollBtn, { passive: true });
-    }
-
-    scrollBtn.addEventListener("click", function(e) {
-        e.stopPropagation();
-        if (seoModalContent && seoModalContent.scrollTop > 0) {
-            seoModalContent.scrollTo({ top: 0, behavior: "smooth" });
-        }
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-})();
 </script>
 </body>
 </html>
